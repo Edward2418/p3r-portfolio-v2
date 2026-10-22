@@ -53,16 +53,16 @@ Tener un proyecto Next.js desplegado en Vercel, con contenido bilingüe en datos
 
 ## 7. Criterios de aceptación
 
-- [ ] CA-1 El sitio está desplegado en Vercel y accesible públicamente.
-- [ ] CA-2 El idioma inicial sigue al navegador y la elección del visitante se conserva entre visitas.
-- [ ] CA-3 Cambiar de idioma actualiza todos los textos visibles y el atributo de idioma del documento.
-- [ ] CA-4 Ningún componente contiene texto de contenido; todo proviene de los datos.
-- [ ] CA-5 Los datos opcionales ausentes no rompen la página ni dejan huecos visibles.
-- [ ] CA-6 Agregar un segundo proyecto de prueba solo requiere añadir datos.
-- [ ] CA-7 Los tokens de diseño existen en un único lugar y la página inicial los usa.
-- [ ] CA-8 Lint, compilación de producción, pruebas unitarias y E2E (390, 768 y 1280 px) pasan.
-- [ ] CA-9 Lighthouse móvil ≥ 90 en rendimiento y 100 en accesibilidad sobre la página inicial.
-- [ ] CA-10 No hay desplazamiento horizontal en los tres anchos.
+- [x] CA-1 El sitio está desplegado en Vercel y accesible públicamente.
+- [x] CA-2 El idioma inicial sigue al navegador y la elección del visitante se conserva entre visitas.
+- [x] CA-3 Cambiar de idioma actualiza todos los textos visibles y el atributo de idioma del documento.
+- [x] CA-4 Ningún componente contiene texto de contenido; todo proviene de los datos.
+- [x] CA-5 Los datos opcionales ausentes no rompen la página ni dejan huecos visibles.
+- [x] CA-6 Agregar un segundo proyecto de prueba solo requiere añadir datos.
+- [x] CA-7 Los tokens de diseño existen en un único lugar y la página inicial los usa.
+- [x] CA-8 Lint, compilación de producción, pruebas unitarias y E2E (390, 768 y 1280 px) pasan.
+- [x] CA-9 Lighthouse móvil ≥ 90 en rendimiento y 100 en accesibilidad sobre la página inicial. Verificado el 2026-10-22: PageSpeed Insights móvil 100 (según Edward); Lighthouse local y en Vercel 82–88 en rendimiento y 100 en accesibilidad (ver `specs/001-base-y-datos/research.md`, R9).
+- [x] CA-10 No hay desplazamiento horizontal en los tres anchos.
 
 ## 8. Fuera de alcance de esta fase
 

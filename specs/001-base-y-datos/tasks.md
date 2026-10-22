@@ -189,8 +189,8 @@ Proyecto único en la raíz del repositorio: `src/`, `tests/`, `public/` (ver pl
 - [ ] T054 [P] Revisar accesibilidad manualmente: orden de tabulación, foco visible, lector de pantalla en el selector y en las etiquetas "Provisional", contraste AA
 - [x] T055 [P] Revisar los componentes y la página con la skill `vercel-react-best-practices` y corregir lo que corresponda
 - [x] T056 [P] Escribir `README.md` en español: qué es el proyecto, requisitos, cómo ejecutarlo, scripts, estructura y cómo agregar un proyecto o dato (sin tocar componentes)
-- [ ] T057 Ejecutar la guía completa `specs/001-base-y-datos/quickstart.md` y marcar los criterios CA-1 a CA-10 en `docs/sprints/fase-1-base-y-datos.md`
-- [ ] T058 Registrar en `specs/001-base-y-datos/research.md` las decisiones que cambiaron durante la implementación (versiones, TypeScript 7, pruebas `.ts` nativas) y confirmar con Edward el cierre de la fase
+- [x] T057 Ejecutar la guía completa `specs/001-base-y-datos/quickstart.md` y marcar los criterios CA-1 a CA-10 en `docs/sprints/fase-1-base-y-datos.md`
+- [x] T058 Registrar en `specs/001-base-y-datos/research.md` las decisiones que cambiaron durante la implementación (versiones, TypeScript 7, pruebas `.ts` nativas) y confirmar con Edward el cierre de la fase
 
 ---
 

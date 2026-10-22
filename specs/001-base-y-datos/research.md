@@ -187,3 +187,34 @@ Medición con Lighthouse 12 móvil sobre la dirección pública, el 2026-10-22, 
 **Control:** una página "hola mundo" generada con `create-next-app` (sin nuestro código), medida en la misma máquina con el mismo método, dio **86, 87 y 89** (TBT de 340–400 ms, 217 KiB). El rendimiento de la página inicial equivale al de la plantilla vacía: el límite es el entorno de ejecución de React y Next (una tarea larga de hidratación) y la potencia de la máquina de medición, no el código del proyecto.
 
 **Estado de CA-9:** accesibilidad 100 y peso ≤ 350 KiB cumplen. Rendimiento ≥ 90 **no está confirmado**: 82–88 en esta máquina. PageSpeed Insights (servidores de Google) devolvió 429 por cuota diaria agotada y no se pudo usar. Pendiente: medir en `pagespeed.web.dev` y decidir con Edward si se acepta o se reduce JavaScript de hidratación en una fase posterior.
+
+## Cierre de la fase 1 (T057 y T058)
+
+**Fecha**: 2026-10-22. Sitio en producción: `https://p3r-portfolio-v2.vercel.app`.
+
+### Criterios de aceptación
+
+| Criterio | Resultado | Evidencia |
+|---|---|---|
+| CA-1 Desplegado en Vercel | Cumple | Producción responde 200 en `/es` y `/en` |
+| CA-2 Idioma inicial y persistencia | Cumple | E2E (`home.spec.ts`, `language.spec.ts`) y comprobación en producción |
+| CA-3 Cambio de idioma y `lang` del documento | Cumple | E2E y comprobación en producción |
+| CA-4 Sin texto de contenido en componentes | Cumple | Todo sale de `src/content/`; los textos de interfaz, de `ui-text.ts` |
+| CA-5 Datos opcionales ausentes | Cumple | E2E: sin enlaces ni huecos de correo, LinkedIn, CV y demo |
+| CA-6 Segundo proyecto solo con datos | Cumple | Comprobado: un proyecto añadido solo en `projects.ts` aparece en `/es` y `/en` (1 archivo modificado) |
+| CA-7 Tokens en un único lugar | Cumple | Pruebas de `tokens.test.ts`; cambiar `--color-cyan` se refleja en el CSS compilado |
+| CA-8 Lint, compilación, pruebas | Cumple | `npm run verify`: 32 unitarias y 92 E2E, 0 vulnerabilidades de producción |
+| CA-9 Lighthouse | Cumple con matiz | PageSpeed Insights móvil: 100 (según Edward). Lighthouse local y en Vercel: 82–88 en rendimiento y 100 en accesibilidad (R9) |
+| CA-10 Sin desplazamiento horizontal | Cumple | `layout.spec.ts` en 390, 768 y 1280 px |
+
+### Comprobación de idioma faltante (FR-011)
+
+Quitar el inglés de un título provoca `error TS2741: Property 'en' is missing in type '{ es: string; }' but required in type 'Localized'`, así que el error no llega a producción.
+
+### Pendiente fuera de la fase
+
+- **T054, lector de pantalla:** sin revisar por Edward. Lo automatizado (foco visible, orden de tabulación, contraste AA, accesibilidad 100 en Lighthouse) sí está cubierto.
+- **Rendimiento:** margen de mejora en hidratación (R9) si una fase posterior lo exige.
+- **404 localizado y `hreflang` absoluto:** fase 6.
+- **Texto provisional:** perfil, niveles del stack, personajes y texto del proyecto esperan confirmación de Edward.
+- **WebKit/Safari y dispositivo real:** verificación pendiente, según el contexto maestro.

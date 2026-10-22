@@ -1,13 +1,3 @@
-<!--
-Informe de impacto de sincronización (temporal; eliminar antes del commit)
-- Cambio de versión: (plantilla sin ratificar) → 1.0.0
-- Principios modificados: ninguno renombrado; los 5 marcadores de la plantilla se definieron por primera vez.
-- Secciones agregadas: Restricciones técnicas y de calidad; Flujo de desarrollo y puertas de calidad.
-- Secciones eliminadas: ninguna.
-- Pendientes diferidos: ninguno en la constitución. Las decisiones [Pendiente] de
-  docs/project-context.md (sección 15) se resuelven en cada fase y no bloquean la ratificación.
-- Fuente: docs/project-context.md (contexto maestro del proyecto).
--->
 # Constitución de Portafolio P3R v2
 
 ## Principios fundamentales

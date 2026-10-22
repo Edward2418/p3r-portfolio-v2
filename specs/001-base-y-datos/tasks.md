@@ -47,12 +47,12 @@ Proyecto único en la raíz del repositorio: `src/`, `tests/`, `public/` (ver pl
 
 **⚠️ CRÍTICO**: ninguna historia puede empezar hasta terminar esta fase.
 
-- [ ] T008 [P] Crear `src/content/types.ts` con `Lang` (`'es' | 'en'`), `Localized` (`{ es: string; en: string }`, ambos idiomas obligatorios y no vacíos tras recortar espacios) y los tipos de las entidades de `data-model.md`: `Profile`, `StackCategory` (`id`: `'frontend' | 'backend' | 'data-tools'`), `Technology` (`level`: `1 | 2 | 3 | 4 | 5`), `Project` (`status`: `'planning' | 'in-progress' | 'completed'`; `links` con `repository?` y `demo?`; `screenshots` con `alt: Localized` obligatorio; `provisional?: boolean`), `Character` (`rank` entre 1 y 10), `Contact` (solo `github` obligatorio; `email`, `linkedin`, `cv` opcionales) y `provisional?: boolean` donde aplique
-- [ ] T009 [P] Crear `src/lib/i18n/config.ts` con los idiomas soportados (`es`, `en`), el idioma por defecto (`en`), el nombre de la cookie (`lang`) y la función `isLang`
-- [ ] T010 [P] Escribir primero `tests/unit/localize.test.ts` (devuelve el texto del idioma pedido; falla de forma clara con un texto vacío) y comprobar que falla
-- [ ] T011 Implementar `src/lib/i18n/localize.ts` con `localize(valor, lang)` (depende de T008, T009) y hacer pasar T010
-- [ ] T012 [P] Definir los tokens en `src/app/globals.css` dentro de `@theme` de Tailwind 4 con los valores de `research.md` (D8): `--color-bg` `#050B1F`, `--color-text` `#F2F7FF`, `--color-cyan` `#3FD8FF`, `--color-red` `#E8203A`, `--color-red-text` `#F03A52`, `--color-red-fill` `#C4122B`, `--duration-fast/base/slow` (`150ms`/`250ms`/`600ms`), `--ease-out` `cubic-bezier(0.23, 1, 0.32, 1)`, y estilos base (fondo, texto, foco visible con contraste AA)
-- [ ] T013 [P] Configurar Anton (títulos) e Inter (texto) con `next/font/google` en `src/app/fonts.ts` (subconjunto `latin`, `display: swap`, solo los pesos usados) y exponerlas como `--font-display` y `--font-body` en los tokens
+- [x] T008 [P] Crear `src/content/types.ts` con `Lang` (`'es' | 'en'`), `Localized` (`{ es: string; en: string }`, ambos idiomas obligatorios y no vacíos tras recortar espacios) y los tipos de las entidades de `data-model.md`: `Profile`, `StackCategory` (`id`: `'frontend' | 'backend' | 'data-tools'`), `Technology` (`level`: `1 | 2 | 3 | 4 | 5`), `Project` (`status`: `'planning' | 'in-progress' | 'completed'`; `links` con `repository?` y `demo?`; `screenshots` con `alt: Localized` obligatorio; `provisional?: boolean`), `Character` (`rank` entre 1 y 10), `Contact` (solo `github` obligatorio; `email`, `linkedin`, `cv` opcionales) y `provisional?: boolean` donde aplique
+- [x] T009 [P] Crear `src/lib/i18n/config.ts` con los idiomas soportados (`es`, `en`), el idioma por defecto (`en`), el nombre de la cookie (`lang`) y la función `isLang`
+- [x] T010 [P] Escribir primero `tests/unit/localize.test.ts` (devuelve el texto del idioma pedido; falla de forma clara con un texto vacío) y comprobar que falla
+- [x] T011 Implementar `src/lib/i18n/localize.ts` con `localize(valor, lang)` (depende de T008, T009) y hacer pasar T010
+- [x] T012 [P] Definir los tokens en `src/app/globals.css` dentro de `@theme` de Tailwind 4 con los valores de `research.md` (D8): `--color-bg` `#050B1F`, `--color-text` `#F2F7FF`, `--color-cyan` `#3FD8FF`, `--color-red` `#E8203A`, `--color-red-text` `#F03A52`, `--color-red-fill` `#C4122B`, `--duration-fast/base/slow` (`150ms`/`250ms`/`600ms`), `--ease-out` `cubic-bezier(0.23, 1, 0.32, 1)`, y estilos base (fondo, texto, foco visible con contraste AA)
+- [x] T013 [P] Configurar Anton (títulos) e Inter (texto) con `next/font/google` en `src/app/fonts.ts` (subconjunto `latin`, `display: swap`, solo los pesos usados) y exponerlas como `--font-display` y `--font-body` en los tokens
 
 **Punto de control**: base lista. Las historias pueden empezar.
 
@@ -70,17 +70,17 @@ Proyecto único en la raíz del repositorio: `src/`, `tests/`, `public/` (ver pl
 
 > Escribirlas primero y comprobar que fallan.
 
-- [ ] T014 [US3] Escribir `tests/unit/content.test.ts` con las reglas de `data-model.md`: todo `Localized` tiene `es` y `en` no vacíos; los `id` son únicos por colección; las categorías de stack son exactamente tres; cada tecnología de un proyecto existe en el stack; los enlaces definidos son URL `https` válidas; `level` entre 1 y 5 y `rank` entre 1 y 10; todo `Screenshot` tiene `alt` en ambos idiomas. Incluir un caso con una lista de dos proyectos de prueba que valide sin tocar código (CA-6)
+- [x] T014 [US3] Escribir `tests/unit/content.test.ts` con las reglas de `data-model.md`: todo `Localized` tiene `es` y `en` no vacíos; los `id` son únicos por colección; las categorías de stack son exactamente tres; cada tecnología de un proyecto existe en el stack; los enlaces definidos son URL `https` válidas; `level` entre 1 y 5 y `rank` entre 1 y 10; todo `Screenshot` tiene `alt` en ambos idiomas. Incluir un caso con una lista de dos proyectos de prueba que valide sin tocar código (CA-6)
 
 ### Implementación de la historia 3
 
-- [ ] T015 [P] [US3] Crear `src/content/profile.ts` con `name`, `headline`, `summary` (`Localized`) y `provisional: true` (texto de ejemplo; no inventar datos personales)
-- [ ] T016 [P] [US3] Crear `src/content/stack.ts` con exactamente tres categorías (`frontend`, `backend`, `data-tools`), nombres `Localized`, tecnologías con `id` único, `name` y `level` de 1 a 5, marcadas `provisional: true`
-- [ ] T017 [P] [US3] Crear `src/content/projects.ts` con un solo proyecto, este portafolio: `id`, `title`, `summary` y `description` `Localized`, `technologies` (ids existentes en el stack), `status` y `links` con `repository` (`https://github.com/Edward2418/p3r-portfolio-v2`) y sin `demo` hasta que exista; `screenshots` vacío; `provisional: true` (el texto lo redacta la IA y Edward debe confirmarlo antes de quitar la marca)
-- [ ] T018 [P] [US3] Crear `src/content/characters.ts` con los personajes de Social Link del contexto maestro (Leon S. Kennedy, Resident Evil, Persona 3 Reload, Super Mario Galaxy): `id`, `name`, `arcana` y `shortText` `Localized`, `rank` entre 1 y 10, `provisional: true`, sin imagen
-- [ ] T019 [P] [US3] Crear `src/content/contact.ts` con `github` (`https://github.com/Edward2418`) y sin `email`, `linkedin` ni `cv`
-- [ ] T020 [P] [US3] Crear `src/content/ui-text.ts` con los textos de interfaz como mapa tipado de claves a `Localized`: etiquetas de sección, "Provisional", aviso de no afiliación del pie (proyecto de aprendizaje sin fines comerciales, no afiliado a los propietarios de las franquicias que inspiran el sitio), estados de proyecto, nombre accesible del selector de idioma, enlace a GitHub, título y descripción del documento
-- [ ] T021 [US3] Crear `src/content/index.ts` que reexporte todas las colecciones y ejecutar `npm run test:unit` hasta que T014 pase
+- [x] T015 [P] [US3] Crear `src/content/profile.ts` con `name`, `headline`, `summary` (`Localized`) y `provisional: true` (texto de ejemplo; no inventar datos personales)
+- [x] T016 [P] [US3] Crear `src/content/stack.ts` con exactamente tres categorías (`frontend`, `backend`, `data-tools`), nombres `Localized`, tecnologías con `id` único, `name` y `level` de 1 a 5, marcadas `provisional: true`
+- [x] T017 [P] [US3] Crear `src/content/projects.ts` con un solo proyecto, este portafolio: `id`, `title`, `summary` y `description` `Localized`, `technologies` (ids existentes en el stack), `status` y `links` con `repository` (`https://github.com/Edward2418/p3r-portfolio-v2`) y sin `demo` hasta que exista; `screenshots` vacío; `provisional: true` (el texto lo redacta la IA y Edward debe confirmarlo antes de quitar la marca)
+- [x] T018 [P] [US3] Crear `src/content/characters.ts` con los personajes de Social Link del contexto maestro (Leon S. Kennedy, Resident Evil, Persona 3 Reload, Super Mario Galaxy): `id`, `name`, `arcana` y `shortText` `Localized`, `rank` entre 1 y 10, `provisional: true`, sin imagen
+- [x] T019 [P] [US3] Crear `src/content/contact.ts` con `github` (`https://github.com/Edward2418`) y sin `email`, `linkedin` ni `cv`
+- [x] T020 [P] [US3] Crear `src/content/ui-text.ts` con los textos de interfaz como mapa tipado de claves a `Localized`: etiquetas de sección, "Provisional", aviso de no afiliación del pie (proyecto de aprendizaje sin fines comerciales, no afiliado a los propietarios de las franquicias que inspiran el sitio), estados de proyecto, nombre accesible del selector de idioma, enlace a GitHub, título y descripción del documento
+- [x] T021 [US3] Crear `src/content/index.ts` que reexporte todas las colecciones y ejecutar `npm run test:unit` hasta que T014 pase
 
 **Punto de control**: los datos validan y la historia 3 se prueba sola. Hacer commit (`feat(content): agregar datos tipados bilingües`).
 

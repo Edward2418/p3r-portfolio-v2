@@ -147,13 +147,13 @@ Proyecto único en la raíz del repositorio: `src/`, `tests/`, `public/` (ver pl
 
 ### Pruebas de la historia 4
 
-- [ ] T043 [P] [US4] Escribir `tests/unit/tokens.test.ts` que lea `src/app/globals.css`, calcule el contraste WCAG de los pares de `research.md` (D8) y falle si el texto normal baja de 4.5:1 (`--color-text`, `--color-cyan` y `--color-red-text` sobre `--color-bg`; `--color-text` sobre `--color-red-fill`) o el texto grande y los gráficos bajan de 3:1 (`--color-red` sobre `--color-bg`)
-- [ ] T044 [P] [US4] Escribir en el mismo `tests/unit/tokens.test.ts` una comprobación de que no hay colores `#hex` ni `rgb(` fuera de `src/app/globals.css` en `src/components/` ni `src/app/[lang]/`
+- [x] T043 [P] [US4] Escribir `tests/unit/tokens.test.ts` que lea `src/app/globals.css`, calcule el contraste WCAG de los pares de `research.md` (D8) y falle si el texto normal baja de 4.5:1 (`--color-text`, `--color-cyan` y `--color-red-text` sobre `--color-bg`; `--color-text` sobre `--color-red-fill`) o el texto grande y los gráficos bajan de 3:1 (`--color-red` sobre `--color-bg`)
+- [x] T044 [P] [US4] Escribir en el mismo `tests/unit/tokens.test.ts` una comprobación de que no hay colores `#hex` ni `rgb(` fuera de `src/app/globals.css` en `src/components/` ni `src/app/[lang]/`
 
 ### Implementación de la historia 4
 
-- [ ] T045 [US4] Revisar `src/components/` y `src/app/[lang]/` y reemplazar cualquier color, fuente, duración o curva suelta por tokens de `globals.css`; hacer pasar T043 y T044
-- [ ] T046 [US4] Verificar manualmente el cambio de un token (guía `quickstart.md`, sección 4) y revertirlo
+- [x] T045 [US4] Revisar `src/components/` y `src/app/[lang]/` y reemplazar cualquier color, fuente, duración o curva suelta por tokens de `globals.css`; hacer pasar T043 y T044
+- [x] T046 [US4] Verificar manualmente el cambio de un token (guía `quickstart.md`, sección 4) y revertirlo
 
 **Punto de control**: CA-7 cumplido. Hacer commit (`feat(design): centralizar tokens de diseño con prueba de contraste`).
 

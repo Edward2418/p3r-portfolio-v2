@@ -3,7 +3,7 @@
 > **Documento de contexto para desarrollo asistido por IA (Claude Code + Spec Kit)**
 >
 > **Nombre del proyecto:** Portafolio personal de Edward Negrete (v2)
-> **Estado:** Planeación
+> **Estado:** Fase 1 (Base y datos) completada el 2026-10-22; siguiente: fase 2 (Escena y menú)
 > **Tipo:** Portafolio profesional y proyecto de aprendizaje
 > **Fecha de redacción:** 22/10/2026
 
@@ -222,4 +222,4 @@ Insumo por fase: copiar `docs/sprints/_plantilla.md` a `docs/sprints/fase-N-<nom
 - **[Pendiente]** Técnica de animación (se decide en el plan de la fase 2).
 - **[Pendiente]** Uso de Higgsfield y presupuesto de créditos para el arte.
 - **[Pendiente]** Nombres definitivos de las opciones del menú en ambos idiomas.
-- **[Pendiente]** Dominio propio o dirección de Vercel.
+- **[Resuelto en la fase 1]** Dirección de Vercel (`p3r-portfolio-v2.vercel.app`); el dominio propio queda para más adelante.

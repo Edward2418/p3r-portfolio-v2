@@ -53,5 +53,6 @@ Una ruta que ya incluye `/es` o `/en` **nunca** se redirige: la dirección expl�
 | Etiqueta "Provisional" | Aparece solo junto a bloques con `provisional: true`; texto traducido. |
 | Enlaces opcionales (correo, LinkedIn, CV, repositorio, demo) | No se renderizan si no tienen dirección. |
 | Enlace a GitHub | Siempre presente, apunta a `https://github.com/Edward2418`. |
+| Pie de página | Siempre presente; muestra el aviso de proyecto de aprendizaje sin fines comerciales y sin afiliación a los propietarios de las franquicias, en el idioma de la ruta (FR-019). |
 | Desplazamiento horizontal | Ninguno en 390, 768 y 1280 px de ancho. |
 | Textos de contenido | Todos provienen de los datos; ninguno está escrito en componentes. |

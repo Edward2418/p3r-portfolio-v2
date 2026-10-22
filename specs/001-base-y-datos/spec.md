@@ -32,6 +32,7 @@ Como visitante, quiero abrir la dirección pública del sitio y ver una página 
 1. **Dado** que el sitio está publicado, **cuando** un visitante abre la dirección pública, **entonces** ve la página inicial con el nombre de Edward, su enlace a GitHub y la ficha del proyecto de este portafolio.
 2. **Dado** un visitante cuyo navegador está en español (o en inglés) y que no ha elegido idioma, **cuando** abre el sitio, **entonces** todos los textos aparecen en ese idioma.
 3. **Dado** un visitante cuyo navegador usa un idioma distinto de español e inglés, **cuando** abre el sitio, **entonces** ve el contenido en inglés.
+4. **Dado** cualquier visitante en la página inicial, **cuando** llega al pie, **entonces** lee el aviso de proyecto de aprendizaje sin fines comerciales y sin afiliación a los propietarios de las franquicias, en el idioma activo.
 
 ---
 
@@ -126,20 +127,21 @@ Como Edward, quiero pruebas automáticas y un despliegue repetible, para detecta
 - **FR-009**: El sistema DEBE tratar como opcionales el correo, LinkedIn, el CV y los enlaces de proyecto (repositorio, demo); un enlace sin dirección NO DEBE mostrarse (ni enlace, ni botón, ni espacio) hasta que el dato la tenga, y su ausencia NO DEBE romper la página ni dejar huecos visibles.
 - **FR-010**: El sistema DEBE permitir agregar un proyecto nuevo solo añadiendo datos.
 - **FR-011**: El sistema DEBE detectar antes de publicar los campos de contenido sin traducción en alguno de los dos idiomas.
-- **FR-012**: El sistema DEBE mostrar una etiqueta "Provisional" (en el idioma activo) junto a cada bloque de contenido de ejemplo (perfil, niveles del stack, personajes), controlada por un indicador en los datos que, al confirmar el dato, deja de mostrarla. El sistema NO DEBE incluir datos personales no confirmados por Edward.
+- **FR-012**: El sistema DEBE mostrar una etiqueta "Provisional" (en el idioma activo) junto a cada bloque de contenido de ejemplo (perfil, niveles del stack, personajes y texto del proyecto mientras Edward no lo confirme), controlada por un indicador en los datos que, al confirmar el dato, deja de mostrarla. El sistema NO DEBE incluir datos personales no confirmados por Edward.
 - **FR-013**: El sistema DEBE definir los tokens de diseño (colores, tipografías, duraciones y curvas de movimiento) en un único lugar, y la página inicial DEBE usarlos. La paleta base es "Medianoche y cian" (fondo `#050B1F`, acento cian `#3FD8FF`, texto `#F2F7FF`, rojo `#E8203A` reservado para el elemento activo) y las tipografías son Anton para títulos e Inter para texto; los pares de color de texto DEBEN cumplir contraste AA.
 - **FR-014**: El sistema DEBE cumplir accesibilidad básica: idioma del documento declarado, foco visible, contraste de texto AA y orden de tabulación lógico.
 - **FR-015**: El sistema NO DEBE presentar desplazamiento horizontal en 390, 768 y 1280 px de ancho.
-- **FR-016**: El proyecto DEBE incluir verificaciones automáticas de estilo de código, compilación de producción, pruebas unitarias y pruebas de extremo a extremo en 390, 768 y 1280 px, y todas DEBEN pasar.
+- **FR-016**: El proyecto DEBE incluir verificaciones automáticas de estilo de código, compilación de producción, pruebas unitarias y pruebas de extremo a extremo en 390, 768 y 1280 px, y todas DEBEN pasar. Las pruebas unitarias y la compilación DEBEN ejecutarse automáticamente antes de cada despliegue, de modo que un fallo impida publicar.
 - **FR-017**: El despliegue DEBE ser repetible, sin secretos en el repositorio y con las dependencias de producción auditadas antes de publicar.
 - **FR-018**: La página inicial NO DEBE incluir splash, menú principal, transiciones, audio, video ni arte nuevo (fuera de alcance de esta fase).
+- **FR-019**: El sistema DEBE mostrar en el pie de la página, en ambos idiomas, un aviso de que es un proyecto de aprendizaje sin fines comerciales y de que no está afiliado a los propietarios de las franquicias que inspiran su estilo y sus personajes.
 
 ### Entidades clave
 
 - **Perfil**: presentación de Edward ("Quién soy"); texto bilingüe, marcado como provisional hasta que Edward lo confirme.
 - **Categoría de stack**: una de tres agrupaciones (frontend, backend, bases de datos / herramientas) con su nombre bilingüe.
 - **Tecnología**: elemento del stack con nombre y nivel; pertenece a una categoría.
-- **Proyecto**: título, resumen, descripción, tecnologías, enlaces (repositorio, demo), capturas y estado, todo bilingüe donde aplique; hoy solo este portafolio.
+- **Proyecto**: título, resumen, descripción, tecnologías, enlaces (repositorio, demo), capturas y estado, todo bilingüe donde aplique; hoy solo este portafolio, con texto provisional hasta que Edward lo confirme.
 - **Personaje de Social Link**: nombre, arcano, rango y texto corto bilingüe; sin arte en esta fase.
 - **Contacto**: GitHub (definido); correo, LinkedIn y CV opcionales y vacíos.
 - **Preferencia de idioma**: idioma elegido por el visitante, que se conserva entre visitas.
@@ -163,7 +165,7 @@ Como Edward, quiero pruebas automáticas y un despliegue repetible, para detecta
 
 - El visitante usa un navegador moderno de escritorio o móvil; no hay cuentas ni inicio de sesión.
 - La página inicial es una página de verificación de la base, sin diseño P3R ni animaciones; el diseño y movimiento llegan desde la fase 2.
-- Los textos de perfil, los niveles del stack y los personajes son de ejemplo y se marcan como provisionales hasta que Edward los confirme.
+- Los textos de perfil, los niveles del stack, los personajes y el texto del proyecto son de ejemplo y se marcan como provisionales hasta que Edward los confirme.
 - El único proyecto cargado es este portafolio; el segundo proyecto de prueba (CA-6) es temporal y no se publica.
 - Decisiones confirmadas por Edward el 2026-10-22: dirección de Vercel sin dominio propio por ahora, rutas por idioma (`/es` y `/en`) y paleta "Medianoche y cian" con tipografías Anton e Inter.
 - Las decisiones técnicas (librería de internacionalización o solución propia, formato y validación de los datos, versión de Node y gestor de paquetes) se resuelven en `/speckit.clarify` y `/speckit.plan`, y se documentan en `research.md`.

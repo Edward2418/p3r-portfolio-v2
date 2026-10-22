@@ -38,7 +38,7 @@ Dejar el terreno técnico listo para las fases siguientes: un proyecto Next.js d
 | II. Movimiento fiel a la referencia | No aplica: sin movimiento en esta fase. Se definen duraciones y curvas como tokens. | Cumple: tokens `--duration-*` y `--ease-*` listos; sin animaciones que revisar. |
 | III. Accesibilidad | Cumple por diseño: `lang`, foco visible, AA, teclado, sin desplazamiento horizontal. | Cumple, con ajuste: el rojo original no cumple AA para texto normal; se añaden `--color-red-text` y `--color-red-fill` y una prueba de contraste (D8). |
 | IV. Contenido en datos tipados y bilingüe | Cumple: `Localized` obliga a ambos idiomas; componentes sin textos. | Cumple: [data-model.md](./data-model.md), textos de interfaz en `UiText`, validación por compilador y pruebas. |
-| V. Honestidad y derechos | Cumple: bloques de ejemplo con `provisional`; no se inventan datos. | Cumple: etiqueta "Provisional"; el aviso de no afiliación se añade en la fase 6 (System) o en el pie si cabe. |
+| V. Honestidad y derechos | Cumple: bloques de ejemplo con `provisional`; no se inventan datos. | Cumple: etiqueta "Provisional"; aviso de no afiliación en el pie de la página inicial (FR-019); el texto del proyecto también se marca provisional hasta que Edward lo confirme. |
 | VI. Fases y trazabilidad | Cumple: solo alcance de la fase 1. | Cumple: trazabilidad en [tasks.md](./tasks.md) (se genera con `/speckit-tasks`). |
 | Stack | Cumple: Next 16, React 19, TypeScript, Tailwind 4, Vercel, Playwright, `node --test`. | Cumple. |
 | Rendimiento y carga bajo demanda | Cumple: sin audio ni video; fuentes propias. | Cumple; se mide al cerrar la fase. |
@@ -77,6 +77,7 @@ src/
 ├── proxy.ts                 # Redirección de idioma (cookie > Accept-Language > en)
 ├── components/              # Solo presentación; sin textos de contenido
 │   ├── LanguageSwitcher.tsx
+│   ├── Footer.tsx           # Aviso de no afiliación (FR-019)
 │   ├── ProvisionalBadge.tsx
 │   └── sections/            # Perfil, stack, proyectos, personajes, contacto
 ├── content/                 # Datos tipados y bilingües
@@ -114,5 +115,7 @@ Sin violaciones de la constitución; no aplica.
 - **TypeScript 7**: confirmar compatibilidad con Next 16 y el lint; si no, usar la versión que traiga `create-next-app` y anotarlo en `research.md`.
 - **Pruebas `.ts` nativas**: si la eliminación de tipos de Node da problemas con las importaciones, evaluar `tsx` como dependencia de desarrollo con justificación.
 - **Cookie y almacenamiento bloqueado**: si el visitante bloquea cookies, el idioma sigue funcionando por la ruta durante la visita (caso límite de la especificación); cubrirlo con una prueba E2E.
+- **Rama y despliegue**: la fase se trabaja en la rama `001-base-y-datos`, cuyos pushes generan vistas previas de Vercel; solo se fusiona a `main` (producción) cuando `npm run verify` pasa.
+- **Puerta de publicación**: `vercel.json` ejecuta `npm run test:unit && npm run build` en cada despliegue, de modo que un fallo impide publicar (FR-011, FR-016). Las pruebas E2E no corren en Vercel; se ejecutan en local con `npm run verify` antes de fusionar.
 - **Repositorio remoto**: `origin` apunta a `Edward2418/p3r-portfolio-v2`; falta que Edward conecte ese repositorio a un proyecto de Vercel y confirme los permisos.
 - **WebKit/Safari**: verificación pendiente, según el contexto maestro.

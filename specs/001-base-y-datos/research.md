@@ -93,7 +93,9 @@ Las versiones se consultaron en el registro de npm el 2026-10-22.
 ## D10. Despliegue en Vercel
 
 - **Decisión**: repositorio de GitHub conectado a un proyecto de Vercel; cada push a `main` despliega a producción y las demás ramas generan vistas previas. Nombre de proyecto limpio para obtener una dirección `*.vercel.app` legible (decisión de Edward: sin dominio propio por ahora). Sin variables de entorno en esta fase (no hace falta `.env.example`; si aparecen, se agrega).
-- **Razón**: es lo más simple y repetible (FR-017). Antes de cada despliegue se ejecutan lint, compilación, pruebas y `npm audit --omit=dev`.
+- **Razón**: es lo más simple y repetible (FR-017). Antes de fusionar a `main` se ejecuta `npm run verify` (lint, compilación, pruebas unitarias, E2E y `npm audit --omit=dev`).
+- **Puerta de publicación (añadido tras `/speckit-analyze`, hallazgo E1)**: `vercel.json` define `buildCommand` como `npm run test:unit && npm run build`. Así, un fallo de pruebas unitarias (por ejemplo un texto vacío en un idioma que el compilador no detecta) o de compilación impide el despliegue, en vistas previas y en producción. Las pruebas E2E necesitan navegadores y no corren en Vercel; se ejecutan en local con `npm run verify`. Alternativa descartada por ahora: un flujo de CI en GitHub Actions (más piezas que mantener para una sola persona).
+- **Flujo de ramas (añadido tras `/speckit-analyze`, hallazgo I1)**: la fase se trabaja en la rama `001-base-y-datos`; cada push genera una vista previa sin tocar producción. Se fusiona a `main` mediante pull request solo cuando `npm run verify` pasa. Evita que commits intermedios (por ejemplo con el proyecto vacío) rompan producción.
 - **Alternativas**: despliegue manual con la CLI (menos repetible); otro proveedor (fuera del stack).
 - **Acción de Edward**: crear el proyecto en Vercel, conectarlo al repositorio `Edward2418/p3r-portfolio-v2` (ya es el `origin` local) y elegir el nombre. Falta confirmar que el repositorio existe en GitHub y tiene permisos para Vercel.
 

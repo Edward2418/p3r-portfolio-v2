@@ -30,7 +30,7 @@ Ejecuta `npm run build` y `npm run start`, o abre la dirección pública de Verc
 4. Recarga la página: sigue en `/en`. Abre `/` de nuevo: te lleva a `/en` por la cookie `lang`.
 5. Abre `/es` directamente con la cookie en `en`: se queda en `/es` (la ruta explícita manda).
 6. Con el teclado: tabula hasta el selector, comprueba el foco visible y actívalo con Enter.
-7. Comprueba que se ven el nombre, el enlace a GitHub, la ficha del proyecto y la etiqueta "Provisional" en perfil, niveles del stack y personajes (FR-002, FR-012).
+7. Comprueba que se ven el nombre, el enlace a GitHub, la ficha del proyecto y la etiqueta "Provisional" en perfil, niveles del stack, personajes y proyecto (FR-002, FR-012). Al final, en el pie, lee el aviso de no afiliación en el idioma activo (FR-019).
 8. Con el correo, LinkedIn, CV y la demo sin dirección: no hay enlaces rotos, botones vacíos ni huecos (CA-5).
 
 ## 3. Contenido sin tocar componentes (CA-4, CA-6)
@@ -61,6 +61,6 @@ Ejecuta `npm run build` y `npm run start`, o abre la dirección pública de Verc
 
 ## 6. Despliegue (CA-1)
 
-1. Haz push a `main`: Vercel despliega a producción.
+1. Haz push a la rama `001-base-y-datos`: Vercel genera una vista previa. Cuando `npm run verify` pase, fusiona la rama a `main` con un pull request: Vercel despliega a producción.
 2. Abre la dirección pública `*.vercel.app` y repite el recorrido manual del punto 2.
 3. Confirma que un push en otra rama genera una vista previa y que `main` no cambia.

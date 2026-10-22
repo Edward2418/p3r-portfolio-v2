@@ -59,6 +59,7 @@ Relación: una `StackCategory` contiene una o más `Technology`.
 | `status` | `'planning' \| 'in-progress' \| 'completed'` | Sí | Etiqueta visible traducida desde los textos de interfaz. |
 | `links` | `{ repository?: string; demo?: string }` | No | Un enlace ausente no se renderiza (FR-009). Las direcciones deben ser URL `https`. |
 | `screenshots` | `Screenshot[]` | No | Vacío en esta fase. |
+| `provisional` | `boolean` | No | `true` mientras Edward no confirme el texto del proyecto. |
 
 `Screenshot` = `{ src: string; alt: Localized }` (el texto alternativo es obligatorio por accesibilidad).
 Hoy contiene un solo proyecto: este portafolio. Agregar otro es añadir un objeto a la lista (FR-010, SC-004).
@@ -89,7 +90,7 @@ Los campos opcionales ausentes no generan elemento, espacio ni error (FR-009, SC
 
 ### UiText (textos de interfaz)
 
-Mapa tipado de claves a `Localized` para todo texto que no es contenido de portafolio: etiquetas de secciones, "Provisional", estados de proyecto, nombre accesible del selector de idioma, título y descripción del documento. Los componentes solo leen claves de aquí (FR-008).
+Mapa tipado de claves a `Localized` para todo texto que no es contenido de portafolio: etiquetas de secciones, "Provisional", aviso de no afiliación del pie, estados de proyecto, nombre accesible del selector de idioma, título y descripción del documento. Los componentes solo leen claves de aquí (FR-008).
 
 ### LanguagePreference (preferencia de idioma)
 

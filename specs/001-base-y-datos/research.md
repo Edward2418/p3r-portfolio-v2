@@ -174,3 +174,16 @@ Ajustes hechos a partir de la medición:
 ### R8. Preset de framework en Vercel (T051)
 
 El primer despliegue de la rama falló con `STATIC_BUILD_NO_OUT_DIR: No Output Directory named "public" found`. Las pruebas unitarias y la compilación de Next sí habían pasado. La causa: el proyecto de Vercel se creó cuando el repositorio solo tenía documentos, así que Vercel asignó el preset "Other" (sitio estático, salida `public`). Se corrige en `vercel.json` con `"framework": "nextjs"`, que prevalece sobre el ajuste del panel y queda versionado. Lección: fijar el framework en el repositorio en lugar de depender de la detección al crear el proyecto.
+
+### R9. Medición en Vercel y control de rendimiento (T053)
+
+Medición con Lighthouse 12 móvil sobre la dirección pública, el 2026-10-22, después de fusionar a `main`:
+
+| Ruta | Rendimiento | Accesibilidad | SEO | Prácticas | LCP | TBT | KiB |
+|---|---|---|---|---|---|---|---|
+| `/es` | 86 y 88 | 100 | 100 | 96 | 2.3–2.4 s | 430–470 ms | 208.4 |
+| `/en` | 82 y 88 | 100 | 100 | 96 | 2.4–2.5 s | 430–610 ms | 208.3 |
+
+**Control:** una página "hola mundo" generada con `create-next-app` (sin nuestro código), medida en la misma máquina con el mismo método, dio **86, 87 y 89** (TBT de 340–400 ms, 217 KiB). El rendimiento de la página inicial equivale al de la plantilla vacía: el límite es el entorno de ejecución de React y Next (una tarea larga de hidratación) y la potencia de la máquina de medición, no el código del proyecto.
+
+**Estado de CA-9:** accesibilidad 100 y peso ≤ 350 KiB cumplen. Rendimiento ≥ 90 **no está confirmado**: 82–88 en esta máquina. PageSpeed Insights (servidores de Google) devolvió 429 por cuota diaria agotada y no se pudo usar. Pendiente: medir en `pagespeed.web.dev` y decidir con Edward si se acepta o se reduce JavaScript de hidratación en una fase posterior.

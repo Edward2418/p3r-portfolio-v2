@@ -133,7 +133,7 @@ Menú principal **[Claude]**:
 - Todo el contenido vive en archivos de datos tipados (TypeScript), con ambos idiomas por campo. Los componentes no contienen textos.
 - **Proyectos [Edward]:** por ahora solo este portafolio. Se prepara para agregar más. Cada proyecto: título, resumen, descripción, tecnologías, enlaces (repositorio, demo), capturas y estado.
 - La ficha de este proyecto cuenta también el proceso: v1 sin metodología → v2 con SDD **[Claude]**.
-- **Contacto y CV:** la v1 retiró CV y LinkedIn por alcance. **[Pendiente]** decidir qué enlaces y si se incluye CV descargable en la v2 (para prácticas y empleo suele ser lo primero que se busca).
+- **Contacto y enlaces:** GitHub **[Edward]**: https://github.com/Edward2418. Los demás enlaces (correo, LinkedIn, otros) y el CV descargable quedan **[Pendiente]** para más adelante; la v1 los había retirado por alcance. El sitio debe funcionar sin ellos y permitir agregarlos como datos sin tocar componentes.
 - Solo contenido confirmado por Edward; sin referencias no verificadas.
 
 # 10. Decisiones sobre piezas de la v1
@@ -217,7 +217,7 @@ Insumo por fase: copiar `docs/sprints/_plantilla.md` a `docs/sprints/fase-N-<nom
 
 # 15. Decisiones pendientes
 
-- **[Pendiente]** Enlaces de contacto, LinkedIn, GitHub y si se incluye CV descargable.
+- **[Pendiente]** Correo, LinkedIn, otros enlaces de contacto y si se incluye CV descargable (GitHub ya está definido en la sección 9).
 - **[Pendiente]** Texto de presentación y datos de "Quién soy" (los redacta o confirma Edward).
 - **[Pendiente]** Técnica de animación (se decide en el plan de la fase 2).
 - **[Pendiente]** Uso de Higgsfield y presupuesto de créditos para el arte.

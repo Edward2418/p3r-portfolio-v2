@@ -170,3 +170,7 @@ Ajustes hechos a partir de la medición:
 - **label-content-name-mismatch:** el nombre accesible del selector de idioma ahora empieza con el texto visible (`English — Switch to Spanish`).
 
 **Rendimiento por debajo de la meta en local:** casi todo el bloqueo (TBT de 430–480 ms con CPU limitada 4×) es una sola tarea larga de unos 448 ms en el script de 70 KiB del entorno de ejecución de React y Next, no código del proyecto. El índice de rendimiento de la máquina (940) es comparable a la referencia de Lighthouse. La medición que cuenta para CA-9 es la de la dirección pública de Vercel (compresión, HTTP/2 y CDN); si allí queda por debajo de 90, se investiga en esta fase (hidratación, `browserslist`, CSS en línea).
+
+### R8. Preset de framework en Vercel (T051)
+
+El primer despliegue de la rama falló con `STATIC_BUILD_NO_OUT_DIR: No Output Directory named "public" found`. Las pruebas unitarias y la compilación de Next sí habían pasado. La causa: el proyecto de Vercel se creó cuando el repositorio solo tenía documentos, así que Vercel asignó el preset "Other" (sitio estático, salida `public`). Se corrige en `vercel.json` con `"framework": "nextjs"`, que prevalece sobre el ajuste del panel y queda versionado. Lección: fijar el framework en el repositorio en lugar de depender de la detección al crear el proyecto.

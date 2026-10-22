@@ -1,0 +1,44 @@
+# Dependencias
+node_modules/
+.pnp
+.pnp.*
+.yarn/*
+
+# Next.js
+.next/
+out/
+next-env.d.ts
+
+# Producción
+build/
+
+# Pruebas
+coverage/
+test-results/
+playwright-report/
+playwright/.cache/
+
+# Variables de entorno (conservar solo el ejemplo)
+.env
+.env.*
+!.env.example
+
+# Vercel
+.vercel/
+
+# Registros y depuración
+*.log
+npm-debug.log*
+
+# Sistema y editores
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Archivos pesados de trabajo (originales de video/arte fuera del repositorio)
+/recursos-originales/
+
+# TypeScript
+*.tsbuildinfo

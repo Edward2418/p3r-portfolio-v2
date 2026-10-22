@@ -22,7 +22,6 @@ export async function generateMetadata({ params }: LayoutProps<"/[lang]">): Prom
   return {
     title: localize(uiText.siteTitle, lang),
     description: localize(uiText.siteDescription, lang),
-    alternates: { languages: { es: "/es", en: "/en" } },
   };
 }
 

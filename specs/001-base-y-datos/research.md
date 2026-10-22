@@ -151,3 +151,22 @@ Node no resuelve el alias `@/`. Los archivos de `src/lib` y `src/content` que cu
 ### R6. Rutas inexistentes (T036)
 
 Las rutas que no existen (por ejemplo `/en/foo` o `/fr`) devuelven 404 con la página por defecto de Next.js, en inglés. La página `not-found.tsx` localizada solo se muestra cuando una página de `[lang]` llama a `notFound()`. Una página 404 global localizada exigiría `global-not-found.js`, que la documentación marca como experimental; se pospone a la fase 6.
+
+### R7. Mediciones locales y ajustes de Lighthouse (T053)
+
+Medición con Lighthouse 12 móvil sobre la compilación de producción local, el 2026-10-22:
+
+| Categoría | Resultado | Meta |
+|---|---|---|
+| Rendimiento | 85–86 (tres corridas estables; la primera, antes de los ajustes, dio 80–85) | ≥ 90 |
+| Accesibilidad | 100 | 100 |
+| SEO | 100 (antes 90) | ≥ 95 |
+| Prácticas recomendadas | 96 | — |
+| Transferido | 204.6 KiB | ≤ 350 KiB |
+
+Ajustes hechos a partir de la medición:
+
+- **hreflang:** se quitaron las alternativas de idioma (`alternates`) de los metadatos porque Lighthouse exige URL absolutas y aún no hay dominio definitivo. Se retoman en la fase 6 (SEO) con `metadataBase`.
+- **label-content-name-mismatch:** el nombre accesible del selector de idioma ahora empieza con el texto visible (`English — Switch to Spanish`).
+
+**Rendimiento por debajo de la meta en local:** casi todo el bloqueo (TBT de 430–480 ms con CPU limitada 4×) es una sola tarea larga de unos 448 ms en el script de 70 KiB del entorno de ejecución de React y Next, no código del proyecto. El índice de rendimiento de la máquina (940) es comparable a la referencia de Lighthouse. La medición que cuenta para CA-9 es la de la dirección pública de Vercel (compresión, HTTP/2 y CDN); si allí queda por debajo de 90, se investiga en esta fase (hidratación, `browserslist`, CSS en línea).

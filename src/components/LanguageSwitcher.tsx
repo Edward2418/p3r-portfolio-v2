@@ -10,7 +10,7 @@ import { buildLangCookie } from "../lib/i18n/cookie.ts";
 interface LanguageSwitcherProps {
   /** Idioma al que cambia el enlace. */
   target: Lang;
-  /** Nombre accesible, ya traducido al idioma activo. */
+  /** Descripción de la acción, ya traducida al idioma activo; se añade al nombre visible. */
   label: string;
 }
 
@@ -32,7 +32,7 @@ export function LanguageSwitcher({ target, label }: LanguageSwitcherProps) {
       href={href}
       hrefLang={target}
       lang={target}
-      aria-label={label}
+      aria-label={`${LANG_NAMES[target]} — ${label}`}
       onClick={rememberLanguage}
       className="inline-flex min-h-11 items-center border border-cyan px-4 text-cyan hover:bg-cyan hover:text-bg"
     >

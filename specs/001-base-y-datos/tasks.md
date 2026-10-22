@@ -187,8 +187,8 @@ Proyecto único en la raíz del repositorio: `src/`, `tests/`, `public/` (ver pl
 
 - [ ] T053 [P] Ejecutar Lighthouse móvil sobre `/es` y `/en` en producción local y en Vercel (`quickstart.md`, sección 5), medir los KiB transferidos y anotar los resultados en la tabla de `specs/001-base-y-datos/quickstart.md` (meta: rendimiento ≥ 90, accesibilidad 100, ≤ 350 KiB)
 - [ ] T054 [P] Revisar accesibilidad manualmente: orden de tabulación, foco visible, lector de pantalla en el selector y en las etiquetas "Provisional", contraste AA
-- [ ] T055 [P] Revisar los componentes y la página con la skill `vercel-react-best-practices` y corregir lo que corresponda
-- [ ] T056 [P] Escribir `README.md` en español: qué es el proyecto, requisitos, cómo ejecutarlo, scripts, estructura y cómo agregar un proyecto o dato (sin tocar componentes)
+- [x] T055 [P] Revisar los componentes y la página con la skill `vercel-react-best-practices` y corregir lo que corresponda
+- [x] T056 [P] Escribir `README.md` en español: qué es el proyecto, requisitos, cómo ejecutarlo, scripts, estructura y cómo agregar un proyecto o dato (sin tocar componentes)
 - [ ] T057 Ejecutar la guía completa `specs/001-base-y-datos/quickstart.md` y marcar los criterios CA-1 a CA-10 en `docs/sprints/fase-1-base-y-datos.md`
 - [ ] T058 Registrar en `specs/001-base-y-datos/research.md` las decisiones que cambiaron durante la implementación (versiones, TypeScript 7, pruebas `.ts` nativas) y confirmar con Edward el cierre de la fase
 

@@ -57,7 +57,8 @@ Ejecuta `npm run build` y `npm run start`, o abre la dirección pública de Verc
 
 | Fecha | Dirección | Rendimiento | Accesibilidad | KiB transferidos |
 |---|---|---|---|---|
-| (pendiente) | | | | |
+| 2026-10-22 | `http://localhost:3200/es` (compilación de producción local) | 85–86 (3 corridas) | 100 | 204.6 |
+| (pendiente) | Dirección pública de Vercel | | | |
 
 ## 6. Despliegue (CA-1)
 

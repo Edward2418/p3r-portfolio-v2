@@ -94,24 +94,24 @@ Proyecto único en la raíz del repositorio: `src/`, `tests/`, `public/` (ver pl
 
 ### Pruebas de la historia 1
 
-- [ ] T022 [P] [US1] Escribir `tests/unit/negotiate.test.ts` con la prioridad cookie `lang` > `Accept-Language` > `en`: `es-MX` → `es`, `en-GB` → `en`, `fr` → `en`, cabecera vacía → `en`, cookie inválida ignorada, listas con pesos `q`
-- [ ] T023 [P] [US1] Escribir `tests/e2e/home.spec.ts` (Playwright, configurando el idioma del navegador): `/` redirige según el idioma del navegador; `/es` y `/en` muestran nombre, enlace a GitHub y la ficha del proyecto; `<html lang>` coincide con la ruta; un idioma no soportado en la ruta (`/fr`) da 404; sin correo, LinkedIn, CV ni demo no hay enlaces ni huecos; la cantidad de etiquetas "Provisional" visibles es igual a la cantidad de bloques con `provisional: true` en los datos (perfil, tecnologías, personajes y proyecto), de modo que quitar la marca de un dato la oculta (FR-012); el pie muestra el aviso de no afiliación en ambos idiomas (FR-019)
+- [x] T022 [P] [US1] Escribir `tests/unit/negotiate.test.ts` con la prioridad cookie `lang` > `Accept-Language` > `en`: `es-MX` → `es`, `en-GB` → `en`, `fr` → `en`, cabecera vacía → `en`, cookie inválida ignorada, listas con pesos `q`
+- [x] T023 [P] [US1] Escribir `tests/e2e/home.spec.ts` (Playwright, configurando el idioma del navegador): `/` redirige según el idioma del navegador; `/es` y `/en` muestran nombre, enlace a GitHub y la ficha del proyecto; `<html lang>` coincide con la ruta; un idioma no soportado en la ruta (`/fr`) da 404; sin correo, LinkedIn, CV ni demo no hay enlaces ni huecos; la cantidad de etiquetas "Provisional" visibles es igual a la cantidad de bloques con `provisional: true` en los datos (perfil, tecnologías, personajes y proyecto), de modo que quitar la marca de un dato la oculta (FR-012); el pie muestra el aviso de no afiliación en ambos idiomas (FR-019)
 
 ### Implementación de la historia 1
 
-- [ ] T024 [US1] Implementar `src/lib/i18n/negotiate.ts` con el análisis propio de `Accept-Language` y la resolución del idioma por prioridad; hacer pasar T022
-- [ ] T025 [US1] Implementar `src/proxy.ts` (según la guía leída en T004) para redirigir rutas sin idioma usando `negotiate.ts`, respetando las rutas con `/es` o `/en`, y excluyendo `/_next` y archivos estáticos
-- [ ] T026 [P] [US1] Crear `src/components/ProvisionalBadge.tsx`: etiqueta "Provisional" con el texto tomado de `ui-text.ts`; no se renderiza si el bloque no es provisional
-- [ ] T027 [P] [US1] Crear `src/components/sections/ProfileSection.tsx` (perfil, con `ProvisionalBadge`)
-- [ ] T028 [P] [US1] Crear `src/components/sections/StackSection.tsx` (categorías y tecnologías con nivel, con `ProvisionalBadge`)
-- [ ] T029 [P] [US1] Crear `src/components/sections/ProjectsSection.tsx` (proyectos, con `ProvisionalBadge`; los enlaces `repository` y `demo` solo se renderizan si tienen dirección, sin dejar huecos)
-- [ ] T030 [P] [US1] Crear `src/components/sections/CharactersSection.tsx` (personajes con arcano, rango y texto corto, con `ProvisionalBadge`)
-- [ ] T031 [P] [US1] Crear `src/components/sections/ContactSection.tsx` (GitHub siempre; correo, LinkedIn y CV solo si existen)
-- [ ] T032 [P] [US1] Crear `src/components/Footer.tsx` con el aviso de no afiliación a las franquicias que inspiran el sitio y de proyecto de aprendizaje sin fines comerciales (Principio V, FR-019), con el texto tomado de `ui-text.ts` y visible en ambos idiomas
-- [ ] T033 [US1] Crear `src/app/[lang]/layout.tsx` con `<html lang>` igual a la ruta, fuentes de `fonts.ts`, `generateStaticParams` para `es` y `en`, metadatos traducidos desde `ui-text.ts`, y `hasLocale`/`notFound()` para idiomas no soportados (depende de T004, T011, T013)
-- [ ] T034 [US1] Crear `src/app/[lang]/page.tsx` que componga las cinco secciones y el pie (T032) leyendo los datos de `src/content/index.ts` y `localize`, sin textos escritos en los componentes (depende de T021, T026–T031, T032, T033)
-- [ ] T035 [P] [US1] Crear `src/app/[lang]/not-found.tsx` con textos desde `ui-text.ts`
-- [ ] T036 [US1] Ejecutar `npm run build`, `npm run test:unit` y `npm run test:e2e` hasta que T022 y T023 pasen en 390, 768 y 1280 px
+- [x] T024 [US1] Implementar `src/lib/i18n/negotiate.ts` con el análisis propio de `Accept-Language` y la resolución del idioma por prioridad; hacer pasar T022
+- [x] T025 [US1] Implementar `src/proxy.ts` (según la guía leída en T004) para redirigir rutas sin idioma usando `negotiate.ts`, respetando las rutas con `/es` o `/en`, y excluyendo `/_next` y archivos estáticos
+- [x] T026 [P] [US1] Crear `src/components/ProvisionalBadge.tsx`: etiqueta "Provisional" con el texto tomado de `ui-text.ts`; no se renderiza si el bloque no es provisional
+- [x] T027 [P] [US1] Crear `src/components/sections/ProfileSection.tsx` (perfil, con `ProvisionalBadge`)
+- [x] T028 [P] [US1] Crear `src/components/sections/StackSection.tsx` (categorías y tecnologías con nivel, con `ProvisionalBadge`)
+- [x] T029 [P] [US1] Crear `src/components/sections/ProjectsSection.tsx` (proyectos, con `ProvisionalBadge`; los enlaces `repository` y `demo` solo se renderizan si tienen dirección, sin dejar huecos)
+- [x] T030 [P] [US1] Crear `src/components/sections/CharactersSection.tsx` (personajes con arcano, rango y texto corto, con `ProvisionalBadge`)
+- [x] T031 [P] [US1] Crear `src/components/sections/ContactSection.tsx` (GitHub siempre; correo, LinkedIn y CV solo si existen)
+- [x] T032 [P] [US1] Crear `src/components/Footer.tsx` con el aviso de no afiliación a las franquicias que inspiran el sitio y de proyecto de aprendizaje sin fines comerciales (Principio V, FR-019), con el texto tomado de `ui-text.ts` y visible en ambos idiomas
+- [x] T033 [US1] Crear `src/app/[lang]/layout.tsx` con `<html lang>` igual a la ruta, fuentes de `fonts.ts`, `generateStaticParams` para `es` y `en`, metadatos traducidos desde `ui-text.ts`, y `hasLocale`/`notFound()` para idiomas no soportados (depende de T004, T011, T013)
+- [x] T034 [US1] Crear `src/app/[lang]/page.tsx` que componga las cinco secciones y el pie (T032) leyendo los datos de `src/content/index.ts` y `localize`, sin textos escritos en los componentes (depende de T021, T026–T031, T032, T033)
+- [x] T035 [P] [US1] Crear `src/app/[lang]/not-found.tsx` con textos desde `ui-text.ts`
+- [x] T036 [US1] Ejecutar `npm run build`, `npm run test:unit` y `npm run test:e2e` hasta que T022 y T023 pasen en 390, 768 y 1280 px
 
 **Punto de control**: la historia 1 funciona sola (MVP local). Hacer commit (`feat(home): agregar página inicial con rutas por idioma`).
 

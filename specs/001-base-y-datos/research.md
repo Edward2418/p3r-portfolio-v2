@@ -147,3 +147,7 @@ Node no resuelve el alias `@/`. Los archivos de `src/lib` y `src/content` que cu
 ### R5. Scripts de npm (T005)
 
 `test:e2e` compila antes mediante `pretest:e2e` (`npm run build`) y levanta `next start` con Playwright. Por eso `verify` no repite `build`: ejecuta `lint`, `test:unit`, `test:e2e` (que compila) y `npm audit --omit=dev`.
+
+### R6. Rutas inexistentes (T036)
+
+Las rutas que no existen (por ejemplo `/en/foo` o `/fr`) devuelven 404 con la página por defecto de Next.js, en inglés. La página `not-found.tsx` localizada solo se muestra cuando una página de `[lang]` llama a `notFound()`. Una página 404 global localizada exigiría `global-not-found.js`, que la documentación marca como experimental; se pospone a la fase 6.

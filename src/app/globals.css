@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+/*
+ * Tokens de diseño: único lugar donde se definen colores, tipografías,
+ * duraciones y curvas de movimiento (FR-013, CA-7).
+ * Paleta "Medianoche y cian". Los pares de texto se verifican con
+ * tests/unit/tokens.test.ts (contraste AA).
+ */
+@theme {
+  /* Color */
+  --color-bg: #050b1f;
+  --color-text: #f2f7ff;
+  --color-cyan: #3fd8ff;
+  /* Marca roja: solo rellenos, bordes y texto grande (4.37:1 sobre el fondo). */
+  --color-red: #e8203a;
+  /* Rojo para texto pequeño sobre el fondo (5.06:1). */
+  --color-red-text: #f03a52;
+  /* Relleno rojo con texto claro encima (5.63:1). */
+  --color-red-fill: #c4122b;
+
+  /* Movimiento */
+  --duration-fast: 150ms;
+  --duration-base: 250ms;
+  --duration-slow: 600ms;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+/* Tipografías: las variables --font-anton e --font-inter las define next/font. */
+@theme inline {
+  --font-display: var(--font-anton), "Arial Narrow", Impact, sans-serif;
+  --font-body: var(--font-inter), system-ui, sans-serif;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+}
+
+/* Foco visible con contraste AA para toda la interfaz. */
+:focus-visible {
+  outline: 2px solid var(--color-cyan);
+  outline-offset: 3px;
+}

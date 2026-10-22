@@ -112,3 +112,38 @@ Las versiones se consultaron en el registro de npm el 2026-10-22.
 ## Resumen de resolución
 
 Todas las decisiones diferidas de `spec.md` y de la sección 9 del insumo de la fase quedan resueltas: idioma (D3, D4), librería de i18n (D3), formato de datos (D5), tokens (D8, D9), dirección pública (D10), Node y gestor (D1). No quedan marcadores `NEEDS CLARIFICATION`.
+
+## Registro de implementación (cambios respecto al plan)
+
+### R1. Versiones instaladas (T003)
+
+| Paquete | Plan (D2) | Instalado | Nota |
+|---|---|---|---|
+| Next.js | 16.4.2 | 16.4.2 | Fijada por `create-next-app` |
+| React / React DOM | 19.3.1 | 19.3.0 | Versión que fija la plantilla de Next 16.4.2 |
+| Tailwind CSS | 4.3.3 | 4.3.3 | Se procesa con `@tailwindcss/turbopack` (cargador configurado en `next.config.ts`) |
+| TypeScript | 7.0.2 | **5.9.3** | La plantilla y `typescript-eslint` usan la serie 5; no se forzó la 7 para no arriesgar la compatibilidad. Se puede reevaluar más adelante |
+| `@types/node` | — | ^22 | La plantilla traía ^20; se sube a 22 para tipar `node:test` con el mismo Node mínimo (`>=22.18`) |
+| `@playwright/test` | 1.64.1 | 1.64.1 | |
+
+### R2. `cacheComponents` desactivado (T004)
+
+La plantilla activa `cacheComponents: true` y `partialPrefetching: true`. Se quitaron de `next.config.ts` porque:
+
+- El sitio es estático y no necesita caché por componente ni prerrenderizado parcial.
+- Con Cache Components, `generateStaticParams` no puede devolver una lista vacía y el acceso a datos dinámicos se vuelve estricto: complejidad sin beneficio en esta fase.
+- Si más adelante se necesita, se activa de forma explícita (la guía indica que será el comportamiento por defecto en la próxima versión mayor).
+
+### R3. Guías leídas en `node_modules/next/dist/docs/` (T004)
+
+- `01-app/02-guides/internationalization.md`: confirma `app/[lang]`, `proxy.ts` (la convención `middleware` está obsoleta), `params` asíncrono, `PageProps`/`LayoutProps` globales, `hasLocale` + `notFound()` y `generateStaticParams`. Coincide con D3.
+- `01-app/03-api-reference/03-file-conventions/proxy.md`: `proxy.ts` va en la raíz o dentro de `src/`; sin `matcher` se ejecuta en todas las peticiones, incluidos los archivos estáticos, por lo que se usa un patrón de exclusión.
+- `01-app/03-api-reference/04-functions/generate-static-params.md`: sin Cache Components se admite el flujo estándar.
+
+### R4. Importaciones en el código probado por Node (T005)
+
+Node no resuelve el alias `@/`. Los archivos de `src/lib` y `src/content` que cubren las pruebas unitarias usan **importaciones relativas con extensión `.ts`** (`allowImportingTsExtensions` está activo).
+
+### R5. Scripts de npm (T005)
+
+`test:e2e` compila antes mediante `pretest:e2e` (`npm run build`) y levanta `next start` con Playwright. Por eso `verify` no repite `build`: ejecuta `lint`, `test:unit`, `test:e2e` (que compila) y `npm audit --omit=dev`.

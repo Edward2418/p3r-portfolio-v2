@@ -125,15 +125,15 @@ Proyecto único en la raíz del repositorio: `src/`, `tests/`, `public/` (ver pl
 
 ### Pruebas de la historia 2
 
-- [ ] T037 [P] [US2] Escribir `tests/e2e/language.spec.ts`: el selector cambia de `/es` a `/en` y actualiza todos los textos y `<html lang>`; tras cambiar, `/` abre el idioma elegido aunque el navegador esté en otro; `/es` con cookie `en` se queda en `/es`; el selector se opera solo con teclado (tabulación y Enter) y tiene foco visible; con cookies bloqueadas el idioma sigue funcionando por la ruta; cambiar de idioma varias veces seguidas no rompe la página
-- [ ] T038 [P] [US2] Escribir `tests/unit/cookie.test.ts` para la función que arma la cookie `lang` (`path=/`, `max-age` de un año, `SameSite=Lax`, solo valores `es` o `en`)
+- [x] T037 [P] [US2] Escribir `tests/e2e/language.spec.ts`: el selector cambia de `/es` a `/en` y actualiza todos los textos y `<html lang>`; tras cambiar, `/` abre el idioma elegido aunque el navegador esté en otro; `/es` con cookie `en` se queda en `/es`; el selector se opera solo con teclado (tabulación y Enter) y tiene foco visible; con cookies bloqueadas el idioma sigue funcionando por la ruta; cambiar de idioma varias veces seguidas no rompe la página
+- [x] T038 [P] [US2] Escribir `tests/unit/cookie.test.ts` para la función que arma la cookie `lang` (`path=/`, `max-age` de un año, `SameSite=Lax`, solo valores `es` o `en`)
 
 ### Implementación de la historia 2
 
-- [ ] T039 [US2] Crear `src/lib/i18n/cookie.ts` con la construcción de la cookie `lang` y hacer pasar T038
-- [ ] T040 [US2] Crear `src/components/LanguageSwitcher.tsx` como enlace (`<a>`) a la misma página en el otro idioma, con nombre accesible traducido, atributo `lang` propio, foco visible con contraste AA y escritura de la cookie al activarlo (componente de cliente solo para este comportamiento)
-- [ ] T041 [US2] Integrar el selector en el encabezado de `src/app/[lang]/layout.tsx` o `page.tsx`, con los textos desde `ui-text.ts`
-- [ ] T042 [US2] Ejecutar `npm run test:unit` y `npm run test:e2e` hasta que T037 y T038 pasen
+- [x] T039 [US2] Crear `src/lib/i18n/cookie.ts` con la construcción de la cookie `lang` y hacer pasar T038
+- [x] T040 [US2] Crear `src/components/LanguageSwitcher.tsx` como enlace (`<a>`) a la misma página en el otro idioma, con nombre accesible traducido, atributo `lang` propio, foco visible con contraste AA y escritura de la cookie al activarlo (componente de cliente solo para este comportamiento)
+- [x] T041 [US2] Integrar el selector en el encabezado de `src/app/[lang]/layout.tsx` o `page.tsx`, con los textos desde `ui-text.ts`
+- [x] T042 [US2] Ejecutar `npm run test:unit` y `npm run test:e2e` hasta que T037 y T038 pasen
 
 **Punto de control**: las historias 1, 2 y 3 funcionan juntas. Hacer commit (`feat(i18n): agregar selector de idioma con cookie`).
 

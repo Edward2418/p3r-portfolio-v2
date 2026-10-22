@@ -12,3 +12,9 @@ export const LANG_COOKIE = "lang";
 export function isLang(value: unknown): value is Lang {
   return typeof value === "string" && (LANGS as readonly string[]).includes(value);
 }
+
+/** Nombre de cada idioma en su propio idioma (no se traduce). */
+export const LANG_NAMES: Record<Lang, string> = {
+  es: "Español",
+  en: "English",
+};

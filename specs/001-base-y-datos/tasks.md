@@ -167,12 +167,12 @@ Proyecto único en la raíz del repositorio: `src/`, `tests/`, `public/` (ver pl
 
 ### Pruebas de la historia 5
 
-- [ ] T047 [P] [US5] Escribir `tests/e2e/layout.spec.ts`: en 390, 768 y 1280 px (`/es` y `/en`) no hay desplazamiento horizontal (`scrollWidth <= clientWidth`) y el selector de idioma es visible y accionable
+- [x] T047 [P] [US5] Escribir `tests/e2e/layout.spec.ts`: en 390, 768 y 1280 px (`/es` y `/en`) no hay desplazamiento horizontal (`scrollWidth <= clientWidth`) y el selector de idioma es visible y accionable
 
 ### Implementación de la historia 5
 
-- [ ] T048 [US5] Definir en `package.json` el script `verify` que ejecute en orden `lint`, `build`, `test:unit`, `test:e2e` y `npm audit --omit=dev`, y comprobar que pasa desde cero con `npm ci`
-- [ ] T049 [US5] Crear `vercel.json` en la raíz con `buildCommand` igual a `npm run test:unit && npm run build`, para que Vercel no publique si fallan las pruebas unitarias o la compilación (FR-011, FR-016, SC-008); las pruebas E2E se ejecutan en local con `npm run verify` antes de fusionar a `main`; la decisión ya está documentada en `specs/001-base-y-datos/research.md` (D10)
+- [x] T048 [US5] Definir en `package.json` el script `verify` que ejecute en orden `lint`, `build`, `test:unit`, `test:e2e` y `npm audit --omit=dev`, y comprobar que pasa desde cero con `npm ci`
+- [x] T049 [US5] Crear `vercel.json` en la raíz con `buildCommand` igual a `npm run test:unit && npm run build`, para que Vercel no publique si fallan las pruebas unitarias o la compilación (FR-011, FR-016, SC-008); las pruebas E2E se ejecutan en local con `npm run verify` antes de fusionar a `main`; la decisión ya está documentada en `specs/001-base-y-datos/research.md` (D10)
 - [x] T050 [US5] **Acción de Edward (hecha el 2026-10-22)**: crear el proyecto en Vercel conectado a `Edward2418/p3r-portfolio-v2`, elegir un nombre limpio para la dirección `*.vercel.app` y confirmar que no se necesitan variables de entorno (si aparecen, agregar `.env.example`). Los despliegues fallarán hasta que exista el proyecto Next (T003–T007); fijar Node 22.x en la configuración del proyecto de Vercel
 - [ ] T051 [US5] Revisar la vista previa de Vercel de la rama `001-base-y-datos`, abrir un pull request hacia `main` con `npm run verify` pasando, fusionarlo, esperar el despliegue de producción y repetir el recorrido manual de `quickstart.md` (sección 2) sobre la dirección pública (CA-1)
 - [ ] T052 [US5] Comprobar que los pushes de la rama `001-base-y-datos` generaron vistas previas y que producción no cambió hasta la fusión (`quickstart.md`, sección 6)

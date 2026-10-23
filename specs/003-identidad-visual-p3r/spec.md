@@ -15,6 +15,7 @@
 - Q: En el móvil (390 px), ¿dónde debe ir Oguri para no tapar las opciones del menú? → A: Como figura grande detrás de las opciones, recortada por el borde derecho y con menos opacidad, sin ocupar espacio; las opciones van encima y ocupan todo el ancho.
 - Q: En las cinco pantallas internas, ¿dónde debe ir Oguri en escritorio y en móvil sin dificultar la lectura del contenido? → A: En escritorio, a la derecha, grande y fuera del área de contenido, que va en un panel; en móvil, detrás del panel, recortada y atenuada, como en el menú.
 - Q: ¿En qué momento exacto debe empezar a cargarse el video de movimiento en reposo de Oguri? → A: Cuando el navegador queda en reposo tras cargar el menú, con un tope de unos 2 s, y solo si no hay movimiento reducido ni ahorro de datos.
+- Ajuste tras medir en la implementación (T055, 2026-10-23): con Lighthouse el video de 1.2 MB se descargaba dentro de la ventana de medición (1483 KiB y rendimiento 63–79 frente a 82–85), así que "bajo demanda" se concreta así: el video empieza a cargarse en la primera interacción del visitante o, sin ella, 8 s después de cargar la página, y siempre con el navegador en reposo (tope de unos 2 s). Mantiene la decisión (reposo, tope de 2 s, sin movimiento reducido ni ahorro de datos) y cumple la constitución ("video y audio bajo demanda, nunca en la carga inicial").
 - Revisión de análisis (`/speckit-analyze`, 2026-10-23), correcciones aplicadas con aprobación de Edward: el indicador de foco debe verse con 3:1 sobre cualquier superficie (FR-015); el personaje atenuado tiene opacidad máxima 0.5 (FR-003 y FR-014); el cambio de idioma puede remontar la escena y el personaje volver a entrar (caso límite); descripción del personaje en un solo lugar; `open` y `close` se emiten desde la llegada de ruta, una vez por cambio.
 
 ## Escenarios de usuario y pruebas *(obligatorio)*
@@ -46,7 +47,7 @@ Como visitante, quiero ver a Oguri como protagonista del menú, con una entrada 
 **Escenarios de aceptación**:
 
 1. **Dado** que el menú se muestra, **cuando** termina la entrada del personaje, **entonces** Oguri se ve completa y sin recortes, sin tapar ninguna opción.
-2. **Dado** que el menú ya es utilizable y el navegador quedó en reposo (con un tope de unos 2 s), **cuando** el movimiento en reposo está disponible, **entonces** Oguri pasa de una imagen fija a un movimiento suave sin saltos visibles.
+2. **Dado** que el menú ya es utilizable y el visitante interactuó (o pasaron 8 s sin interacción) con el navegador en reposo (tope de unos 2 s), **cuando** el movimiento en reposo está disponible, **entonces** Oguri pasa de una imagen fija a un movimiento suave sin saltos visibles.
 3. **Dado** que el visitante tiene el movimiento reducido activado (sistema o sitio) o el ahorro de datos activado, **cuando** abre el menú, **entonces** Oguri aparece como imagen fija y no se descarga el video de movimiento en reposo.
 4. **Dado** que el video de movimiento en reposo no llega o falla, **cuando** se muestra el menú, **entonces** Oguri sigue visible como imagen fija y no aparece ningún error.
 
@@ -137,7 +138,7 @@ Como Edward, quiero que el arte, los sonidos, el título vertical y los textos n
 ### Casos límite
 
 - Si la imagen del personaje no carga, el menú sigue siendo utilizable y se muestra un espacio vacío con el nombre accesible del personaje.
-- Con una conexión lenta, el menú y las opciones aparecen antes que el movimiento en reposo, que empieza a cargarse al quedar el navegador en reposo (tope de unos 2 s) y sin bloquear nada.
+- Con una conexión lenta, el menú y las opciones aparecen antes que el movimiento en reposo, que empieza a cargarse en la primera interacción o 8 s después de cargar la página, con el navegador en reposo (tope de unos 2 s), y sin bloquear nada.
 - Con el ahorro de datos activado, no se descarga el video de movimiento en reposo.
 - Si el navegador no admite video con transparencia, Oguri se muestra como imagen fija.
 - Una transición interrumpida en cualquier punto deja a Oguri en su posición final y no en una pose intermedia.
@@ -155,7 +156,7 @@ Como Edward, quiero que el arte, los sonidos, el título vertical y los textos n
 - **FR-002**: El título vertical del panel y los textos nuevos MUST salir de datos bilingües, no de los componentes.
 - **FR-003**: El menú MUST mostrar a Oguri como imagen principal sin que cubra ninguna opción en 390, 768 y 1280 px. En móvil, Oguri MUST ir detrás de las opciones, recortada por el borde derecho y con menos opacidad (como máximo 0.5), sin ocupar espacio del diseño; las opciones MUST ir encima y ocupar todo el ancho disponible (menos la banda del título vertical, que queda visible a la izquierda).
 - **FR-004**: Oguri MUST entrar con una animación breve al mostrar el menú, y el menú MUST ser utilizable sin esperar a que termine.
-- **FR-005**: El movimiento en reposo de Oguri MUST empezar a cargarse cuando el navegador quede en reposo tras cargar el menú, con un tope de unos 2 s, MUST NOT bloquear la carga inicial ni competir con el contenido y MUST tener una imagen fija como alternativa.
+- **FR-005**: El movimiento en reposo de Oguri MUST empezar a cargarse bajo demanda (en la primera interacción del visitante o, sin ella, 8 s después de cargar la página) y con el navegador en reposo (tope de unos 2 s), MUST NOT bloquear la carga inicial ni competir con el contenido y MUST tener una imagen fija como alternativa.
 - **FR-006**: El movimiento en reposo MUST NOT cargarse ni reproducirse con movimiento reducido (del sistema o del sitio) ni con el ahorro de datos activado.
 - **FR-007**: La transición entre pantallas MUST incluir a Oguri entrando desde la derecha, rotada, durante la entrada escalonada, reutilizando los tiempos y las curvas de la fase 2 y sin salirse del rango de 500 a 800 ms.
 - **FR-008**: La transición MUST seguir siendo interrumpible: un clic o una tecla lleva al destino de inmediato con Oguri en su posición final.
@@ -199,7 +200,7 @@ Como Edward, quiero que el arte, los sonidos, el título vertical y los textos n
 
 - El título vertical del panel es "PORTFOLIO", como en la versión anterior, y se puede cambiar en los datos.
 - Con una sola pose de Oguri disponible, el personaje cambia de posición, escala y rotación en cada pantalla, no de pose; más poses llegan en la fase 6.
-- El idle de Oguri empieza a cargarse al quedar el navegador en reposo (tope de unos 2 s); es el video con transparencia de la versión anterior, ya incluido en el repositorio; el retrato es el WebP optimizado.
+- El idle de Oguri empieza a cargarse en la primera interacción o 8 s después de cargar la página, con el navegador en reposo (tope de unos 2 s); es el video con transparencia de la versión anterior, ya incluido en el repositorio; el retrato es el WebP optimizado.
 - La preferencia de sonido se guarda en el navegador del visitante, sin cuentas ni servidores.
 - El sonido de subida de nivel suena una sola vez, al activar el sonido, como confirmación.
 - El interruptor de sonido vive en System; la pantalla System completa (contacto y demás ajustes) llega en la fase 7.

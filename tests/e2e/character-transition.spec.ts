@@ -174,6 +174,7 @@ test.describe("idle durante la transición", () => {
 
   test("el video se pausa durante la transición y se reanuda al terminar", async ({ page }) => {
     await openPrefetched(page, `/${lang}`);
+    await page.keyboard.press("a"); // la primera interacción adelanta la carga del idle
     await expect(page.locator("[data-character-root]")).toHaveAttribute("data-idle", "playing", { timeout: 15_000 });
     const paused = () => page.evaluate(() => document.querySelector("video")!.paused);
     expect(await paused(), "antes de la transición el idle debe reproducirse").toBe(false);

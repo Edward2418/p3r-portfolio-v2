@@ -49,6 +49,7 @@ Cada decisión indica su razón y las alternativas evaluadas. Las skills `animat
 - **Pausas**: el video se pausa mientras `data-scene-busy` esté activo en `<html>` (durante la transición, para liberar el hilo y la decodificación), con la pestaña oculta y si el movimiento pasa a reducido; se reanuda al terminar.
 - **Detección de WebKit**: por agente de usuario (`Safari` sin `Chrome`, `Chromium`, `Android` ni `Firefox`, o cualquier navegador en iOS, que usa WebKit), con prueba unitaria sobre cadenas reales.
 - **Razón**: el WebM con alfa pesa 1.8 MB y decodificarlo en un móvil modesto puede quitar fotogramas a la transición. WebKit/Safari no dibuja el alfa de WebM, y mostraría un recuadro negro: la exclusión es preferible a ese defecto (verificación en Safari pendiente).
+- **Ajuste tras medir (R8)**: pedir el video en cuanto el navegador queda en reposo hacía que Lighthouse lo descargara dentro de su ventana de medición; ahora se pide en la primera interacción o 8 s después de cargar.
 - **Alternativas**: `<video>` en el HTML con `preload="none"` (el navegador puede igualmente pedirlo antes del reposo), hoja de sprites animada (3.7 MB, peor), WebP animado (más pesado), precargar tras el evento `load` (no espera al reposo).
 
 ## D6. Barrido con el personaje: reutilizar el motor
@@ -124,3 +125,21 @@ Solo `transform` y `opacity`; la entrada inicial es CSS (`character-in`, 300 ms,
 ### R7. Verificación de datos y tokens (US7, T052 y T053)
 
 Se cambiaron a propósito `panelTitle` (`src/content/ui-text.ts`), `--color-sky` y `--duration-character-in` (`src/app/globals.css`): `git status` mostró solo esos dos archivos y la compilación reflejó el título nuevo en el HTML de `/es` y `/en`, y el color y la duración nuevos en el CSS. Se revirtió y el árbol quedó limpio. Los componentes nuevos (`Character`, `SceneBackdrop`, `SoundProvider`, `SoundToggle` y `MainMenu`) no contienen colores ni duraciones en milisegundos; el tope de espera del idle (2000 ms) es una constante del contrato de medios. La prueba de tokens sigue impidiendo colores sueltos fuera de `globals.css`.
+
+### R8. El idle bajo demanda de verdad (T055, medición de rendimiento)
+
+Primera medición con el idle pedido en cuanto el navegador quedaba en reposo (tope de 2 s), Lighthouse 12 móvil sobre la compilación de producción local:
+
+| Ruta | Rendimiento | KiB | Nota |
+|---|---|---|---|
+| `/es` | 79 y 63 | 1483 | El video (1.2 MB) entra en la ventana de medición |
+| `/es/stack` | 83 y 83 | 1469 | Igual |
+
+Sin el video la carga inicial es de unos 282 KiB (dentro de los 350 KiB), pero el video descargándose durante la medición bajaba el rendimiento (TBT de hasta 1.5 s). Por eso el video se pide ahora **en la primera interacción o 8 s después de cargar la página**, siempre con el navegador en reposo (tope de 2 s). Con ese cambio:
+
+| Ruta | Rendimiento (3 corridas) | Accesibilidad | KiB | Video / audio en la medición |
+|---|---|---|---|---|
+| `/es` (con splash) | 85, 82 y 84 | 100 | 281.3 | no / no |
+| `/es/stack` (entrada directa) | 82, 83 y 84 | 100 | 267.8 | no / no |
+
+El rendimiento queda al nivel de la fase 2 (85–86 local, el límite del framework). El usuario real que interactúa tiene el idle en pocos segundos y quien no interactúa lo tiene a los 8 s.

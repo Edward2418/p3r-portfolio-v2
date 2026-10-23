@@ -44,8 +44,8 @@ Comprueban, entre otras cosas: ninguna petición de `idle.webm` ni de `/audio/` 
 
 | Fecha | Ruta | Escenario | Rendimiento | Accesibilidad | KiB |
 |---|---|---|---|---|---|
-| (pendiente) | `/es` | Splash visible | | | |
-| (pendiente) | `/es/stack` | Entrada directa, sin splash | | | |
+| 2026-10-23 | `/es` (producción local) | Splash visible, idle bajo demanda | 85, 82 y 84 | 100 | 281.3 |
+| 2026-10-23 | `/es/stack` (producción local) | Entrada directa, sin splash | 82, 83 y 84 | 100 | 267.8 |
 | (pendiente) | Dirección pública de Vercel | Splash visible y entrada directa | | | |
 
 Metas: carga inicial ≤ 350 KiB, accesibilidad 100 y rendimiento ≥ 90 en la dirección pública (en local, al nivel de la fase 2: 85 a 86). axe-core debe dar 0 violaciones en el menú y las cinco pantallas, en español e inglés, a 390 y 1280 px.

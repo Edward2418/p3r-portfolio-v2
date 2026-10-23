@@ -79,11 +79,27 @@ test.describe("idle diferido", () => {
     expect(urls.filter((url) => IDLE.test(url)), "no debe pedirse idle.webm antes del reposo").toEqual([]);
   });
 
-  test("tras el reposo se pide el video y el personaje pasa a idle", async ({ page }) => {
+  test("sin interacción no se pide el video en los primeros segundos (no entra en la medición de carga)", async ({ page }) => {
+    const urls = trackRequests(page);
+    await openReady(page, `/${lang}`);
+    await page.waitForTimeout(4000);
+    expect(urls.filter((url) => IDLE.test(url)), "no debe pedirse idle.webm sin interacción a los 4 s").toEqual([]);
+    await expect(dataIdle(page)).toHaveAttribute("data-idle", "pending");
+  });
+
+  test("tras la primera interacción se pide el video y el personaje pasa a idle", async ({ page }) => {
     const request = page.waitForRequest(IDLE, { timeout: 10_000 });
     await openReady(page, `/${lang}`);
+    await page.keyboard.press("a");
     await request;
     await expect(dataIdle(page)).toHaveAttribute("data-idle", /^(loading|playing)$/);
+  });
+
+  test("sin ninguna interacción el video se pide unos segundos después de cargar", async ({ page, browserName, viewport }) => {
+    test.skip(browserName !== "chromium" || viewport?.width !== 1280, "prueba lenta: solo en Chromium a 1280 px");
+    const request = page.waitForRequest(IDLE, { timeout: 15_000 });
+    await openReady(page, `/${lang}`);
+    await request;
   });
 
   test("con el ahorro de datos activado nunca se pide el video", async ({ page }) => {
@@ -123,6 +139,7 @@ test.describe("fallos de carga", () => {
     page.on("pageerror", (error) => errors.push(error.message));
     await page.route(IDLE, (route) => route.abort());
     await openReady(page, `/${lang}`);
+    await page.keyboard.press("a");
     await expect(dataIdle(page)).toHaveAttribute("data-idle", "failed", { timeout: 8000 });
     await expect(dataIdle(page).locator("img")).toBeVisible();
     await expect(dataIdle(page).locator("video")).toHaveCount(0);

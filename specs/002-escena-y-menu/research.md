@@ -307,3 +307,21 @@ Lighthouse 12 móvil sobre la compilación de producción local, el 2026-10-22 (
 - **Edward**: `/review-animations` y la confirmación de la comparación con el video (T070); revisión con lector de pantalla (T071); fluidez a 60 fps en un móvil de gama media y umbrales de deslizamiento en un dispositivo real (T073); pull request a `main` y medición en Vercel (T077).
 - **Fase 3 y siguientes**: contenido y diseño real de las pantallas, arte del personaje, audio y System completo.
 - **Marcador del personaje** y sus entradas siguen siendo provisionales hasta la fase 3.
+
+### R11. Verificación desde instalación limpia (T076)
+
+Realizada el 2026-10-22 tras `rm -rf node_modules .next` y `npm ci`, por etapas y con 2 trabajadores de Playwright (con 4 trabajadores y todo en un solo comando el sistema se quedó sin memoria y detuvo el proceso; con 3.3 GB libres se ejecutó un navegador a la vez):
+
+| Etapa | Resultado |
+|---|---|
+| `npm ci` | 290 paquetes |
+| `npm run lint` | Sin errores |
+| `npm run test:unit` | 80 de 80 |
+| `npm audit --omit=dev` | 0 vulnerabilidades |
+| `npm run build` | Compilación correcta; 10 rutas estáticas |
+| E2E Chromium 390 px | 121 pasadas |
+| E2E Chromium 768 px | 121 pasadas |
+| E2E Chromium 1280 px | 121 pasadas |
+| E2E Firefox 1280 px | 114 pasadas y 7 omitidas a propósito (gestos táctiles y limitador de CPU, que usan CDP de Chromium) |
+
+Sin pruebas intermitentes: con 2 trabajadores las de tiempo (duración de la transición e interrupción) pasaron a la primera.

@@ -153,14 +153,14 @@ Proyecto único en la raíz del repositorio: `src/`, `tests/`, `public/` (ver pl
 
 ### Pruebas de la historia (escribirlas primero y comprobar que fallan)
 
-- [ ] T034 [P] [US4] Crear `tests/e2e/screens-accessibility.spec.ts`: el árbol de accesibilidad (`ariaSnapshot`) de "Stack" muestra "Full-Stack", cada categoría como encabezado y, por tecnología, su nombre con "Nivel: n/5" en ese orden; el de "Quién soy" muestra la ficha como lista de definición y la trayectoria como lista ordenada con "Actual" y "Meta"; la jerarquía de encabezados es `h1` > `h2` (> `h3` en Stack) sin saltos; no hay elementos interactivos nuevos (el orden de tabulación de la pantalla solo contiene los controles de la guía y del encabezado); el foco queda en el `<h1>` al llegar; el anuncio de ruta lee el título de la pantalla.
-- [ ] T035 [P] [US4] Ampliar `tests/e2e/layout.spec.ts` y `tests/e2e/mobile-layout.spec.ts` para recorrer las dos pantallas nuevas a 390, 768, 1280 y 320 px sin desplazamiento horizontal y con el texto de los círculos y de la trayectoria dentro del viewport.
+- [x] T034 [P] [US4] Crear `tests/e2e/screens-accessibility.spec.ts`: el árbol de accesibilidad (`ariaSnapshot`) de "Stack" muestra "Full-Stack", cada categoría como encabezado y, por tecnología, su nombre con "Nivel: n/5" en ese orden; el de "Quién soy" muestra la ficha como lista de definición y la trayectoria como lista ordenada con "Actual" y "Meta"; la jerarquía de encabezados es `h1` > `h2` (> `h3` en Stack) sin saltos; no hay elementos interactivos nuevos (el orden de tabulación de la pantalla solo contiene los controles de la guía y del encabezado); el foco queda en el `<h1>` al llegar; el anuncio de ruta lee el título de la pantalla.
+- [x] T035 [P] [US4] Ampliar `tests/e2e/layout.spec.ts` y `tests/e2e/mobile-layout.spec.ts` para recorrer las dos pantallas nuevas a 390, 768, 1280 y 320 px sin desplazamiento horizontal y con el texto de los círculos y de la trayectoria dentro del viewport.
 
 ### Implementación de la historia
 
-- [ ] T036 [US4] Corregir lo que fallen T034 y T035 en `src/components/profile/*.tsx`, `src/components/stack/StackCircles.tsx` y `src/app/globals.css` (por ejemplo, orden del DOM, `aria-hidden` de los puntos o ajuste de texto largo), sin añadir texto oculto duplicado: el equivalente textual es la propia estructura.
-- [ ] T037 [US4] Pasar axe-core (reglas WCAG 2.2 AA y buenas prácticas, instalado fuera del repositorio) sobre ambas pantallas en español e inglés, a 390 y 1280 px; resolver cualquier violación de contraste, de foco o de regiones. El barrido final de 12 casos va en T043.
-- [ ] T038 [US4] Recorrer ambas pantallas con el teclado y con una emulación de zoom del 200 % (viewport de 320 px) y anotar en `research.md` (nueva sección R) lo comprobado.
+- [x] T036 [US4] Corregir lo que fallen T034 y T035 en `src/components/profile/*.tsx`, `src/components/stack/StackCircles.tsx` y `src/app/globals.css` (por ejemplo, orden del DOM, `aria-hidden` de los puntos o ajuste de texto largo), sin añadir texto oculto duplicado: el equivalente textual es la propia estructura.
+- [x] T037 [US4] Pasar axe-core (reglas WCAG 2.2 AA y buenas prácticas, instalado fuera del repositorio) sobre ambas pantallas en español e inglés, a 390 y 1280 px; resolver cualquier violación de contraste, de foco o de regiones. El barrido final de 12 casos va en T043.
+- [x] T038 [US4] Recorrer ambas pantallas con el teclado y con una emulación de zoom del 200 % (viewport de 320 px) y anotar en `research.md` (nueva sección R) lo comprobado.
 
 **Punto de control**: ambas pantallas accesibles. Commit: `test(screens): comprobar la accesibilidad de quién soy y stack`.
 

@@ -159,3 +159,12 @@ test("no hay duraciones ni curvas sueltas fuera de globals.css", () => {
   const offenders = files.filter((file) => loose.test(readFileSync(file, "utf8")));
   assert.deepEqual(offenders, [], "las duraciones y curvas deben venir de los tokens");
 });
+
+test("la etiqueta central del stack mantiene contraste AA (4.5:1) sobre los tres tintes apilados", () => {
+  const tint = readOpacityToken("circle-tint") ?? 0.14;
+  // En el centro se solapan los tres círculos: se mezclan sus tres tintes, uno tras otro, sobre el panel.
+  let surface = tokens.navy;
+  for (const circle of ["cyan", "red", "panel"]) surface = blend(tokens[circle], surface, tint);
+  const ratio = contrast(tokens.text, surface);
+  assert.ok(ratio >= 4.5, `--color-text sobre los tres tintes apilados (${surface}) tiene ${ratio.toFixed(2)}:1, mínimo 4.5:1`);
+});

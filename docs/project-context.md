@@ -3,7 +3,7 @@
 > **Documento de contexto para desarrollo asistido por IA (Claude Code + Spec Kit)**
 >
 > **Nombre del proyecto:** Portafolio personal de Edward Negrete (v2)
-> **Estado:** Fase 1 (Base y datos) completada el 2026-10-22; fase 2 (Escena y menú) implementada y en revisión
+> **Estado:** Fase 1 (Base y datos) completada el 2026-10-22; fase 2 (Escena y menú) fusionada a `main` el 2026-10-23; en curso: fase 3 (Identidad visual P3R, intercalada por decisión de Edward)
 > **Tipo:** Portafolio profesional y proyecto de aprendizaje
 > **Fecha de redacción:** 22/10/2026
 
@@ -208,10 +208,11 @@ Cada fase termina con algo demostrable y probado antes de pasar a la siguiente.
 | --- | --- | --- |
 | 1 | Base y datos | Proyecto Next configurado, tokens de diseño, datos tipados bilingües, selector de idioma, despliegue vacío en Vercel con pruebas básicas |
 | 2 | Escena y menú | Splash, menú principal, motor de transiciones (barrido, escalonado, círculo), navegación L/R y teclado, movimiento reducido |
-| 3 | Quién soy y Stack | Ambas pantallas con sus transiciones y el personaje como hilo conductor |
-| 4 | Proyectos | Lista y detalle basados en datos; ficha del portafolio con capturas |
-| 5 | Social Link y personajes | Social Link con Oguri y los demás; arte nuevo generado con IA |
-| 6 | System, sonido y cierre | Contacto, idioma, sonido, movimiento, SEO, medición de rendimiento y despliegue final |
+| 3 | Identidad visual P3R | Menú con el aspecto de P3R, Oguri como protagonista (entrada e idle), barrido con el personaje, marco común de pantallas e interruptor de sonido |
+| 4 | Quién soy y Stack | Ambas pantallas con sus transiciones y el personaje como hilo conductor |
+| 5 | Proyectos | Lista y detalle basados en datos; ficha del portafolio con capturas |
+| 6 | Social Link y personajes | Social Link con Oguri y los demás; arte nuevo generado con IA |
+| 7 | System y cierre | Contacto, idioma, movimiento, SEO, medición de rendimiento y despliegue final |
 
 Insumo por fase: copiar `docs/sprints/_plantilla.md` a `docs/sprints/fase-N-<nombre>.md` y completarlo antes de `/speckit.specify`.
 

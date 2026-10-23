@@ -46,8 +46,8 @@ Comprueban, entre otras cosas: las reglas de los datos (niveles de 1 a 5, una so
 
 | Fecha | Ruta | Escenario | Rendimiento | Accesibilidad | KiB |
 |---|---|---|---|---|---|
-| (pendiente) | `/es/profile` | Entrada directa | | | |
-| (pendiente) | `/es/stack` | Entrada directa | | | |
+| 2026-10-23 | `/es/profile` (producción local) | Entrada directa | 82, 80 y 82 | 100 | 265.8 |
+| 2026-10-23 | `/es/stack` (producción local) | Entrada directa | 82, 82 y 81 | 100 | 270.3 |
 | (pendiente) | Dirección pública de Vercel | `/es/profile` y `/es/stack` | | | |
 
 Metas: carga inicial ≤ 350 KiB, accesibilidad 100 y rendimiento ≥ 90 en la dirección pública (en local, al nivel de la fase 3: 82 a 88). axe-core con 0 violaciones en ambas pantallas, en español e inglés, a 390 y 1280 px.

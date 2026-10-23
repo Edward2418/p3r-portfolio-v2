@@ -2,7 +2,7 @@
 
 Portafolio personal de Edward Negrete, con la estética del menú de Persona 3 Reload. Esta versión se rehace desde cero con desarrollo guiado por especificación (Spec Kit) y se construye por fases. El alcance completo está en [`docs/project-context.md`](docs/project-context.md) y las reglas no negociables, en [`.specify/memory/constitution.md`](.specify/memory/constitution.md).
 
-**Estado:** fase 3 (Identidad visual P3R). El sitio tiene un splash corto, un menú con el aspecto del menú de pausa de Persona 3 Reload (degradado de cian a azul, panel blanco inclinado con título vertical y opciones inclinadas), a Oguri como protagonista (entrada animada, idle diferido y barrido con el personaje), cinco pantallas con un marco común y dirección propia (`/es/stack`, `/en/projects`…) y sonido opcional. Las pantallas muestran por ahora el contenido provisional de la fase 1; su contenido real llega en las fases 4 a 7.
+**Estado:** fase 4 (Quién soy y Stack). "Quién soy" muestra la ficha de Edward y su trayectoria, y "Stack" muestra las tecnologías en tres círculos solapados con su nivel (la fase 3 dejó el aspecto P3R, Oguri y el sonido opcional). El sitio tiene un splash corto, un menú con el aspecto del menú de pausa de Persona 3 Reload (degradado de cian a azul, panel blanco inclinado con título vertical y opciones inclinadas), a Oguri como protagonista (entrada animada, idle diferido y barrido con el personaje), cinco pantallas con un marco común y dirección propia (`/es/stack`, `/en/projects`…) y sonido opcional. Las demás pantallas (Proyectos, Social Link y System) muestran por ahora el contenido provisional de la fase 1; su contenido real llega en las fases 5 a 7.
 
 ## Requisitos
 
@@ -28,7 +28,7 @@ Al abrir `/` el sitio te lleva a `/es` o `/en` según la cookie `lang` y, si no 
 | Tacto | — | Deslizamiento horizontal para pasar de pantalla |
 
 - Un clic, un toque o una tecla durante una transición la termina de inmediato.
-- Oguri aparece a la izquierda en el menú y a la derecha en las pantallas (desde 1024 px); en pantallas estrechas va detrás del contenido, recortada y atenuada, para no taparlo.
+- Oguri aparece a la izquierda en el menú y a la derecha en las pantallas (desde 1024 px), con una altura e inclinación propias en Quién soy y en Stack; en pantallas estrechas va detrás del contenido, recortada y atenuada, para no taparlo.
 - El **sonido** está desactivado por defecto: se activa en System y su preferencia se recuerda. Sus seis efectos (cursor, confirmar, cancelar, abrir, cerrar y subida de nivel) se descargan solo al activarlo, o tras la primera interacción si ya estaba activado. Es independiente del movimiento reducido.
 - El **idle** de Oguri (video con transparencia de 1.2 MB) se pide bajo demanda: en la primera interacción o 8 s después de cargar la página, con el navegador en reposo. Con movimiento reducido, con el ahorro de datos o en Safari se queda la imagen fija.
 - El splash dura como máximo 1.5 s, se omite con cualquier tecla o clic, y solo aparece al entrar por la raíz en la primera visita de la sesión.
@@ -61,12 +61,15 @@ src/
 │   ├── scene/             # SceneShell, transición (WAAPI), fondo (SceneBackdrop), personaje (Character), guía y botones
 │   ├── menu/              # Menú principal (fichas inclinadas)
 │   ├── audio/             # SoundProvider, SoundToggle y el almacén del sonido (carga bajo demanda)
+│   ├── profile/           # ProfileSheet (ficha) y Trajectory (trayectoria) de Quién soy
+│   ├── stack/             # StackCircles: los tres círculos de Stack
 │   ├── sections/          # Secciones de contenido (se reutilizan en las pantallas)
 │   └── …                  # Splash, interruptor de movimiento, selector de idioma, pie
 ├── content/               # Todo el contenido y el menú, en datos tipados y bilingües
 ├── lib/
 │   ├── i18n/              # Idiomas, negociación, cookie y localize()
 │   ├── audio/             # Lógica pura del sonido: preferencia, mapa de acciones y limitador
+│   ├── profile/ stack/    # Lógica pura de presentación: trayectoria vacía, categorías visibles, etiqueta central y marca provisional
 │   ├── motion/            # Lógica pura: teclado, deslizamiento, tiempos, preferencia de movimiento e idle
 │   └── scene/             # Nombres y títulos de las pantallas
 └── proxy.ts               # Redirección de idioma para rutas sin /es o /en
@@ -81,10 +84,13 @@ docs/                      # Contexto maestro y insumos de cada fase
 
 Todo el contenido vive en `src/content/`. Cada texto traducible lleva ambos idiomas (`{ es: "...", en: "..." }`); si falta uno, el compilador falla.
 
+- **Una tecnología nueva en Stack:** agrégala a la categoría que corresponda en `src/content/stack.ts` (nivel de 1 a 5). Cada categoría con tecnologías se muestra en su círculo; la etiqueta central "Full-Stack" (`stackCenterLabel`) aparece solo si las tres categorías tienen tecnologías.
+- **Un hito de la trayectoria:** agrégalo a `src/content/trajectory.ts` en orden cronológico; el último debe ser el hito `goal` (la meta futura, sin año) y solo puede haber un hito `current`.
+- **Tu perfil:** edita `src/content/profile.ts` (presentación, especialidad, institución y semestre). No se publican el apellido completo ni el año de titulación: una prueba lo impide.
 - **Un proyecto nuevo:** agrega un objeto a la lista de `src/content/projects.ts`. Las tecnologías deben existir en `src/content/stack.ts`.
 - **Agregar, renombrar o reordenar una opción del menú:** edita `src/content/menu.ts`. El orden del arreglo es el orden del menú, de las pestañas L y R y de la navegación por teclado. (Una opción nueva también necesita su `SceneId` en `src/content/types.ts` y su página en `src/app/[lang]/<id>/page.tsx`.)
 - **Correo, LinkedIn o CV:** agrega el campo en `src/content/contact.ts`. Mientras no exista, no se muestra ningún enlace ni hueco.
-- **Confirmar un dato de ejemplo:** quita `provisional: true` del bloque y desaparece su etiqueta "Provisional".
+- **Confirmar un dato de ejemplo:** quita `provisional: true` del bloque y desaparece su etiqueta "Provisional". En Stack, si todas las tecnologías de una categoría son provisionales, la etiqueta aparece una sola vez en el encabezado de la categoría; si hay una mezcla, solo en las provisionales.
 - **Un texto de interfaz:** edita `src/content/ui-text.ts` (incluye el título vertical del panel, `panelTitle`).
 - **El arte de Oguri:** cambia las rutas y la descripción en `src/content/character.ts` y coloca los archivos en `public/img/oguri/` (imagen fija en WebP con transparencia, 540×960, y video en WebM con VP9 y transparencia). La imagen fija debe ser el primer cuadro del video, para que el cambio no dé un salto.
 - **Los sonidos:** cambia los archivos en `src/content/audio.ts` y `public/audio/` (los seis identificadores deben existir).

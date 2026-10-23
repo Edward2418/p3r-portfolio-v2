@@ -107,3 +107,14 @@ Por debajo de 768 px los círculos se apilan como elipses más anchas que altas 
 ### R3. Contenido solo en datos (US6, T039 a T041)
 
 Se agregaron a propósito una tecnología (`DockerXYZ`) en `src/content/stack.ts`, un hito (`HitoPruebaXYZ` / `TestMilestoneXYZ`) en `src/content/trajectory.ts` y se quitó `provisional` de Git: `git status` mostró solo esos dos archivos de datos y la compilación reflejó la tecnología en `/es/stack` y `/en/stack` y el hito en cada idioma en `/es/profile` y `/en/profile`. Se revirtió y el árbol quedó limpio. Los componentes nuevos (`ProfileSheet`, `Trajectory` y `StackCircles`) no contienen textos visibles, colores ni duraciones sueltos (solo comentarios). Las pruebas de cada pantalla comprueban que la cantidad de etiquetas "Provisional" coincide con los datos provisionales (con `provisionalBadgeCount` en el stack) y que no hay elementos de texto vacíos.
+
+### R4. Rendimiento local con la fase 4 (T044)
+
+Lighthouse 12 móvil sobre la compilación de producción local, el 2026-10-23, tres corridas por ruta:
+
+| Ruta | Rendimiento | Accesibilidad | SEO | Prácticas | LCP | TBT | CLS | KiB | Video / audio |
+|---|---|---|---|---|---|---|---|---|---|
+| `/es/profile` | 82, 80 y 82 | 100 | 100 | 96 | 3.2–3.3 s | 440–530 ms | 0 | 265.8 | no / no |
+| `/es/stack` | 82, 82 y 81 | 100 | 100 | 96 | 3.3 s | 420–470 ms | 0 | 270.3 | no / no |
+
+La carga inicial sigue por debajo de 350 KiB (la fase 4 solo añade HTML y CSS: ningún JavaScript de cliente nuevo) y el rendimiento queda al nivel de las fases anteriores en este equipo (80 a 88). Pendiente: PageSpeed Insights en la web de Google, tras fusionar.

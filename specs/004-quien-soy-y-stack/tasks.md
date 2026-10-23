@@ -198,7 +198,7 @@ Proyecto único en la raíz del repositorio: `src/`, `tests/`, `public/` (ver pl
 - [ ] T048 [P] **Acción de Edward (móvil real)**: comprobar la lectura de los círculos apilados y de la trayectoria en un móvil real y que Oguri se distingue sin tapar nada.
 - [x] T049 Actualizar `README.md`: las dos pantallas, cómo agregar una tecnología o un hito (solo datos), qué datos se publican y cuáles no, la etiqueta central y la posición de Oguri por pantalla.
 - [x] T050 Ejecutar `npm run verify` desde una instalación limpia (`npm ci`), por etapas y con `--workers=2` si la memoria es limitada (lint, unitarias, compilación, E2E de cada proyecto y `npm audit --omit=dev`); registrar el resultado en `research.md`; comprobar también que `tests/e2e/navigation.spec.ts` ("accesos con pocas interacciones") sigue pasando (FR-015).
-- [ ] T051 Subir la rama y revisar la vista previa de Vercel; abrir el pull request `004-quien-soy-y-stack` → `main` (con `gh`, ya instalado y con sesión iniciada) y dejar la fusión a Edward.
+- [x] T051 Subir la rama y revisar la vista previa de Vercel; abrir el pull request `004-quien-soy-y-stack` → `main` (con `gh`, ya instalado y con sesión iniciada) y dejar la fusión a Edward.
 - [ ] T052 **Acción de Edward**: fusionar el pull request; luego medir Lighthouse en la dirección pública (`/es/profile` y `/es/stack`) y anotar los resultados (rendimiento ≥ 90 en PageSpeed, accesibilidad 100, ≤ 350 KiB).
 - [ ] T053 Marcar CA-1 a CA-9 en `docs/sprints/fase-4-quien-soy-y-stack.md` con su evidencia, registrar los cambios finales y las lecciones en `research.md`, actualizar el estado en `docs/project-context.md` (fase 4 completada) y confirmar el cierre con Edward.
 

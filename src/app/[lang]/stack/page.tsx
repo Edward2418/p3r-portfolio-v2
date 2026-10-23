@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ScreenFrame } from "../../../components/scene/ScreenFrame.tsx";
-import { StackSection } from "../../../components/sections/StackSection.tsx";
+import { StackCircles } from "../../../components/stack/StackCircles.tsx";
 import { isLang } from "../../../lib/i18n/config.ts";
 import { screenTitle } from "../../../lib/scene/titles.ts";
 
@@ -16,7 +16,7 @@ export default async function Page({ params }: PageProps<"/[lang]/stack">) {
 
   return (
     <ScreenFrame lang={lang} sceneId="stack">
-      <StackSection lang={lang} />
+      <StackCircles lang={lang} />
     </ScreenFrame>
   );
 }

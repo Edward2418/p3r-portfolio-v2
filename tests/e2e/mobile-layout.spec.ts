@@ -89,3 +89,34 @@ test.describe("ancho mínimo de reflujo (320 px, equivalente a zoom del 200 %)",
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
   });
 });
+
+// --- Quién soy y Stack en anchos estrechos (specs/004-quien-soy-y-stack, historia 4) ---
+
+test.describe("Quién soy y Stack en 320 px y en horizontal", () => {
+  for (const viewport of [
+    { width: 320, height: 640 },
+    { width: 844, height: 390 },
+  ]) {
+    test.describe(`${viewport.width}×${viewport.height}`, () => {
+      test.use({ viewport });
+
+      for (const id of [menu[0].id, menu[1].id]) {
+        test(`${id}: sin desplazamiento horizontal y con todo el texto dentro de la ventana`, async ({ page }) => {
+          await openReady(page, `/${lang}/${id}`);
+          await expectNoHorizontalScroll(page);
+          const outside = await page.locator("main").evaluate((main) => {
+            const width = window.innerWidth;
+            return [...main.querySelectorAll<HTMLElement>("h1, h2, h3, p, li, dt, dd, span")]
+              .filter((element) => element.getBoundingClientRect().width > 0)
+              .filter((element) => {
+                const rect = element.getBoundingClientRect();
+                return rect.left < -1 || rect.right > width + 1;
+              })
+              .map((element) => `${element.tagName}: ${element.textContent?.trim().slice(0, 30)}`);
+          });
+          expect(outside, "ningún texto debe salirse de la ventana").toEqual([]);
+        });
+      }
+    });
+  }
+});

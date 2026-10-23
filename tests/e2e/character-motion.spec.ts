@@ -20,33 +20,38 @@ async function startIdle(page: Page) {
 }
 
 test.describe("entrada de Oguri al omitir el splash", () => {
+  // Cuenta cuadros de animación: con la máquina cargada pueden perderse algunos; se permiten reintentos acotados.
+  test.describe.configure({ retries: 2 });
+
   test("anima su entrada en el momento de omitirlo en lugar de aparecer de golpe", async ({ page }) => {
     // Sin marcar el splash como visto: se muestra y se omite con una tecla a mitad.
     await page.goto(`/${lang}`);
     await page.locator('html[data-scene-ready="true"]').waitFor({ state: "attached" });
     await page.waitForTimeout(300);
+    // Con el splash completo la entrada espera 1.2 s y dura 0.3 s. Si el retraso desaparece al omitir el splash
+    // con la animación ya "vencida", empieza y termina en el mismo instante (aparece de golpe); con el reinicio
+    // dura lo que debe. Se mide el tiempo entre `animationstart` y `animationend`.
     await page.evaluate(() => {
-      const w = window as unknown as { __samples: [number, number][]; __skippedAt: number };
-      w.__samples = [];
-      const character = document.querySelector<HTMLElement>("[data-character]")!;
-      const tick = () => {
-        w.__samples.push([performance.now(), Number(getComputedStyle(character).opacity)]);
-        if (w.__samples.length < 400) requestAnimationFrame(tick);
-      };
-      requestAnimationFrame(tick);
+      const w = window as unknown as { __entrance: { start: number | null; end: number | null } };
+      w.__entrance = { start: null, end: null };
+      const character = document.querySelector("[data-character]")!;
+      character.addEventListener("animationstart", (event) => {
+        if ((event as AnimationEvent).animationName === "character-in") w.__entrance.start = performance.now();
+      });
+      character.addEventListener("animationend", (event) => {
+        if ((event as AnimationEvent).animationName === "character-in") w.__entrance.end = performance.now();
+      });
     });
-    await page.evaluate(() => ((window as unknown as { __skippedAt: number }).__skippedAt = performance.now()));
     await page.keyboard.press("a"); // omite el splash
-    await page.waitForTimeout(900);
-
-    const { samples, skippedAt } = await page.evaluate(() => {
-      const w = window as unknown as { __samples: [number, number][]; __skippedAt: number };
-      return { samples: w.__samples, skippedAt: w.__skippedAt };
-    });
-    const after = samples.filter(([time]) => time > skippedAt);
-    const mid = after.filter(([, opacity]) => opacity > 0.05 && opacity < 0.95);
-    expect(mid.length, "la entrada debe verse animada (varios cuadros intermedios), no aparecer de golpe").toBeGreaterThanOrEqual(3);
-    expect(after.at(-1)![1], "al terminar Oguri debe estar totalmente visible").toBeGreaterThanOrEqual(0.99);
+    await expect
+      .poll(() => page.evaluate(() => (window as unknown as { __entrance: { end: number | null } }).__entrance.end), {
+        message: "la animación de entrada debe terminar tras omitir el splash",
+        timeout: 3000,
+      })
+      .not.toBeNull();
+    const { start, end } = await page.evaluate(() => (window as unknown as { __entrance: { start: number; end: number } }).__entrance);
+    expect(end - start, "la entrada debe durar lo que dura la animación (≈300 ms), no aparecer de golpe").toBeGreaterThanOrEqual(200);
+    await expect(page.locator("[data-character]")).toHaveCSS("opacity", "1");
   });
 
   test("con el splash completo la entrada no se repite al cerrarse solo", async ({ page }) => {

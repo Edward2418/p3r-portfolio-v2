@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ScreenFrame } from "../../../components/scene/ScreenFrame.tsx";
-import { ProfileSection } from "../../../components/sections/ProfileSection.tsx";
+import { ProfileSheet } from "../../../components/profile/ProfileSheet.tsx";
+import { Trajectory } from "../../../components/profile/Trajectory.tsx";
 import { isLang } from "../../../lib/i18n/config.ts";
 import { screenTitle } from "../../../lib/scene/titles.ts";
 
@@ -16,7 +17,8 @@ export default async function Page({ params }: PageProps<"/[lang]/profile">) {
 
   return (
     <ScreenFrame lang={lang} sceneId="profile">
-      <ProfileSection lang={lang} />
+      <ProfileSheet lang={lang} />
+      <Trajectory lang={lang} />
     </ScreenFrame>
   );
 }

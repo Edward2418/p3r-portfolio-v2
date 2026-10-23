@@ -8,6 +8,14 @@
 
 **Entrada**: Descripción del usuario: "Fase 4: Quién soy y Stack" (insumo: `docs/sprints/fase-4-quien-soy-y-stack.md`)
 
+## Aclaraciones
+
+### Sesión 2026-10-23
+
+- Q: ¿Qué datos personales se publican en "Quién soy"? → A: El nombre ("Edward Negrete"), el titular, la especialidad, la institución (TecNM, ITSH) y el semestre actual. No se publican el apellido completo ni el año de titulación previsto.
+- Q: ¿Qué hitos de la trayectoria se confirman y se muestra el hito futuro? → A: Los cinco hitos de la versión anterior (inicio de carrera, 3.º y 4.º semestre, 5.º y 6.º, semestre actual y titulación), con la titulación distinguida como meta futura; todos provisionales hasta que Edward los revise. Como no se publica el año de titulación, el hito futuro se muestra sin año.
+- Q: ¿Qué representan las intersecciones de los círculos? → A: Una etiqueta fija ("Full-Stack") en el centro de los tres círculos, sin tecnologías propias; cada tecnología va en un solo círculo y las demás zonas de solapamiento son decorativas.
+
 ## Escenarios de usuario y pruebas *(obligatorio)*
 
 ### Historia de usuario 1 - Conocer quién es Edward (Prioridad: P1)
@@ -55,7 +63,8 @@ Como reclutador, quiero ver en "Stack" las tecnologías agrupadas en tres círcu
 1. **Dado** que el visitante abre "Stack", **cuando** termina la transición, **entonces** ve tres círculos solapados, uno por categoría, con las tecnologías de cada una.
 2. **Dado** que una tecnología tiene nivel, **cuando** se muestra, **entonces** su nivel de 1 a 5 se lee de forma explícita (no solo por color o tamaño).
 3. **Dado** que una tecnología no está confirmada por Edward, **cuando** se muestra, **entonces** aparece marcada como provisional.
-4. **Dado** que el visitante pasa de "Quién soy" a "Stack" con la pestaña R, el teclado o el deslizamiento, **cuando** termina la transición, **entonces** ve "Stack" con la misma transición y el mismo personaje de las fases anteriores.
+4. **Dado** que se muestra la zona central de los tres círculos, **cuando** el visitante la ve, **entonces** aparece la etiqueta "Full-Stack" sin tecnologías propias, y esa misma etiqueta está en el texto para lectores de pantalla.
+5. **Dado** que el visitante pasa de "Quién soy" a "Stack" con la pestaña R, el teclado o el deslizamiento, **cuando** termina la transición, **entonces** ve "Stack" con la misma transición y el mismo personaje de las fases anteriores.
 
 ---
 
@@ -110,7 +119,7 @@ Como Edward, quiero que mi perfil, mi formación, mi trayectoria y mis tecnolog�
 ### Casos límite
 
 - Si la trayectoria no tiene ningún hito confirmado, "Quién soy" se muestra sin esa sección y sin huecos.
-- Si una categoría de tecnologías queda vacía, su círculo no se muestra o se muestra sin elementos, sin romper el solapamiento de los otros.
+- Si una categoría de tecnologías queda vacía, su círculo no se muestra o se muestra sin elementos, sin romper el solapamiento de los otros; la etiqueta central solo se muestra si hay tecnologías en las tres categorías.
 - Con muchas tecnologías en una categoría, el círculo y su lista siguen siendo legibles y no se cortan.
 - Con textos largos o con el zoom del 200 %, las pantallas siguen siendo legibles y sin desplazamiento horizontal.
 - En 390 px los tres círculos no caben solapados a su tamaño de escritorio: se adaptan (por ejemplo, apilados o más pequeños) sin perder la información.
@@ -126,11 +135,11 @@ Como Edward, quiero que mi perfil, mi formación, mi trayectoria y mis tecnolog�
 - **FR-001**: "Quién soy" MUST mostrar el nombre de Edward, su titular de perfil y una presentación breve, dentro de una ficha con el aspecto de una pantalla del juego.
 - **FR-002**: "Quién soy" MUST mostrar la formación y la trayectoria breve en orden cronológico, cada hito con su periodo, su título y una descripción breve, y distinguir los hitos futuros de los ya ocurridos.
 - **FR-003**: El sistema MUST publicar solo contenido confirmado por Edward: todo dato pendiente de confirmar MUST mostrarse marcado como provisional y ninguna referencia no verificada MUST presentarse como cierta.
-- **FR-004**: El sistema MUST publicar como datos personales visibles solo [NEEDS CLARIFICATION: ¿qué datos personales se publican en "Quién soy": apellido completo, semestre actual, institución y año de titulación previsto?].
-- **FR-005**: La trayectoria MUST incluir solo los hitos que Edward confirme [NEEDS CLARIFICATION: ¿qué hitos de la trayectoria se confirman y si se muestra el hito futuro de titulación?].
+- **FR-004**: El sistema MUST publicar como datos personales visibles solo el nombre ("Edward Negrete"), el titular, la especialidad, la institución (TecNM, ITSH) y el semestre actual, y MUST NOT publicar el apellido completo ni el año de titulación previsto.
+- **FR-005**: La trayectoria MUST incluir los cinco hitos de la versión anterior (inicio de carrera, 3.º y 4.º semestre, 5.º y 6.º semestre, semestre actual y titulación), con la titulación distinguida como meta futura y sin año, y todos MUST aparecer como provisionales hasta que Edward los confirme.
 - **FR-006**: "Stack" MUST mostrar las tecnologías agrupadas en tres círculos solapados, uno por categoría (frontend, backend, bases de datos y herramientas), con cada tecnología en el círculo de su categoría.
 - **FR-007**: Cada tecnología MUST mostrar su nivel de 1 a 5 de forma explícita (valor legible), no solo mediante color, tamaño o posición.
-- **FR-008**: Las zonas donde se solapan los círculos MUST tener un significado definido [NEEDS CLARIFICATION: ¿qué representan las intersecciones de los círculos: tecnologías que aplican a varias categorías, o son solo decorativas?].
+- **FR-008**: Cada tecnología MUST pertenecer a un solo círculo; la zona central de los tres círculos MUST mostrar la etiqueta fija "Full-Stack" (en datos, en ambos idiomas) sin tecnologías propias, y las demás zonas de solapamiento son decorativas y MUST NOT contener información.
 - **FR-009**: Toda la información de "Stack" (categorías, tecnologías y niveles) MUST estar disponible como texto en un orden lógico para lectores de pantalla, sin depender del gráfico de círculos.
 - **FR-010**: Ambas pantallas MUST ser legibles y operables en 390, 768 y 1280 px de ancho, sin desplazamiento horizontal y con los círculos adaptados a cada ancho sin perder información.
 - **FR-011**: Oguri MUST acompañar ambas pantallas con una posición, una escala y una rotación propias de cada una, sin tapar ningún contenido y cambiando de lugar bajo la cobertura del barrido.
@@ -144,10 +153,11 @@ Como Edward, quiero que mi perfil, mi formación, mi trayectoria y mis tecnolog�
 
 ### Entidades clave *(incluir si la funcionalidad involucra datos)*
 
-- **Perfil**: nombre, titular, presentación y, si Edward lo confirma, institución y semestre; cada campo en español e inglés y con marca de provisional cuando no está confirmado.
+- **Perfil**: nombre, titular, especialidad, presentación, institución y semestre actual (sin apellido completo ni año de titulación); cada campo en español e inglés y con marca de provisional cuando no está confirmado.
 - **Hito de trayectoria**: periodo (o año), título, descripción breve, tipo (formación, avance o meta futura) y marca de provisional; pertenece a la trayectoria ordenada cronológicamente.
 - **Tecnología**: nombre, nivel de 1 a 5 y marca de provisional; pertenece a una categoría.
 - **Categoría de stack**: nombre en dos idiomas y lista de tecnologías; hay tres (frontend, backend, bases de datos y herramientas).
+- **Etiqueta central del stack**: texto "Full-Stack" en dos idiomas para la zona donde se cruzan los tres círculos.
 - **Posición de Oguri en una pantalla**: ubicación, escala y rotación propias de "Quién soy" y de "Stack".
 
 ## Criterios de éxito *(obligatorio)*
@@ -168,10 +178,10 @@ Como Edward, quiero que mi perfil, mi formación, mi trayectoria y mis tecnolog�
 ## Supuestos
 
 - Se mantiene la escala de nivel de 1 a 5 ya existente en los datos; los porcentajes de la versión anterior no se usan.
-- La lista de tecnologías parte de la ya existente, marcada como provisional (Next.js, React, TypeScript, Tailwind CSS, Node.js, Git, Playwright y Vercel). Los candidatos de la versión anterior (Java, SQL y bases de datos, HTML y CSS, JavaScript) y su recorrido académico (2023 a 2027, institución y especialidad) se incorporan solo como provisionales hasta que Edward los confirme, y los niveles son de ejemplo.
+- La lista de tecnologías parte de la ya existente, marcada como provisional (Next.js, React, TypeScript, Tailwind CSS, Node.js, Git, Playwright y Vercel). Los candidatos de la versión anterior (Java, SQL y bases de datos, HTML y CSS, JavaScript) y su recorrido (desde 2023, institución y especialidad) se incorporan solo como provisionales hasta que Edward los confirme, y los niveles son de ejemplo; el semestre actual y la agrupación en categorías también son provisionales.
 - La presentación es un texto de ejemplo marcado como provisional hasta que Edward la redacte o apruebe un borrador en español e inglés; las traducciones al inglés las propone el asistente y Edward las confirma.
 - Los círculos de "Stack" son un recurso visual con un equivalente textual completo; no son interactivos.
-- Las intersecciones de los círculos y los niveles se leen sin depender del color; la manera exacta de dibujarlos se decide en la planificación.
+- Los niveles y la etiqueta central se leen sin depender del color; la manera exacta de dibujar los círculos se decide en la planificación.
 - Las animaciones de entrada de los bloques de las pantallas se mantienen discretas y por defecto no se añade movimiento nuevo más allá de la entrada de la escena, hasta que se decida otra cosa.
 - Hay una sola pose de Oguri; su posición, escala y rotación cambian por pantalla, pero no su pose (más poses llegan en la fase 6).
 - No hay arte nuevo ni dependencias nuevas; el contacto, el CV, los proyectos y Social Link quedan fuera de esta fase.

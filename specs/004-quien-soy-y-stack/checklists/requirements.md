@@ -13,7 +13,7 @@
 
 ## Completitud de los requisitos
 
-- [ ] No quedan marcadores [NEEDS CLARIFICATION]
+- [x] No quedan marcadores [NEEDS CLARIFICATION]
 - [x] Los requisitos son comprobables y no ambiguos
 - [x] Los criterios de éxito son medibles
 - [x] Los criterios de éxito no dependen de la tecnología
@@ -31,6 +31,6 @@
 
 ## Notas
 
-- Quedan 3 marcadores [NEEDS CLARIFICATION] (FR-004 datos personales, FR-005 hitos de la trayectoria y FR-008 significado de las intersecciones); se resuelven preguntándole a Edward.
+- Los 3 marcadores [NEEDS CLARIFICATION] (FR-004 datos personales, FR-005 hitos de la trayectoria y FR-008 significado de las intersecciones) se resolvieron con Edward el 2026-10-23 (ver Aclaraciones en la especificación).
 - El insumo `docs/sprints/fase-4-quien-soy-y-stack.md` existe antes de la especificación (principio VI).
 - El contenido de la v1 (trayectoria, institución y tecnologías) entra solo como provisional hasta que Edward lo confirme (principio V).

@@ -8,6 +8,14 @@
 
 **Entrada**: Descripción del usuario: "Fase 3: identidad visual P3R" (insumo: `docs/sprints/fase-3-identidad-visual-p3r.md`)
 
+## Aclaraciones
+
+### Sesión 2026-10-23
+
+- Q: En el móvil (390 px), ¿dónde debe ir Oguri para no tapar las opciones del menú? → A: Como figura grande detrás de las opciones, recortada por el borde derecho y con menos opacidad, sin ocupar espacio; las opciones van encima y ocupan todo el ancho.
+- Q: En las cinco pantallas internas, ¿dónde debe ir Oguri en escritorio y en móvil sin dificultar la lectura del contenido? → A: En escritorio, a la derecha, grande y fuera del área de contenido, que va en un panel; en móvil, detrás del panel, recortada y atenuada, como en el menú.
+- Q: ¿En qué momento exacto debe empezar a cargarse el video de movimiento en reposo de Oguri? → A: Cuando el navegador queda en reposo tras cargar el menú, con un tope de unos 2 s, y solo si no hay movimiento reducido ni ahorro de datos.
+
 ## Escenarios de usuario y pruebas *(obligatorio)*
 
 ### Historia de usuario 1 - Ver un menú con el estilo de P3R (Prioridad: P1)
@@ -37,7 +45,7 @@ Como visitante, quiero ver a Oguri como protagonista del menú, con una entrada 
 **Escenarios de aceptación**:
 
 1. **Dado** que el menú se muestra, **cuando** termina la entrada del personaje, **entonces** Oguri se ve completa y sin recortes, sin tapar ninguna opción.
-2. **Dado** que el menú ya es utilizable, **cuando** el movimiento en reposo está disponible, **entonces** Oguri pasa de una imagen fija a un movimiento suave sin saltos visibles.
+2. **Dado** que el menú ya es utilizable y el navegador quedó en reposo (con un tope de unos 2 s), **cuando** el movimiento en reposo está disponible, **entonces** Oguri pasa de una imagen fija a un movimiento suave sin saltos visibles.
 3. **Dado** que el visitante tiene el movimiento reducido activado (sistema o sitio) o el ahorro de datos activado, **cuando** abre el menú, **entonces** Oguri aparece como imagen fija y no se descarga el video de movimiento en reposo.
 4. **Dado** que el video de movimiento en reposo no llega o falla, **cuando** se muestra el menú, **entonces** Oguri sigue visible como imagen fija y no aparece ningún error.
 
@@ -88,7 +96,7 @@ Como visitante, quiero que las cinco pantallas internas compartan un marco con e
 
 **Escenarios de aceptación**:
 
-1. **Dado** que el visitante abre cualquiera de las cinco pantallas, **cuando** se muestra, **entonces** ve el fondo común, la cabecera con el nombre de la pantalla y a Oguri en su posición de pantalla.
+1. **Dado** que el visitante abre cualquiera de las cinco pantallas, **cuando** se muestra, **entonces** ve el fondo común, la cabecera con el nombre de la pantalla, el contenido dentro de un panel y a Oguri en su posición de pantalla: en escritorio, a la derecha y fuera del panel; en móvil, detrás del panel, recortada y atenuada.
 2. **Dado** que una pantalla tiene mucho contenido, **cuando** el visitante se desplaza, **entonces** el contenido se lee con contraste suficiente sobre el fondo y la cabecera y el personaje no lo tapan.
 3. **Dado** que el visitante pasa de una pantalla a otra con L/R, **cuando** termina la transición, **entonces** el marco se mantiene y solo cambia el contenido y el nombre de la cabecera.
 
@@ -104,7 +112,7 @@ Como visitante en móvil, quiero que Oguri y el panel no tapen las opciones ni o
 
 **Escenarios de aceptación**:
 
-1. **Dado** que la pantalla mide 390 px de ancho, **cuando** se muestra el menú, **entonces** las cinco opciones se ven completas, se pulsan con facilidad y Oguri no las cubre.
+1. **Dado** que la pantalla mide 390 px de ancho, **cuando** se muestra el menú, **entonces** Oguri aparece como figura grande detrás de las opciones, recortada por el borde derecho y con menos opacidad, y las cinco opciones se ven completas, encima del personaje, ocupan todo el ancho y se pulsan con facilidad.
 2. **Dado** que el visitante gira el móvil a horizontal, **cuando** se muestra el menú, **entonces** el diseño se adapta sin recortar opciones ni crear desplazamiento horizontal.
 3. **Dado** que el visitante usa los anchos 390, 768 y 1280 px, **cuando** recorre el menú y las pantallas, **entonces** no aparece desplazamiento horizontal.
 
@@ -128,14 +136,14 @@ Como Edward, quiero que el arte, los sonidos, el título vertical y los textos n
 ### Casos límite
 
 - Si la imagen del personaje no carga, el menú sigue siendo utilizable y se muestra un espacio vacío con el nombre accesible del personaje.
-- Con una conexión lenta, el menú y las opciones aparecen antes que el movimiento en reposo, que se carga después y sin bloquear nada.
+- Con una conexión lenta, el menú y las opciones aparecen antes que el movimiento en reposo, que empieza a cargarse al quedar el navegador en reposo (tope de unos 2 s) y sin bloquear nada.
 - Con el ahorro de datos activado, no se descarga el video de movimiento en reposo.
 - Si el navegador no admite video con transparencia, Oguri se muestra como imagen fija.
 - Una transición interrumpida en cualquier punto deja a Oguri en su posición final y no en una pose intermedia.
 - Cambiar de idioma durante una transición no deja textos a medias ni reinicia el personaje.
 - Un navegador con el audio bloqueado hasta una interacción no muestra errores y el sonido funciona después de la primera interacción.
 - El texto sobre el panel blanco y sobre el degradado mantiene el contraste AA en cualquier punto del degradado y en cualquier ancho.
-- Con el contenido de una pantalla muy largo, el marco no tapa el contenido ni el personaje se superpone al texto.
+- Con el contenido de una pantalla muy largo, el panel crece o se desplaza sin que el personaje se superponga al texto ni la cabecera lo tape.
 - Con zoom del 200 % o fuente grande, el menú sigue siendo utilizable y sin desplazamiento horizontal.
 
 ## Requisitos *(obligatorio)*
@@ -144,9 +152,9 @@ Como Edward, quiero que el arte, los sonidos, el título vertical y los textos n
 
 - **FR-001**: El menú principal MUST mostrar un fondo en degradado de cian a azul profundo, un panel blanco inclinado con un título vertical y las cinco opciones inclinadas, con la activa en blanco y con borde rojo.
 - **FR-002**: El título vertical del panel y los textos nuevos MUST salir de datos bilingües, no de los componentes.
-- **FR-003**: El menú MUST mostrar a Oguri como imagen principal, sin cubrir ninguna opción en 390, 768 y 1280 px.
+- **FR-003**: El menú MUST mostrar a Oguri como imagen principal sin que cubra ninguna opción en 390, 768 y 1280 px. En móvil, Oguri MUST ir detrás de las opciones, recortada por el borde derecho y con menos opacidad, sin ocupar espacio del diseño; las opciones MUST ir encima y ocupar todo el ancho.
 - **FR-004**: Oguri MUST entrar con una animación breve al mostrar el menú, y el menú MUST ser utilizable sin esperar a que termine.
-- **FR-005**: El movimiento en reposo de Oguri MUST cargarse después de que el menú sea utilizable, MUST NOT bloquear la carga inicial y MUST tener una imagen fija como alternativa.
+- **FR-005**: El movimiento en reposo de Oguri MUST empezar a cargarse cuando el navegador quede en reposo tras cargar el menú, con un tope de unos 2 s, MUST NOT bloquear la carga inicial ni competir con el contenido y MUST tener una imagen fija como alternativa.
 - **FR-006**: El movimiento en reposo MUST NOT cargarse ni reproducirse con movimiento reducido (del sistema o del sitio) ni con el ahorro de datos activado.
 - **FR-007**: La transición entre pantallas MUST incluir a Oguri entrando desde la derecha, rotada, durante la entrada escalonada, reutilizando los tiempos y las curvas de la fase 2 y sin salirse del rango de 500 a 800 ms.
 - **FR-008**: La transición MUST seguir siendo interrumpible: un clic o una tecla lleva al destino de inmediato con Oguri en su posición final.
@@ -155,7 +163,7 @@ Como Edward, quiero que el arte, los sonidos, el título vertical y los textos n
 - **FR-011**: El sonido MUST estar desactivado por defecto y MUST NOT descargar ningún archivo de audio hasta que el visitante lo active.
 - **FR-012**: System MUST ofrecer un interruptor de sonido operable con teclado, con su estado anunciado a los lectores de pantalla y recordado entre visitas.
 - **FR-013**: Con el sonido activado, el sitio MUST reproducir un sonido por acción: mover la opción (cursor), confirmar, cancelar, abrir una pantalla, cerrar o volver, y, una sola vez al activar el sonido, subida de nivel.
-- **FR-014**: Las cinco pantallas internas MUST compartir un marco con el mismo fondo, una cabecera con el nombre de la pantalla y la posición de pantalla de Oguri, sin ocultar ni dificultar la lectura de su contenido.
+- **FR-014**: Las cinco pantallas internas MUST compartir un marco con el mismo fondo, una cabecera con el nombre de la pantalla, un panel para el contenido y la posición de pantalla de Oguri, sin ocultar ni dificultar la lectura de su contenido. En escritorio y tableta, Oguri MUST ir a la derecha, grande y fuera del panel; en móvil, detrás del panel, recortada y atenuada.
 - **FR-015**: El contenido de las pantallas MUST mantener contraste AA sobre el fondo y MUST seguir siendo operable con teclado, con toque y con lector de pantalla.
 - **FR-016**: El personaje decorativo MUST ocultarse a los lectores de pantalla cuando no aporte información, y MUST tener una descripción cuando sí la aporte.
 - **FR-017**: El sitio MUST NOT tener desplazamiento horizontal en 390, 768 y 1280 px.
@@ -190,7 +198,7 @@ Como Edward, quiero que el arte, los sonidos, el título vertical y los textos n
 
 - El título vertical del panel es "PORTFOLIO", como en la versión anterior, y se puede cambiar en los datos.
 - Con una sola pose de Oguri disponible, el personaje cambia de posición, escala y rotación en cada pantalla, no de pose; más poses llegan en la fase 6.
-- El idle de Oguri es el video con transparencia de la versión anterior, ya incluido en el repositorio; el retrato es el WebP optimizado.
+- El idle de Oguri empieza a cargarse al quedar el navegador en reposo (tope de unos 2 s); es el video con transparencia de la versión anterior, ya incluido en el repositorio; el retrato es el WebP optimizado.
 - La preferencia de sonido se guarda en el navegador del visitante, sin cuentas ni servidores.
 - El sonido de subida de nivel suena una sola vez, al activar el sonido, como confirmación.
 - El interruptor de sonido vive en System; la pantalla System completa (contacto y demás ajustes) llega en la fase 7.

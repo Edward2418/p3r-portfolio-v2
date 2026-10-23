@@ -16,7 +16,7 @@ Enfoque técnico (resuelto en [research.md](./research.md)): **sin dependencias 
 
 **Dependencias principales**: Next.js 16.4.2, React 19.3, Tailwind CSS 4.3; **sin dependencias nuevas**
 
-**Almacenamiento**: datos tipados en `src/content/` (`profile.ts`, `stack.ts` y `timeline.ts` nuevo); sin almacenamiento nuevo en el cliente
+**Almacenamiento**: datos tipados en `src/content/` (`profile.ts`, `stack.ts` y `trajectory.ts` nuevo); sin almacenamiento nuevo en el cliente
 
 **Pruebas**: `node --test` (unitarias) y `@playwright/test` (E2E en 390, 768 y 1280 px en Chromium y 1280 px en Firefox); axe-core y Lighthouse bajo demanda, fuera del repositorio
 
@@ -80,27 +80,28 @@ src/
 ├── components/
 │   ├── profile/
 │   │   ├── ProfileSheet.tsx           # Servidor: nombre, titular, datos de la ficha y presentación
-│   │   └── Timeline.tsx               # Servidor: trayectoria en orden cronológico
+│   │   └── Trajectory.tsx             # Servidor: trayectoria en orden cronológico
 │   ├── stack/
 │   │   └── StackCircles.tsx           # Servidor: tres círculos, niveles y etiqueta central
 │   ├── scene/
 │   │   └── SceneShell.tsx             # + data-scene; fundido del personaje también al cambiar de pantalla
 │   └── sections/                      # ProfileSection y StackSection se reemplazan por los anteriores
 ├── content/
-│   ├── types.ts                       # Profile ampliado, TimelineEntry y etiqueta central
+│   ├── types.ts                       # Profile ampliado, TrajectoryEntry y etiqueta central
 │   ├── profile.ts                     # + especialidad, institución y semestre
-│   ├── timeline.ts                    # Cinco hitos (nuevo)
+│   ├── trajectory.ts                  # Cinco hitos (nuevo)
 │   ├── stack.ts                       # + etiqueta central "Full-Stack" y tecnologías candidatas
 │   └── ui-text.ts                     # + etiquetas de la ficha, de la trayectoria y de los niveles
 └── lib/
-    └── scene/                         # (sin cambios)
+    ├── stack/layout.ts                # Funciones puras: categorías visibles y cuándo se muestra la etiqueta central (nuevo)
+    └── profile/trajectory.ts          # Función pura: si hay trayectoria que mostrar (nuevo)
 
 tests/
-├── unit/                              # content.test.ts (reglas nuevas), tokens.test.ts (+ tinte de los círculos)
+├── unit/                              # content.test.ts (reglas nuevas), presentation.test.ts (funciones puras nuevas), tokens.test.ts (+ tinte de los círculos)
 └── e2e/                               # profile.spec.ts, stack.spec.ts, character-per-scene.spec.ts (+ ajustes a language, layout y screen-frame)
 ```
 
-**Decisión de estructura**: se mantiene el proyecto único. Las dos pantallas son componentes de servidor sin estado; la única pieza de cliente que cambia es `SceneShell`, que publica `data-scene` y amplía el fundido del personaje con movimiento reducido. No hay lógica pura nueva salvo las validaciones de datos, que se prueban con `node --test`.
+**Decisión de estructura**: se mantiene el proyecto único. Las dos pantallas son componentes de servidor sin estado; la única pieza de cliente que cambia es `SceneShell`, que publica `data-scene` y amplía el fundido del personaje con movimiento reducido. La lógica pura nueva (categorías visibles, etiqueta central y trayectoria vacía) vive en `src/lib/` para probarla con `node --test`, que no importa componentes `.tsx`; las validaciones de datos se prueban igual.
 
 ## Seguimiento de complejidad
 

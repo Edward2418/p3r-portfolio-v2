@@ -38,7 +38,7 @@ Reglas:
 
 - Sin desplazamiento horizontal ni texto recortado en 390, 768 y 1280 px, en español e inglés.
 - Con más tecnologías de las que caben, el bloque crece hacia abajo (`min-height`) y el círculo pasa a elipse suave; nunca se recorta el texto.
-- Una categoría vacía no se muestra y la etiqueta central tampoco.
+- Una categoría vacía no se muestra y la etiqueta central solo aparece con tecnologías en las tres categorías (`visibleCategories` y `showCenterLabel` en `src/lib/stack/layout.ts`).
 
 ## Movimiento
 

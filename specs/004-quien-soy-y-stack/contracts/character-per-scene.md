@@ -34,5 +34,5 @@ Por debajo de 1024 px se mantiene la regla de la fase 3: detrás del panel, reco
 ## Observable (para las pruebas)
 
 - Las cajas de `[data-character]` de "Quién soy" y de "Stack" difieren en altura y en posición.
-- La inclinación calculada de la imagen es 0° en "Quién soy" y 3° en "Stack".
+- La inclinación calculada de la imagen difiere entre "Quién soy" y "Stack" (valores iniciales 0° y 3°, que se afinan con capturas sin romper la prueba).
 - En 1280 px, la caja de Oguri empieza a la derecha del panel en ambas pantallas.

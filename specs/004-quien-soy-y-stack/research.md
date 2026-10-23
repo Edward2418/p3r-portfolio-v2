@@ -46,9 +46,9 @@ Cada decisión indica su razón y las alternativas evaluadas. No quedaba ningún
 
 - **Decisión**:
   - `Profile` se amplía con `specialty`, `institution` y `semester` (los tres `Localized`, p. ej. "7.º semestre" y "7th semester"); `name` sigue siendo "Edward Negrete" (sin apellido completo).
-  - Nuevo `TimelineEntry` en `src/content/timeline.ts`: `id`, `period` (`Localized`, p. ej. "2023", "Hoy", "Meta"), `title`, `description`, `kind` (`formation`, `progress`, `current` o `goal`) y `provisional`. El hito de la titulación es `goal` y no lleva año.
+  - Nuevo `TrajectoryEntry` en `src/content/trajectory.ts`: `id`, `period` (`Localized`, p. ej. "2023", "Hoy", "Meta"), `title`, `description`, `kind` (`formation`, `progress`, `current` o `goal`) y `provisional`. El hito de la titulación es `goal` y no lleva año.
   - `stack.ts` suma `stackCenterLabel` y las tecnologías candidatas (Java, SQL y bases de datos, HTML y CSS, JavaScript), todas provisionales con niveles de ejemplo.
-  - Una prueba unitaria impide publicar el apellido completo y el año de titulación en `profile`, `timeline`, `stack` y `ui-text` (FR-004) y comprueba que ningún hito `goal` tiene un año.
+  - Una prueba unitaria impide publicar el apellido completo y el año de titulación en `profile`, `trajectory`, `stack` y `ui-text` (FR-004) y comprueba que ningún hito `goal` tiene un año.
 - **Razón**: Principios IV y V; la prueba convierte la decisión de privacidad en una regla que no se rompe por accidente.
 - **Alternativas**: guardar los datos personales en variables de entorno (innecesario: son decisiones públicas de Edward).
 
@@ -76,13 +76,13 @@ Cada decisión indica su razón y las alternativas evaluadas. No quedaba ningún
 
 ## D11. Pruebas
 
-- **Unitarias**: validaciones nuevas en `content.test.ts` (niveles de 1 a 5, tecnologías únicas, tres categorías, hitos con exactamente una meta y al final, ningún apellido completo ni año de titulación, idiomas completos) y los pares de contraste del tinte en `tokens.test.ts`.
+- **Unitarias**: validaciones nuevas en `content.test.ts` (niveles de 1 a 5, tecnologías únicas, tres categorías, hitos con exactamente una meta y al final, ningún apellido completo ni año de titulación, idiomas completos) y los pares de contraste del tinte en `tokens.test.ts`; además `presentation.test.ts` para las funciones puras de presentación (categoría vacía, etiqueta central y trayectoria vacía), porque `node --test` no importa componentes y los datos se renderizan en el servidor.
 - **E2E**: `profile.spec.ts` (ficha, datos publicados, orden y estado de los hitos, etiquetas provisionales, idioma), `stack.spec.ts` (tres grupos, nivel como texto en cada tecnología, etiqueta central, orden de lectura, sin recorte ni desplazamiento horizontal en 390, 768 y 1280 px, con la categoría más larga) y `character-per-scene.spec.ts` (posiciones distintas por pantalla, sin tapar el contenido, fundido con movimiento reducido).
 - **Revisión**: axe-core con 0 violaciones, capturas a 390, 768 y 1280 px y comparación con la pantalla de referencia de P3R.
 
 ## D12. Pruebas y código heredados
 
-- **Decisión**: `ProfileSection` y `StackSection` se reemplazan por `ProfileSheet`, `Timeline` y `StackCircles`; `StackCircles` conserva un `<h2>` "Stack" porque `language.spec.ts` lo espera. Las pruebas de `screen-frame` y de diseño se ajustan solo si dependen del DOM anterior.
+- **Decisión**: `ProfileSection` y `StackSection` se reemplazan por `ProfileSheet`, `Trajectory` y `StackCircles`; `StackCircles` conserva un `<h2>` "Stack" porque `language.spec.ts` lo espera. Las pruebas de `screen-frame` y de diseño se ajustan solo si dependen del DOM anterior.
 - **Razón**: evita código muerto y mantiene los 190 E2E existentes en verde.
 
 ## D13. Borradores de contenido

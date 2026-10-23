@@ -15,6 +15,7 @@
 - Q: ¿Qué datos personales se publican en "Quién soy"? → A: El nombre ("Edward Negrete"), el titular, la especialidad, la institución (TecNM, ITSH) y el semestre actual. No se publican el apellido completo ni el año de titulación previsto.
 - Q: ¿Qué hitos de la trayectoria se confirman y se muestra el hito futuro? → A: Los cinco hitos de la versión anterior (inicio de carrera, 3.º y 4.º semestre, 5.º y 6.º, semestre actual y titulación), con la titulación distinguida como meta futura; todos provisionales hasta que Edward los revise. Como no se publica el año de titulación, el hito futuro se muestra sin año.
 - Q: ¿Qué representan las intersecciones de los círculos? → A: Una etiqueta fija ("Full-Stack") en el centro de los tres círculos, sin tecnologías propias; cada tecnología va en un solo círculo y las demás zonas de solapamiento son decorativas.
+- Revisión de análisis (`/speckit-analyze`, 2026-10-23), correcciones aplicadas con aprobación de Edward: la lógica de qué se muestra (categorías vacías, etiqueta central y trayectoria vacía) va en funciones puras para poder probarla; el contenido de la trayectoria se llama `trajectory` para no confundirlo con la línea de tiempo del movimiento; el periodo del hito futuro es "Futuro" (la etiqueta visible sigue siendo "Meta"); y el semestre actual de la v1 no es un valor confirmado.
 
 ## Escenarios de usuario y pruebas *(obligatorio)*
 

@@ -113,3 +113,10 @@ axe no puede calcular el contraste de texto sobre un panel translúcido encima d
 ### R5. Animación del personaje (T029, skills animate y animation-performance)
 
 Solo `transform` y `opacity`; la entrada inicial es CSS (`character-in`, 300 ms, `--ease-out`) con retraso igual al 80 % del splash, el fundido imagen a video es una transición de `opacity` de 150 ms y el video se pausa durante las transiciones (`data-scene-busy`) y con la pestaña oculta. No hay `transition: all` ni `will-change` permanente.
+
+### R6. Barrido con el personaje y comparación con el video (US3, T038 y T040)
+
+- La secuencia de la fase 2 no cambió: `[data-character]` ya se animaba en la entrada escalonada. Con el personaje real se aumentó el desplazamiento de entrada de `translateX(40%)` (de su propio ancho, unos 160 px) a `translateX(30vw)` (unos 380 px a 1280 px) con la misma rotación de 8°, para que se note que entra "desde la derecha" también en el menú, donde su lugar es la izquierda.
+- Se grabó el menú → Stack a 1280×720 (video de Playwright, 25 fps) y se armó una hoja de contactos: se ven en orden el barrido que cubre, el contorno hexagonal que se contrae, la entrada de las fichas junto con Oguri desde la derecha y el anillo de cierre, como en la referencia (R5 de la fase 2).
+- Señal `data-scene-busy` en `<html>` durante la transición: el idle se pausa (comprobado en Chromium) y se reanuda al terminar. Las pruebas de tiempo de la fase 2 (500–800 ms) y de interrupción siguen pasando en Chromium y Firefox.
+- Diferencias aceptadas respecto al video: se mantienen las de R5 (el anillo no recorta las fichas) y, nueva, el cambio de lugar de Oguri entre el menú (izquierda) y las pantallas (derecha) ocurre bajo la cobertura, sin que se vea el desplazamiento.

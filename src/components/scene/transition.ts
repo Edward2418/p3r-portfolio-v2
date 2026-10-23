@@ -141,7 +141,7 @@ export function createTransitionController(): TransitionController {
       run(
         document.querySelector("[data-character]"),
         [
-          { transform: "translateX(40%) rotate(8deg)", opacity: 0 },
+          { transform: "translateX(30vw) rotate(8deg)", opacity: 0 },
           { transform: "translateX(0) rotate(0deg)", opacity: 1 },
         ],
         { duration: totalMs, easing: tokens.easeOut, fill: "backwards" },

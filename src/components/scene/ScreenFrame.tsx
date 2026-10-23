@@ -16,7 +16,7 @@ export function ScreenFrame({ lang, sceneId, children }: ScreenFrameProps) {
     <main
       id="content"
       data-scene={sceneId}
-      className="mx-auto w-full max-w-3xl flex-1 space-y-10 px-4 pb-32 pt-10"
+      className="relative z-10 mx-auto my-6 w-full max-w-3xl flex-1 space-y-10 bg-navy px-6 pb-32 pt-10"
     >
       <h1 tabIndex={-1} data-stagger className="font-display text-5xl uppercase outline-none sm:text-6xl">
         {screenName(sceneId, lang)}

@@ -20,7 +20,7 @@ export default async function Page({ params }: PageProps<"/[lang]">) {
   return (
     <main
       id="content"
-      className="mx-auto grid w-full max-w-5xl flex-1 items-center gap-8 px-4 pb-32 pt-10 md:grid-cols-[1fr_1.2fr]"
+      className="relative z-10 mx-auto grid w-full max-w-5xl flex-1 items-center gap-8 px-4 pb-32 pt-10 md:grid-cols-[1fr_1.2fr]"
     >
       <h1 className="sr-only">{t("siteTitle", lang)}</h1>
       <CharacterSlot lang={lang} />

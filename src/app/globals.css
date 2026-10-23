@@ -77,10 +77,80 @@ body {
   font-family: var(--font-body);
 }
 
-/* Foco visible con contraste AA para toda la interfaz. */
+/*
+ * Foco visible para toda la interfaz: anillo de doble capa. El contorno interior (marino) se ve sobre
+ * superficies claras (panel blanco, cian) y el halo exterior (blanco) sobre las oscuras (marino, azul
+ * profundo); sobre cualquiera de ellas se distingue al menos una capa con 3:1 (tokens.test.ts).
+ */
 :focus-visible {
-  outline: 2px solid var(--color-cyan);
-  outline-offset: 3px;
+  outline: 2px solid var(--color-focus-inner);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 5px var(--color-focus-outer);
+}
+
+/*
+ * Fondo de la escena (src/components/scene/SceneBackdrop.tsx). Es una capa fija detrás del contenido
+ * (z-index negativo: el contenido no necesita contexto de apilamiento) y no se anima; el panel cambia
+ * de tamaño según la vista mientras el barrido cubre la pantalla.
+ */
+[data-backdrop] {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  pointer-events: none;
+  background: linear-gradient(165deg, var(--color-sky) 0%, var(--color-deep) 88%);
+}
+
+[data-backdrop] [data-panel] {
+  position: absolute;
+  top: -12%;
+  bottom: -12%;
+  left: -8%;
+  width: 22%;
+  background: var(--color-panel);
+  transform: skewX(var(--angle-skew));
+}
+
+[data-backdrop] [data-panel-title] {
+  position: absolute;
+  top: 2%;
+  left: 2%;
+  margin: 0;
+  writing-mode: vertical-rl;
+  font-family: var(--font-display);
+  font-size: min(34vh, 22vw);
+  line-height: 0.9;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--color-on-panel);
+  white-space: nowrap;
+}
+
+@media (min-width: 768px) {
+  [data-view="menu"] [data-backdrop] [data-panel] {
+    left: -6%;
+    width: 44%;
+  }
+
+  [data-view="menu"] [data-backdrop] [data-panel-title] {
+    left: 4%;
+    font-size: min(40vh, 14vw);
+  }
+}
+
+/* En las pantallas internas el panel es una banda estrecha y el título vertical no se muestra. */
+[data-view="screen"] [data-backdrop] [data-panel] {
+  width: 12%;
+}
+
+[data-view="screen"] [data-backdrop] [data-panel-title] {
+  display: none;
+}
+
+/* Fichas inclinadas del menú: la inclinación sale del token y el texto se inclina con la ficha. */
+[data-menu-item] {
+  transform: skewX(var(--angle-skew));
 }
 
 /*

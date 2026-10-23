@@ -1,8 +1,8 @@
 "use client";
 
 // Menú principal: lista de enlaces reales (Enter, clic y toque funcionan sin JavaScript).
-// La opción activa va resaltada en rojo y blanco y recibe el foco al moverse con el teclado;
-// el título de fondo es decorativo.
+// Cada opción es una ficha inclinada (token `--angle-skew`): las inactivas en azul marino con texto
+// cian, la activa en blanco con borde rojo. La activa recibe el foco al moverse con el teclado.
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import type { MouseEvent } from "react";
@@ -23,6 +23,11 @@ interface MainMenuProps {
 }
 
 const MENU_KEYS = ["ArrowDown", "ArrowUp", "ArrowLeft", "ArrowRight", "Home", "End"];
+
+const chipClass =
+  "block min-h-11 px-5 py-3 font-display text-3xl uppercase tracking-wide sm:text-4xl";
+const activeClass = `${chipClass} border-[3px] border-red bg-panel text-on-panel`;
+const inactiveClass = `${chipClass} border-[3px] border-transparent border-l-cyan bg-navy text-cyan`;
 
 export function MainMenu({ lang, label, options }: MainMenuProps) {
   const { activeMenuId, setActiveMenuId, navigate } = useScene();
@@ -76,19 +81,15 @@ export function MainMenu({ lang, label, options }: MainMenuProps) {
 
   return (
     <nav aria-label={label} className="relative">
-      <p
-        aria-hidden="true"
-        data-title={options[activeIndex]?.name}
-        className="pointer-events-none absolute -top-6 left-0 -z-10 w-full overflow-hidden whitespace-nowrap font-display text-[22vw] uppercase leading-none text-cyan before:opacity-10 before:content-[attr(data-title)] md:text-[9rem]"
-      />
       <ul className="flex flex-col gap-2">
         {options.map((option, index) => {
           const isActive = index === activeIndex;
           const href = `/${lang}/${option.id}`;
           return (
-            <li key={option.id} data-stagger className={isActive ? "-skew-x-6" : "-skew-x-6 pl-6"}>
+            <li key={option.id} data-stagger className={isActive ? "" : "pl-6"}>
               <Link
                 href={href}
+                data-menu-item
                 ref={(element) => {
                   links.current[index] = element;
                 }}
@@ -96,11 +97,7 @@ export function MainMenu({ lang, label, options }: MainMenuProps) {
                 onClick={(event) => onLinkClick(event, href)}
                 onPointerEnter={() => setActiveMenuId(option.id)}
                 onFocus={() => setActiveMenuId(option.id)}
-                className={
-                  isActive
-                    ? "block bg-red-fill px-5 py-3 font-display text-3xl uppercase tracking-wide text-text sm:text-4xl"
-                    : "block border-l-4 border-cyan px-5 py-3 font-display text-3xl uppercase tracking-wide text-text sm:text-4xl"
-                }
+                className={isActive ? activeClass : inactiveClass}
               >
                 {option.name}
               </Link>

@@ -4,6 +4,7 @@ import { lang as getLang } from "next/root-params";
 import { Footer } from "../../components/Footer.tsx";
 import { LanguageSwitcher } from "../../components/LanguageSwitcher.tsx";
 import { MotionToggle } from "../../components/MotionToggle.tsx";
+import { SceneBackdrop } from "../../components/scene/SceneBackdrop.tsx";
 import { SceneShell } from "../../components/scene/SceneShell.tsx";
 import { menu } from "../../content/menu.ts";
 import { uiText } from "../../content/ui-text.ts";
@@ -65,7 +66,8 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
           {t("skipToContent", lang)}
         </a>
         <SceneShell lang={lang} scenes={scenes} labels={labels}>
-          <header className="mx-auto flex w-full max-w-5xl flex-wrap items-center justify-end gap-3 px-4 pt-4">
+          <SceneBackdrop lang={lang} />
+          <header className="relative z-10 mx-auto flex w-full max-w-5xl flex-wrap items-center justify-end gap-3 px-4 pt-4">
             <LanguageSwitcher target={lang === "es" ? "en" : "es"} label={t("switchLanguage", lang)} />
             <MotionToggle
               label={t("motionToggleLabel", lang)}

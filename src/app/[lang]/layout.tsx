@@ -3,11 +3,13 @@ import { notFound } from "next/navigation";
 import { lang as getLang } from "next/root-params";
 import { Footer } from "../../components/Footer.tsx";
 import { LanguageSwitcher } from "../../components/LanguageSwitcher.tsx";
+import { MotionToggle } from "../../components/MotionToggle.tsx";
 import { SceneShell } from "../../components/scene/SceneShell.tsx";
 import { menu } from "../../content/menu.ts";
 import { uiText } from "../../content/ui-text.ts";
 import { anton, inter } from "../fonts.ts";
 import { isLang, LANGS } from "../../lib/i18n/config.ts";
+import { INIT_SCRIPT } from "../../lib/motion/init-script.ts";
 import { localize } from "../../lib/i18n/localize.ts";
 import { t } from "../../lib/i18n/t.ts";
 import "../globals.css";
@@ -51,7 +53,11 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
   };
 
   return (
-    <html lang={lang} className={`${anton.variable} ${inter.variable}`}>
+    <html lang={lang} className={`${anton.variable} ${inter.variable}`} suppressHydrationWarning>
+      <head>
+        {/* Fija data-motion y data-splash antes del primer pintado (sin parpadeo). */}
+        <script dangerouslySetInnerHTML={{ __html: INIT_SCRIPT }} />
+      </head>
       <body>
         <a
           href="#content"
@@ -60,8 +66,14 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
           {t("skipToContent", lang)}
         </a>
         <SceneShell lang={lang} scenes={scenes} labels={labels}>
-          <header className="mx-auto flex w-full max-w-5xl justify-end px-4 pt-4">
+          <header className="mx-auto flex w-full max-w-5xl flex-wrap items-center justify-end gap-3 px-4 pt-4">
             <LanguageSwitcher target={lang === "es" ? "en" : "es"} label={t("switchLanguage", lang)} />
+            <MotionToggle
+              label={t("motionToggleLabel", lang)}
+              onText={t("motionOn", lang)}
+              offText={t("motionOff", lang)}
+              lockedText={t("motionLockedBySystem", lang)}
+            />
           </header>
           {children}
           <Footer lang={lang} />

@@ -80,3 +80,29 @@ body {
 [data-transition-layer] [data-circle] {
   opacity: 0;
 }
+
+/*
+ * Movimiento reducido (sistema o sitio): sin capas decorativas ni transiciones. El cambio de pantalla
+ * queda en un fundido de opacidad corto que reproduce transition.ts.
+ */
+html[data-motion="reduced"] [data-transition-layer] {
+  display: none;
+}
+
+html[data-motion="reduced"] *,
+html[data-motion="reduced"] *::before,
+html[data-motion="reduced"] *::after {
+  transition-duration: 0s !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-transition-layer] {
+    display: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0s !important;
+  }
+}

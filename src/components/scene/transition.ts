@@ -3,6 +3,7 @@
 // Solo se animan `transform` y `opacity`; los tiempos y las curvas salen de los tokens de globals.css.
 // El efecto equivale al barrido diagonal, la entrada de fichas de abajo hacia arriba y el arco circular
 // del menú de pausa de Persona 3 Reload (medido en el video de referencia; ver research.md, D4).
+import { effectiveMotion } from "../../lib/motion/preference.ts";
 import { parseCssTime, staggerPlan } from "../../lib/motion/timeline.ts";
 
 export type TransitionPhase = "idle" | "exiting" | "navigating" | "entering" | "closing";
@@ -45,8 +46,9 @@ export function supportsWaapi(): boolean {
 
 /** Movimiento reducido: preferencia del sistema o atributo del sitio (lo fija el script del <head>). */
 export function prefersReducedMotion(): boolean {
-  if (document.documentElement.dataset.motion === "reduced") return true;
-  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const site = document.documentElement.dataset.motion === "reduced" ? "reduced" : "full";
+  const system = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  return effectiveMotion(system, site) === "reduced";
 }
 
 export interface TransitionController {
@@ -82,7 +84,7 @@ export function createTransitionController(): TransitionController {
 
   /** Reproduce una animación y la registra para poder terminarla al interrumpir. */
   function run(element: Element | null, keyframes: Keyframe[], options: KeyframeAnimationOptions): Promise<void> {
-    if (!element) return Promise.resolve();
+    if (!element || !supportsWaapi()) return Promise.resolve();
     const target = element as HTMLElement;
     if (options.fill !== "backwards") target.style.willChange = "transform, opacity";
     const animation = element.animate(keyframes, options);

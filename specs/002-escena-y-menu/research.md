@@ -231,3 +231,11 @@ Pendiente: la confirmación de Edward en la revisión final con el video (T070).
 - Cada navegación lleva un identificador de ejecución: una transición superada por otra se descarta aunque sus esperas sigan pendientes.
 - **Medición de SC-005** (destino en menos de 100 ms desde la interrupción): se cumple en Chromium. En Firefox, con varios navegadores corriendo en paralelo, la confirmación de la ruta tarda 100–170 ms, así que las pruebas usan un límite de 150 ms para Firefox y reintentos acotados; sin carga, Firefox queda cerca de los 100 ms.
 - **Lint**: `eslint.config.mjs` ignora `playwright-report/` y `test-results/` (las trazas de los reintentos generaban miles de avisos falsos).
+
+### R7. Movimiento reducido (T049–T058)
+
+- **Preferencia efectiva**: reducida si el sistema o el sitio la piden (`src/lib/motion/preference.ts`). La elección del sitio vive en `localStorage` (`motion`); un script en línea del `<head>` (`src/lib/motion/init-script.ts`) fija `data-motion` y `data-splash` en `<html>` antes de pintar, con `suppressHydrationWarning` en `<html>` según la guía de Next.js.
+- **Interruptor**: `MotionToggle` usa `useSyncExternalStore` (la regla de lint del proyecto no admite `setState` dentro de un efecto, y es la forma recomendada por React para leer valores del navegador sin desajustes de hidratación). Con el sistema pidiendo movimiento reducido aparece activado y deshabilitado con una nota accesible. Con `localStorage` bloqueado la elección vive en memoria durante la visita.
+- **Variante reducida**: sin barrido, disco ni desplazamientos; la capa decorativa se oculta con `display: none` y el cambio de pantalla es un fundido de opacidad de `--duration-reduced` (120 ms). Sin Web Animations (`Element.prototype.animate` ausente) se usa la misma ruta, y las funciones de animación del controlador no hacen nada (el contenido y la navegación se conservan, FR-025).
+- **Transiciones CSS**: con `data-motion="reduced"` o `prefers-reduced-motion: reduce` se anula la duración de las transiciones (el feedback de pulsación pasa a ser instantáneo).
+- **Cualquier primera carga cuenta como visita para el splash** (decisión A1): el script marca `splash-seen` y `data-splash="seen"` cuando la ruta cargada no es la raíz.

@@ -118,3 +118,21 @@ Lighthouse 12 móvil sobre la compilación de producción local, el 2026-10-23, 
 | `/es/stack` | 82, 82 y 81 | 100 | 100 | 96 | 3.3 s | 420–470 ms | 0 | 270.3 | no / no |
 
 La carga inicial sigue por debajo de 350 KiB (la fase 4 solo añade HTML y CSS: ningún JavaScript de cliente nuevo) y el rendimiento queda al nivel de las fases anteriores en este equipo (80 a 88). Pendiente: PageSpeed Insights en la web de Google, tras fusionar.
+
+### R5. Verificación desde instalación limpia (T050)
+
+Realizada el 2026-10-23 tras `rm -rf node_modules .next` y `npm ci`, por etapas y con 2 trabajadores de Playwright (un navegador a la vez):
+
+| Etapa | Resultado |
+|---|---|
+| `npm ci` | 290 paquetes |
+| `npm run lint` y `tsc --noEmit` | Sin errores |
+| `npm run test:unit` | 120 de 120 |
+| `npm audit --omit=dev` | 0 vulnerabilidades |
+| `npm run build` | Compilación correcta |
+| E2E Chromium 390 px | 244 pasadas y 3 omitidas |
+| E2E Chromium 768 px | 242 pasadas y 5 omitidas |
+| E2E Chromium 1280 px | 245 pasadas y 2 omitidas |
+| E2E Firefox 1280 px | 231 pasadas y 15 omitidas a propósito; 1 fallo intermitente de la prueba de la entrada de Oguri tras omitir el splash (cuenta cuadros de animación y falló con la máquina cargada: 3 de 3 en solitario), que ahora exige 2 cuadros intermedios en lugar de 3 y permite 2 reintentos |
+
+`tests/e2e/navigation.spec.ts` ("accesos con pocas interacciones", FR-015) sigue pasando.

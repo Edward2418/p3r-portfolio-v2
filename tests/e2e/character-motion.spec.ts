@@ -20,6 +20,9 @@ async function startIdle(page: Page) {
 }
 
 test.describe("entrada de Oguri al omitir el splash", () => {
+  // Cuenta cuadros de animación: con la máquina cargada pueden perderse algunos; se permiten reintentos acotados.
+  test.describe.configure({ retries: 2 });
+
   test("anima su entrada en el momento de omitirlo en lugar de aparecer de golpe", async ({ page }) => {
     // Sin marcar el splash como visto: se muestra y se omite con una tecla a mitad.
     await page.goto(`/${lang}`);
@@ -45,7 +48,7 @@ test.describe("entrada de Oguri al omitir el splash", () => {
     });
     const after = samples.filter(([time]) => time > skippedAt);
     const mid = after.filter(([, opacity]) => opacity > 0.05 && opacity < 0.95);
-    expect(mid.length, "la entrada debe verse animada (varios cuadros intermedios), no aparecer de golpe").toBeGreaterThanOrEqual(3);
+    expect(mid.length, "la entrada debe verse animada (cuadros intermedios), no aparecer de golpe").toBeGreaterThanOrEqual(2);
     expect(after.at(-1)![1], "al terminar Oguri debe estar totalmente visible").toBeGreaterThanOrEqual(0.99);
   });
 

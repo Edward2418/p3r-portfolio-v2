@@ -36,6 +36,7 @@ export interface SceneLabels {
   tabNext: string;
   tabPreviousShort: string;
   tabNextShort: string;
+  guideLabel: string;
   guideScreenHint: string;
   screenAnnouncement: string;
 }

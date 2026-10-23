@@ -58,6 +58,7 @@ export const uiText = {
     es: "Elige una opción y pulsa Confirmar.",
     en: "Choose an option and press Confirm.",
   },
+  guideLabel: { es: "Guía y controles", en: "Guide and controls" },
   guideScreenHint: {
     es: "Usa L y R para cambiar de pantalla o Atrás para volver al menú.",
     en: "Use L and R to change screen or Back to return to the menu.",

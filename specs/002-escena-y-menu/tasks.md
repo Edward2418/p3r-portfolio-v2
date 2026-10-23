@@ -209,13 +209,13 @@ Proyecto único en la raíz del repositorio: `src/`, `tests/` (ver plan.md, "Có
 
 ### Pruebas de la historia 7
 
-- [ ] T064 [P] [US7] Escribir `tests/e2e/guide.spec.ts`: en 390, 768 y 1280 px la guía y los botones están dentro de la ventana y en el cuadrante inferior derecho, en el menú y en las cinco pantallas, en ambos idiomas; en el menú la guía muestra la descripción de la opción activa y cambia con ↓; Atrás aparece deshabilitado en el menú y habilitado en las pantallas; Confirmar abre la activa en el menú y aparece deshabilitado en las pantallas; las pestañas L y R están en las pantallas; sin desplazamiento horizontal; comprobar que falla
+- [x] T064 [P] [US7] Escribir `tests/e2e/guide.spec.ts`: en 390, 768 y 1280 px la guía y los botones están dentro de la ventana y en el cuadrante inferior derecho, en el menú y en las cinco pantallas, en ambos idiomas; en el menú la guía muestra la descripción de la opción activa y cambia con ↓; Atrás aparece deshabilitado en el menú y habilitado en las pantallas; Confirmar abre la activa en el menú y aparece deshabilitado en las pantallas; las pestañas L y R están en las pantallas; sin desplazamiento horizontal; comprobar que falla
 
 ### Implementación de la historia 7
 
-- [ ] T065 [US7] Completar `src/components/scene/GuideBar.tsx`: texto de guía (descripción de la opción activa en el menú, ayuda general en las pantallas), posición fija abajo a la derecha con margen seguro y por debajo de la capa de transición, y espacio inferior en `ScreenFrame` y en el menú para no tapar contenido
-- [ ] T066 [US7] Definir los estados de los botones en `GuideBar` con `aria-disabled` coherente (Atrás deshabilitado en el menú; Confirmar deshabilitado en las pantallas; L y R deshabilitadas en los extremos) y asegurar contraste AA y foco visible
-- [ ] T067 [US7] Ejecutar `npm run test:unit` y `npm run test:e2e` hasta que T064 pase
+- [x] T065 [US7] Completar `src/components/scene/GuideBar.tsx`: texto de guía (descripción de la opción activa en el menú, ayuda general en las pantallas), posición fija abajo a la derecha con margen seguro y por debajo de la capa de transición, y espacio inferior en `ScreenFrame` y en el menú para no tapar contenido
+- [x] T066 [US7] Definir los estados de los botones en `GuideBar` con `aria-disabled` coherente (Atrás deshabilitado en el menú; Confirmar deshabilitado en las pantallas; L y R deshabilitadas en los extremos) y asegurar contraste AA y foco visible
+- [x] T067 [US7] Ejecutar `npm run test:unit` y `npm run test:e2e` hasta que T064 pase
 
 **Punto de control**: guía y botones contextuales. Hacer commit (`feat(guide): agregar guía contextual y botones`).
 

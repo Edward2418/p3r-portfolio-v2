@@ -1,8 +1,8 @@
 "use client";
 
-// Guía contextual y botones, abajo a la derecha: pestañas L y R (en las pantallas), Atrás y Confirmar.
-// Los estados (Atrás deshabilitado en el menú, Confirmar deshabilitado en las pantallas) se completan
-// en la historia de la guía.
+// Guía contextual y botones, siempre visibles abajo a la derecha: pestañas L y R (en las pantallas),
+// Atrás y Confirmar. Atrás está deshabilitado en el menú, Confirmar en las pantallas, y L o R en los
+// extremos del orden del menú. El texto de la guía es la descripción de la opción activa en el menú.
 import { neighbors } from "../../lib/motion/navigation.ts";
 import { useScene } from "./SceneShell.tsx";
 
@@ -18,7 +18,12 @@ export function GuideBar() {
     : labels.guideScreenHint;
 
   return (
-    <div className="fixed bottom-4 right-4 z-30 flex max-w-[calc(100vw-2rem)] flex-col items-end gap-2">
+    <div
+      data-guide
+      role="group"
+      aria-label={labels.guideLabel}
+      className="fixed bottom-4 right-4 z-30 flex max-w-[calc(100vw-2rem)] flex-col items-end gap-2"
+    >
       <p className="border border-cyan/40 bg-bg px-3 py-2 text-sm">{hint}</p>
       <div className="flex flex-wrap justify-end gap-2">
         {inMenu ? null : (

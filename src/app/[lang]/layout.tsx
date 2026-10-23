@@ -48,6 +48,7 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
     tabNext: t("tabNext", lang),
     tabPreviousShort: t("tabPreviousShort", lang),
     tabNextShort: t("tabNextShort", lang),
+    guideLabel: t("guideLabel", lang),
     guideScreenHint: t("guideScreenHint", lang),
     screenAnnouncement: t("screenAnnouncement", lang),
   };

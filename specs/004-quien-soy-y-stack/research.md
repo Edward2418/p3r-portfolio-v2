@@ -1,0 +1,91 @@
+# Investigación (Fase 0): Fase 4 — Quién soy y Stack
+
+**Fecha**: 2026-10-23 | **Especificación**: [spec.md](./spec.md) | **Fases anteriores**: [../003-identidad-visual-p3r/research.md](../003-identidad-visual-p3r/research.md) y [../002-escena-y-menu/research.md](../002-escena-y-menu/research.md)
+
+Cada decisión indica su razón y las alternativas evaluadas. No quedaba ningún punto `NEEDS CLARIFICATION` tras las tres aclaraciones de la especificación.
+
+## D1. Los círculos son CSS sobre el propio contenido
+
+- **Decisión**: cada categoría es un bloque HTML (`<section>` con un `<h3>` y una `<ul>`) al que el CSS da forma circular: un borde de color y, tras el texto, un tinte translúcido en un pseudoelemento decorativo. Los tres bloques se colocan con porcentajes dentro de un contenedor de proporción fija para que se solapen. No hay SVG ni biblioteca de gráficos.
+- **Razón**:
+  - **Un solo DOM**: lo que ve el visitante es lo que leen los lectores de pantalla; el equivalente textual (FR-009) no es una copia que pueda desincronizarse.
+  - **Sin JavaScript de cliente nuevo**: son componentes de servidor; no suma peso ni retrasa la hidratación (Principio I y presupuesto de 350 KiB).
+  - **Contraste verificable**: el texto es texto HTML sobre el panel marino; axe y las pruebas de tokens pueden comprobarlo (D10).
+- **Alternativas evaluadas**:
+  - *SVG con los textos dentro*: el texto SVG no se ajusta bien a anchos distintos y duplica la información para lectores de pantalla.
+  - *Biblioteca de gráficos (D3, Chart.js)*: dependencia nueva y peso para tres círculos estáticos; viola "sin dependencias nuevas sin justificar".
+  - *Canvas*: no accesible.
+
+## D2. Disposición: solapados desde 768 px y apilados por debajo
+
+- **Decisión**:
+  - **Desde 768 px**: un contenedor con `aspect-ratio` y tres círculos de ~58 % del ancho: dos arriba (izquierda y derecha) y uno abajo y al centro, de forma que se solapen formando una zona central común. La etiqueta "Full-Stack" va en esa zona. Cada lista queda en la parte propia de su círculo (no solapada).
+  - **Por debajo de 768 px** (390 px incluido): los tres círculos se apilan en una columna con solapamiento vertical parcial (márgenes negativos) para conservar la idea de círculos encadenados, con la etiqueta "Full-Stack" como cabecera de la pila. Cada categoría ocupa todo el ancho.
+  - Con más tecnologías de las que caben en el círculo (más de unas 6 por categoría), el bloque crece hacia abajo (`min-height` en lugar de alto fijo) y el círculo pasa a ser una elipse suave; el texto nunca se recorta.
+- **Razón**: tres círculos solapados a tamaño de escritorio miden más de 300 px cada uno y no caben en 342 px de ancho útil; apilarlos conserva la lectura y la identidad. El contenedor de proporción fija da un solapamiento estable en escritorio.
+- **Alternativas**: reducir el escalado proporcionalmente en móvil (el texto queda ilegible), carrusel horizontal (viola "sin desplazamiento horizontal" y la lectura sin interacción).
+
+## D3. Nivel como texto y como puntos
+
+- **Decisión**: cada tecnología muestra "Nivel: n/5" como texto y, junto al texto, cinco puntos (rellenos hasta el nivel) marcados `aria-hidden`. La información no depende del color: un punto relleno y uno vacío se distinguen por forma (relleno frente a contorno), y el valor numérico siempre está.
+- **Razón**: FR-007 y el Principio III; los puntos dan el gesto visual de "nivel" del juego y el texto lo hace accesible.
+- **Alternativas**: estrellas (más recargado y sugiere calificación), barras (la v1 las usaba y se quitaron por coherencia), solo número (poco visual).
+
+## D4. Etiqueta central "Full-Stack"
+
+- **Decisión**: la etiqueta vive en `src/content/stack.ts` (`stackCenterLabel`, bilingüe). Se muestra en la zona central solo si las tres categorías tienen tecnologías. En el DOM va antes de las categorías (orden de lectura: "Full-Stack", luego Frontend, Backend y Bases de datos y herramientas), de modo que el lector de pantalla la anuncia como el título del conjunto.
+- **Razón**: FR-008 y la aclaración 3; los datos son editables sin tocar componentes.
+
+## D5. La ficha de "Quién soy"
+
+- **Decisión**: la ficha es un bloque con el nombre (tipografía de display), el titular, la especialidad, una lista de definición (`<dl>`) con "Institución" y "Semestre" y la presentación. La trayectoria es una lista ordenada (`<ol>`) con cada hito como `<li>`: el periodo (o la etiqueta "Hoy" o "Meta"), el título y la descripción. El hito actual y la meta futura llevan una etiqueta de texto visible y un estilo distinto (la meta, con contorno punteado); el estado no depende solo del estilo.
+- **Razón**: la estructura semántica (`dl`, `ol`) comunica la relación entre etiqueta y valor y el orden cronológico a los lectores de pantalla sin ARIA adicional.
+- **Alternativas**: tabla (peor en móvil), tarjetas sueltas sin lista (sin orden semántico).
+
+## D6. Datos y privacidad
+
+- **Decisión**:
+  - `Profile` se amplía con `specialty`, `institution` y `semester` (los tres `Localized`, p. ej. "7.º semestre" y "7th semester"); `name` sigue siendo "Edward Negrete" (sin apellido completo).
+  - Nuevo `TimelineEntry` en `src/content/timeline.ts`: `id`, `period` (`Localized`, p. ej. "2023", "Hoy", "Meta"), `title`, `description`, `kind` (`formation`, `progress`, `current` o `goal`) y `provisional`. El hito de la titulación es `goal` y no lleva año.
+  - `stack.ts` suma `stackCenterLabel` y las tecnologías candidatas (Java, SQL y bases de datos, HTML y CSS, JavaScript), todas provisionales con niveles de ejemplo.
+  - Una prueba unitaria impide publicar el apellido completo y el año de titulación en `profile`, `timeline`, `stack` y `ui-text` (FR-004) y comprueba que ningún hito `goal` tiene un año.
+- **Razón**: Principios IV y V; la prueba convierte la decisión de privacidad en una regla que no se rompe por accidente.
+- **Alternativas**: guardar los datos personales en variables de entorno (innecesario: son decisiones públicas de Edward).
+
+## D7. Oguri por pantalla
+
+- **Decisión**: `SceneShell` publica `data-scene="<id>"` (vacío en el menú) además de `data-view`. El CSS define por pantalla la posición, la altura y la inclinación de `[data-character]` con propiedades personalizadas (`--character-right`, `--character-height`, `--character-tilt`); la inclinación se aplica a la imagen y al video interiores (no a `[data-character]`, cuyo `transform` anima WAAPI en la transición). El cambio de posición ocurre al cambiar la ruta, bajo la cobertura del barrido. Con movimiento reducido, el personaje se funde cuando cambia la **pantalla** (no solo la vista), reutilizando `fadeIn(includeCharacter)` de la fase 3.
+- **Valores iniciales** (se afinan con capturas): Quién soy, a la derecha, altura `min(90vh, 60vw)`, sin inclinación; Stack, a la derecha pero más pequeña (`min(78vh, 52vw)`) y con 3° de inclinación. Por debajo de 1024 px siguen las reglas de la fase 3 (detrás del panel, atenuada).
+- **Razón**: FR-011; mantiene la regla de la fase 3 (un único elemento animado por WAAPI) y no añade JavaScript.
+- **Alternativas**: un componente `Character` por pantalla (remonta el idle), reflejar la imagen horizontalmente (cambia la lectura de la pose y no estaba pedido).
+
+## D8. Movimiento
+
+- **Decisión**: no se añade movimiento nuevo. Las dos pantallas usan la entrada escalonada de bloques de `ScreenFrame` (`data-stagger`); los círculos, los puntos de nivel y la trayectoria son estáticos. Los círculos no se animan al entrar.
+- **Razón**: la aclaración por defecto de la especificación (supuestos) y el Principio I: información primero. Si más adelante se quiere una entrada de círculos, será una decisión aparte con `animate` y `review-animations`.
+
+## D9. Accesibilidad
+
+- **Decisión**: jerarquía `h1` (nombre de la pantalla, foco al llegar), `h2` por sección (ficha, trayectoria, Stack) y `h3` por categoría; listas reales para tecnologías e hitos; el gráfico decorativo (`aria-hidden`); ningún control interactivo nuevo, así que el orden de tabulación no cambia. Los textos de nivel y de estado (provisional, actual, meta) son visibles. El idioma se declara por documento (ya hecho).
+- **Razón**: Principio III y FR-009, FR-016.
+
+## D10. Contraste con el tinte de los círculos
+
+- **Decisión**: el tinte de cada círculo se define con un token de opacidad (`--opacity-circle-tint`, ≈ 0.14) sobre uno de los colores de la paleta (cian, rojo de marca y blanco azulado). `tokens.test.ts` calcula el color mezclado del tinte sobre `--color-navy` y exige 4.5:1 con `--color-text` y con `--color-cyan` (nombres de categoría); el trazo de cada círculo cumple 3:1 contra el panel.
+- **Razón**: el texto está sobre el panel marino y el tinte, que no se puede verificar con axe cuando es un pseudoelemento; la prueba lo cubre.
+
+## D11. Pruebas
+
+- **Unitarias**: validaciones nuevas en `content.test.ts` (niveles de 1 a 5, tecnologías únicas, tres categorías, hitos con exactamente una meta y al final, ningún apellido completo ni año de titulación, idiomas completos) y los pares de contraste del tinte en `tokens.test.ts`.
+- **E2E**: `profile.spec.ts` (ficha, datos publicados, orden y estado de los hitos, etiquetas provisionales, idioma), `stack.spec.ts` (tres grupos, nivel como texto en cada tecnología, etiqueta central, orden de lectura, sin recorte ni desplazamiento horizontal en 390, 768 y 1280 px, con la categoría más larga) y `character-per-scene.spec.ts` (posiciones distintas por pantalla, sin tapar el contenido, fundido con movimiento reducido).
+- **Revisión**: axe-core con 0 violaciones, capturas a 390, 768 y 1280 px y comparación con la pantalla de referencia de P3R.
+
+## D12. Pruebas y código heredados
+
+- **Decisión**: `ProfileSection` y `StackSection` se reemplazan por `ProfileSheet`, `Timeline` y `StackCircles`; `StackCircles` conserva un `<h2>` "Stack" porque `language.spec.ts` lo espera. Las pruebas de `screen-frame` y de diseño se ajustan solo si dependen del DOM anterior.
+- **Razón**: evita código muerto y mantiene los 190 E2E existentes en verde.
+
+## D13. Borradores de contenido
+
+- **Decisión**: el asistente propone, como provisional, la presentación, las descripciones de los hitos (a partir de los datos de la v1) y todas las traducciones al inglés; Edward las revisa y confirma. Los borradores están en [data-model.md](./data-model.md).
+- **Razón**: Principio V; nada se publica como cierto sin su confirmación.

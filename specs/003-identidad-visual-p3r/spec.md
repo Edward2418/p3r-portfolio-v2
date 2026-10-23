@@ -15,6 +15,7 @@
 - Q: En el móvil (390 px), ¿dónde debe ir Oguri para no tapar las opciones del menú? → A: Como figura grande detrás de las opciones, recortada por el borde derecho y con menos opacidad, sin ocupar espacio; las opciones van encima y ocupan todo el ancho.
 - Q: En las cinco pantallas internas, ¿dónde debe ir Oguri en escritorio y en móvil sin dificultar la lectura del contenido? → A: En escritorio, a la derecha, grande y fuera del área de contenido, que va en un panel; en móvil, detrás del panel, recortada y atenuada, como en el menú.
 - Q: ¿En qué momento exacto debe empezar a cargarse el video de movimiento en reposo de Oguri? → A: Cuando el navegador queda en reposo tras cargar el menú, con un tope de unos 2 s, y solo si no hay movimiento reducido ni ahorro de datos.
+- Revisión de análisis (`/speckit-analyze`, 2026-10-23), correcciones aplicadas con aprobación de Edward: el indicador de foco debe verse con 3:1 sobre cualquier superficie (FR-015); el personaje atenuado tiene opacidad máxima 0.5 (FR-003 y FR-014); el cambio de idioma puede remontar la escena y el personaje volver a entrar (caso límite); descripción del personaje en un solo lugar; `open` y `close` se emiten desde la llegada de ruta, una vez por cambio.
 
 ## Escenarios de usuario y pruebas *(obligatorio)*
 
@@ -140,7 +141,7 @@ Como Edward, quiero que el arte, los sonidos, el título vertical y los textos n
 - Con el ahorro de datos activado, no se descarga el video de movimiento en reposo.
 - Si el navegador no admite video con transparencia, Oguri se muestra como imagen fija.
 - Una transición interrumpida en cualquier punto deja a Oguri en su posición final y no en una pose intermedia.
-- Cambiar de idioma durante una transición no deja textos a medias ni reinicia el personaje.
+- Cambiar de idioma durante una transición no deja textos a medias; si el cambio de idioma remonta la escena, el personaje puede volver a entrar, sin errores, y la preferencia de sonido se conserva.
 - Un navegador con el audio bloqueado hasta una interacción no muestra errores y el sonido funciona después de la primera interacción.
 - El texto sobre el panel blanco y sobre el degradado mantiene el contraste AA en cualquier punto del degradado y en cualquier ancho.
 - Con el contenido de una pantalla muy largo, el panel crece o se desplaza sin que el personaje se superponga al texto ni la cabecera lo tape.
@@ -152,7 +153,7 @@ Como Edward, quiero que el arte, los sonidos, el título vertical y los textos n
 
 - **FR-001**: El menú principal MUST mostrar un fondo en degradado de cian a azul profundo, un panel blanco inclinado con un título vertical y las cinco opciones inclinadas, con la activa en blanco y con borde rojo.
 - **FR-002**: El título vertical del panel y los textos nuevos MUST salir de datos bilingües, no de los componentes.
-- **FR-003**: El menú MUST mostrar a Oguri como imagen principal sin que cubra ninguna opción en 390, 768 y 1280 px. En móvil, Oguri MUST ir detrás de las opciones, recortada por el borde derecho y con menos opacidad, sin ocupar espacio del diseño; las opciones MUST ir encima y ocupar todo el ancho.
+- **FR-003**: El menú MUST mostrar a Oguri como imagen principal sin que cubra ninguna opción en 390, 768 y 1280 px. En móvil, Oguri MUST ir detrás de las opciones, recortada por el borde derecho y con menos opacidad (como máximo 0.5), sin ocupar espacio del diseño; las opciones MUST ir encima y ocupar todo el ancho.
 - **FR-004**: Oguri MUST entrar con una animación breve al mostrar el menú, y el menú MUST ser utilizable sin esperar a que termine.
 - **FR-005**: El movimiento en reposo de Oguri MUST empezar a cargarse cuando el navegador quede en reposo tras cargar el menú, con un tope de unos 2 s, MUST NOT bloquear la carga inicial ni competir con el contenido y MUST tener una imagen fija como alternativa.
 - **FR-006**: El movimiento en reposo MUST NOT cargarse ni reproducirse con movimiento reducido (del sistema o del sitio) ni con el ahorro de datos activado.
@@ -163,8 +164,8 @@ Como Edward, quiero que el arte, los sonidos, el título vertical y los textos n
 - **FR-011**: El sonido MUST estar desactivado por defecto y MUST NOT descargar ningún archivo de audio hasta que el visitante lo active.
 - **FR-012**: System MUST ofrecer un interruptor de sonido operable con teclado, con su estado anunciado a los lectores de pantalla y recordado entre visitas.
 - **FR-013**: Con el sonido activado, el sitio MUST reproducir un sonido por acción: mover la opción (cursor), confirmar, cancelar, abrir una pantalla, cerrar o volver, y, una sola vez al activar el sonido, subida de nivel.
-- **FR-014**: Las cinco pantallas internas MUST compartir un marco con el mismo fondo, una cabecera con el nombre de la pantalla, un panel para el contenido y la posición de pantalla de Oguri, sin ocultar ni dificultar la lectura de su contenido. En escritorio y tableta, Oguri MUST ir a la derecha, grande y fuera del panel; en móvil, detrás del panel, recortada y atenuada.
-- **FR-015**: El contenido de las pantallas MUST mantener contraste AA sobre el fondo y MUST seguir siendo operable con teclado, con toque y con lector de pantalla.
+- **FR-014**: Las cinco pantallas internas MUST compartir un marco con el mismo fondo, una cabecera con el nombre de la pantalla, un panel para el contenido y la posición de pantalla de Oguri, sin ocultar ni dificultar la lectura de su contenido. En escritorio y tableta, Oguri MUST ir a la derecha, grande y fuera del panel; en móvil, detrás del panel, recortada y atenuada (opacidad máxima 0.5).
+- **FR-015**: El contenido de las pantallas MUST mantener contraste AA sobre el fondo y MUST seguir siendo operable con teclado, con toque y con lector de pantalla. El indicador de foco MUST verse con un contraste de al menos 3:1 sobre cualquier superficie del sitio (blanca, cian o marina).
 - **FR-016**: El personaje decorativo MUST ocultarse a los lectores de pantalla cuando no aporte información, y MUST tener una descripción cuando sí la aporte.
 - **FR-017**: El sitio MUST NOT tener desplazamiento horizontal en 390, 768 y 1280 px.
 - **FR-018**: El sitio MUST mantener visible el aviso de que no está afiliado a los propietarios de las franquicias que lo inspiran, y MUST tener identidad propia sin copiar el diseño del juego.

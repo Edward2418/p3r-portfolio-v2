@@ -11,6 +11,7 @@ Cada decisión indica su razón y las alternativas evaluadas. Las skills `animat
   - El idle (video) se carga una sola vez y no se reinicia en cada navegación.
   - Evita duplicar el personaje en seis páginas y mantiene una sola fuente de verdad (Principio IV).
   - La posición se aplica con CSS estático sobre un contenedor; la animación va en un elemento interior (`[data-character]`), así no compiten dos transformaciones sobre el mismo nodo.
+- **Cambio de idioma**: `[lang]` es un segmento dinámico, así que el layout probablemente se remonta al pasar de `/es` a `/en` y el personaje y el proveedor de sonido se reinician; se comprueba en T002 y se acepta (el personaje puede volver a entrar, sin errores, y la preferencia de sonido persiste en `localStorage`).
 - **Alternativas evaluadas**:
   - *Personaje dentro de cada página (como `CharacterSlot`)*: se remonta en cada ruta, recarga el video y repite la decodificación; y la posición depende del flujo de cada página.
   - *Animar la posición entre vistas con `transform` visible*: exigiría calcular desplazamientos entre diseños distintos; con el barrido cubriendo la pantalla es innecesario y no es fiel al video (donde el personaje reaparece).
@@ -46,6 +47,7 @@ Cada decisión indica su razón y las alternativas evaluadas. Las skills `animat
 
 - **Decisión**: `shouldLoadIdle` (pura) decide con cuatro datos: movimiento reducido (sistema o sitio), ahorro de datos (`navigator.connection.saveData`), soporte de WebM VP9 (`canPlayType`) y motor WebKit (excluido). Si es elegible, `Character` espera a `requestIdleCallback` con `timeout` de 2000 ms (con `setTimeout` de respaldo donde no exista) y entonces asigna el `src` del `<video muted playsinline loop>`. Cuando el video empieza a reproducirse (`playing`), aparece con un fundido de `opacity` sobre el póster; si falla (`error`), se quita sin avisos.
 - **Pausas**: el video se pausa mientras `data-scene-busy` esté activo en `<html>` (durante la transición, para liberar el hilo y la decodificación), con la pestaña oculta y si el movimiento pasa a reducido; se reanuda al terminar.
+- **Detección de WebKit**: por agente de usuario (`Safari` sin `Chrome`, `Chromium`, `Android` ni `Firefox`, o cualquier navegador en iOS, que usa WebKit), con prueba unitaria sobre cadenas reales.
 - **Razón**: el WebM con alfa pesa 1.8 MB y decodificarlo en un móvil modesto puede quitar fotogramas a la transición. WebKit/Safari no dibuja el alfa de WebM, y mostraría un recuadro negro: la exclusión es preferible a ese defecto (verificación en Safari pendiente).
 - **Alternativas**: `<video>` en el HTML con `preload="none"` (el navegador puede igualmente pedirlo antes del reposo), hoja de sprites animada (3.7 MB, peor), WebP animado (más pesado), precargar tras el evento `load` (no espera al reposo).
 
@@ -65,6 +67,7 @@ Cada decisión indica su razón y las alternativas evaluadas. Las skills `animat
 
 - **Decisión**: el contenido de las pantallas va en un panel de azul marino (`--color-navy`, con ~92 % de opacidad) que conserva los colores de texto de la fase 1 (claro sobre oscuro), de modo que los contrastes ya medidos siguen valiendo. Las opciones del menú son fichas azul marino con texto cian; la activa es blanca con borde rojo y texto marino. Los controles del encabezado (idioma y movimiento reducido) y el aviso del pie llevan una ficha marino propia para no quedar cian sobre cian. La prueba `tokens.test.ts` añade los pares nuevos con un umbral AA (4.5:1 para texto pequeño, 3:1 para grande) y calcula el peor caso del degradado.
 - **Razón**: no se puede garantizar contraste de texto directamente sobre un degradado que va de cian claro a azul oscuro; las fichas lo resuelven con valores fijos y comprobables.
+- **Foco visible**: el contorno cian global (`:focus-visible`) casi no se ve sobre la ficha blanca, el panel blanco ni el degradado cian (≈ 1.5:1, por debajo del 3:1). Se sustituye por un anillo de doble capa (contorno `--color-focus-inner` y halo `--color-focus-outer`), que se ve sobre cualquiera de esas superficies; la prueba de tokens añade esos pares (hallazgo C1 de `/speckit-analyze`).
 - **Alternativas**: texto directo sobre el degradado con sombra (no verificable), oscurecer todo el degradado (pierde la identidad cian).
 
 ## D9. Contenido en datos

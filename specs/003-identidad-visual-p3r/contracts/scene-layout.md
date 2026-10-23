@@ -30,6 +30,8 @@ Define cómo se apilan las capas de la escena, cómo cambian entre el menú y la
 Reglas:
 
 - El cambio de vista (posición y tamaño) se aplica sin animar, durante la cobertura del barrido (fases `exiting` y `navigating`). Las llegadas por el botón Atrás o Adelante del navegador usan la entrada corta de la fase 2.
+- Cuando el personaje va detrás del contenido (móvil y pantallas estrechas) su opacidad es la del token `--opacity-character-dim` (máximo 0.5).
+- El foco visible usa un anillo de doble capa (`--color-focus-inner` y `--color-focus-outer`) para verse sobre superficies blancas, cian y marinas.
 - El personaje nunca recibe punteros (`pointer-events: none`) y nunca ocupa espacio del diseño.
 - Sin desplazamiento horizontal en 390, 768 y 1280 px; el recorte por el borde derecho se hace con `overflow: clip` del contenedor del personaje, no con la página.
 - Con movimiento reducido no hay barrido; el personaje cambia de lugar con el fundido corto de la fase 2.

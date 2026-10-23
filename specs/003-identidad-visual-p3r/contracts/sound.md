@@ -31,7 +31,8 @@
 Reglas:
 
 - Con movimiento reducido el sonido sigue el mismo mapa (son independientes); `open` y `close` suenan al cambiar de pantalla aunque no haya barrido.
-- Una interrupción de la transición no repite ni corta los sonidos ya emitidos.
+- `open` y `close` se emiten siempre desde el efecto de llegada de ruta de `SceneShell`, una sola vez por cambio de pantalla y por cualquier camino (transición completa, interrupción, movimiento reducido o botón Atrás del navegador). Una interrupción no repite ni corta los sonidos ya emitidos.
+- El estado del interruptor se lee con `useSyncExternalStore` (valor del servidor `off`) para no producir discrepancias de hidratación.
 - Los sonidos solapados no se cortan entre sí (se reinicia `currentTime` del nodo o se clona).
 - `play()` puede ser rechazado por la política del navegador: se ignora sin mensajes; la primera interacción lo desbloquea.
 - Las repeticiones de una tecla mantenida no encadenan `cursor` más de una vez cada 80 ms.

@@ -36,7 +36,7 @@ El contenido sigue en archivos TypeScript tipados en `src/content/`. Esta fase a
 
 ### Textos de interfaz nuevos (`UiText`)
 
-Se amplía `src/content/ui-text.ts` con: `panelTitle` (título vertical del panel, "PORTFOLIO"), `soundToggleLabel`, `soundOn`, `soundOff`, `soundHint` (nota breve sobre el audio) y `characterAlt`. Todos con español e inglés.
+Se amplía `src/content/ui-text.ts` con: `panelTitle` (título vertical del panel, "PORTFOLIO"), `soundToggleLabel`, `soundOn`, `soundOff`, y `soundHint` (nota breve sobre el audio). Todos con español e inglés. La descripción del personaje vive solo en `CharacterAsset.alt`.
 
 ### Preferencia de sonido (cliente)
 
@@ -54,6 +54,9 @@ Se amplía `src/content/ui-text.ts` con: `panelTitle` (título vertical del pane
 | `--color-on-panel` | azul marino oscuro | Texto del título vertical y de la opción activa |
 | `--angle-skew` | `-10deg` | Inclinación del panel y de las opciones |
 | `--duration-character-in` | `300ms` | Entrada inicial del personaje al abrir el menú |
+| `--opacity-character-dim` | `0.45` | Opacidad del personaje cuando va detrás del contenido (móvil y pantallas estrechas; máximo 0.5) |
+| `--color-focus-inner` | azul marino | Contorno interior del anillo de foco |
+| `--color-focus-outer` | blanco | Halo exterior del anillo de foco |
 
 Los valores finales se fijan al implementar y los pares de texto se verifican con `tokens.test.ts` (AA).
 

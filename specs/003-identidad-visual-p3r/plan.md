@@ -130,6 +130,8 @@ Sin violaciones de la constitución; no aplica.
 - **Idle en gama baja**: decodificar VP9 con alfa cuesta CPU; se pausa durante las transiciones y con la pestaña oculta, y se comprueba en un móvil real (D5).
 - **WebKit/Safari**: el WebM con alfa no se dibuja bien; por eso el idle se excluye del motor WebKit y se muestra el póster (D5). Verificación manual pendiente.
 - **Contraste sobre el degradado**: el cian del encabezado sobre el cian del degradado no cumple; los controles del encabezado y el pie llevan una superficie propia (D8).
+- **Foco visible sobre superficies claras**: el contorno cian global no se ve sobre blanco ni sobre el cian del degradado; se sustituye por un anillo de doble capa con tokens y pares verificados (D8).
+- **Cambio de idioma**: el layout de `[lang]` probablemente se remonta; el personaje y el sonido deben tolerarlo sin errores (D1).
 - **Pruebas heredadas**: `menu.spec.ts`, `layout.spec.ts`, `transition.spec.ts` y `guide.spec.ts` dependen del marcador (`CharacterSlot`) y del aspecto anterior; se ajustan en la misma tarea que el cambio (D11).
 - **Navegación de Next.js y hidratación**: el personaje persistente no debe remontarse entre rutas; confirmar en `node_modules/next/dist/docs/` el comportamiento de los layouts compartidos antes de escribirlo.
 - **Audio bloqueado por el navegador**: la reproducción se intenta con `play()` y se ignoran los rechazos; la primera interacción desbloquea el audio (D4).

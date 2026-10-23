@@ -174,12 +174,12 @@ Proyecto único en la raíz del repositorio: `src/`, `tests/`, `public/` (ver pl
 
 ### Pruebas de la historia (escribirlas primero y comprobar que fallan)
 
-- [ ] T039 [P] [US6] Ampliar `tests/e2e/profile.spec.ts` y `tests/e2e/stack.spec.ts`: con un dato confirmado (sin `provisional`) no aparece su etiqueta "Provisional" y con uno provisional sí; la cantidad de etiquetas "Provisional" en cada pantalla coincide con la cantidad de datos provisionales de `src/content/` (cálculo en la prueba); un hito sin descripción no deja hueco ni texto vacío.
+- [x] T039 [P] [US6] Ampliar `tests/e2e/profile.spec.ts` y `tests/e2e/stack.spec.ts`: con un dato confirmado (sin `provisional`) no aparece su etiqueta "Provisional" y con uno provisional sí; la cantidad de etiquetas "Provisional" en cada pantalla coincide con la cantidad de datos provisionales de `src/content/` (cálculo en la prueba); un hito sin descripción no deja hueco ni texto vacío.
 
 ### Implementación de la historia
 
-- [ ] T040 [US6] Verificar que agregar una tecnología a `src/content/stack.ts`, un hito a `src/content/trajectory.ts` y quitar `provisional` de un dato se refleja en ambas pantallas, en los dos idiomas, sin editar ningún componente (`git status` muestra solo los archivos de datos); revertir los cambios y anotar el resultado en `research.md`.
-- [ ] T041 [US6] Verificar que no hay textos, colores ni duraciones sueltos en los componentes nuevos (`grep` de cadenas en español e inglés, de `#` y de `ms` en `src/components/profile` y `src/components/stack`) y que la prueba de tokens sigue impidiendo colores fuera de `globals.css`.
+- [x] T040 [US6] Verificar que agregar una tecnología a `src/content/stack.ts`, un hito a `src/content/trajectory.ts` y quitar `provisional` de un dato se refleja en ambas pantallas, en los dos idiomas, sin editar ningún componente (`git status` muestra solo los archivos de datos); revertir los cambios y anotar el resultado en `research.md`.
+- [x] T041 [US6] Verificar que no hay textos, colores ni duraciones sueltos en los componentes nuevos (`grep` de cadenas en español e inglés, de `#` y de `ms` en `src/components/profile` y `src/components/stack`) y que la prueba de tokens sigue impidiendo colores fuera de `globals.css`.
 
 **Punto de control**: contenido en datos. Commit: `test(content): comprobar que el contenido solo vive en los datos`.
 

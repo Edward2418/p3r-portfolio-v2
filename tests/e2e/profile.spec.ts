@@ -110,3 +110,19 @@ test("al cambiar de idioma la pantalla se conserva y la trayectoria cambia de id
   await expect(trajectorySection(page).getByRole("heading", { level: 2 })).toHaveText(uiText.sectionTrajectory.en);
   await expect(trajectorySection(page)).toContainText(trajectory[0].title.en);
 });
+
+// --- Datos provisionales y sin huecos (historia 6) ---
+
+for (const lang of LANGS) {
+  test(`en /${lang} la cantidad de etiquetas Provisional coincide con los datos provisionales y no hay textos vacíos`, async ({ page }) => {
+    await openReady(page, `/${lang}/${menu[0].id}`);
+    const expected = (profile.provisional ? 1 : 0) + trajectory.filter((entry) => entry.provisional).length;
+    await expect(page.locator("main").getByText(uiText.provisional[lang], { exact: true })).toHaveCount(expected);
+    const empty = await page.locator("main").evaluate((main) =>
+      [...main.querySelectorAll<HTMLElement>("p, li, dt, dd, h1, h2, h3")]
+        .filter((element) => !element.textContent?.trim())
+        .map((element) => element.tagName),
+    );
+    expect(empty, "no debe haber elementos de texto vacíos").toEqual([]);
+  });
+}

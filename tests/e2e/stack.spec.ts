@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 import type { Locator, Page } from "@playwright/test";
 import { menu, stack, stackCenterLabel, uiText } from "../../src/content/index.ts";
-import { provisionalScope } from "../../src/lib/stack/layout.ts";
+import { provisionalBadgeCount, provisionalScope } from "../../src/lib/stack/layout.ts";
 import { openReady } from "./helpers.ts";
 
 // Pantalla "Stack" (specs/004-quien-soy-y-stack, historia 3 y casos límite).
@@ -167,3 +167,16 @@ test.describe("casos límite del stack", () => {
     await expectTextNotClipped(page);
   });
 });
+
+// --- Datos provisionales y sin huecos (historia 6) ---
+
+for (const lang of LANGS) {
+  test(`en /${lang} la cantidad de etiquetas Provisional coincide con los datos provisionales y no hay textos vacíos`, async ({ page }) => {
+    await openReady(page, `/${lang}/${stackId}`);
+    await expect(page.locator("main").getByText(uiText.provisional[lang], { exact: true })).toHaveCount(provisionalBadgeCount(stack));
+    const empty = await page.locator("main").evaluate((main) =>
+      [...main.querySelectorAll<HTMLElement>("p, li, h1, h2, h3")].filter((element) => !element.textContent?.trim()).map((element) => element.tagName),
+    );
+    expect(empty, "no debe haber elementos de texto vacíos").toEqual([]);
+  });
+}

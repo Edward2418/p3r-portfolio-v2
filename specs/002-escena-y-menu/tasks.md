@@ -227,8 +227,8 @@ Proyecto único en la raíz del repositorio: `src/`, `tests/` (ver plan.md, "Có
 
 **Prueba independiente**: reordenar o renombrar una opción solo en `menu.ts` y cambiar una duración solo en `globals.css`; comprobar que el sitio lo refleja.
 
-- [ ] T068 [P] [US8] Escribir `tests/unit/motion-tokens.test.ts`: lee los tokens de `src/app/globals.css`; cada duración es positiva; `--duration-wipe-out + --duration-stagger-in + --duration-hold + --duration-circle` está entre 500 y 800 ms; `--duration-reduced` ≤ 200 ms; `--duration-splash` ≤ 1500 ms; existen `--ease-out` y `--ease-in-out`; además comprobar que `tests/unit/tokens.test.ts` recorre `src/components/scene` y `src/components/menu` sin encontrar colores, duraciones ni curvas sueltas
-- [ ] T069 [US8] Verificar manualmente (guía `quickstart.md`, sección 4): cambiar el nombre y el orden de una opción en `src/content/menu.ts` y comprobar menú, pestañas y teclado; cambiar `--duration-hold` en `globals.css` y comprobar la transición; revertir todo y confirmar con `git status` que no hay cambios en `src/components/`
+- [x] T068 [P] [US8] Escribir `tests/unit/motion-tokens.test.ts`: lee los tokens de `src/app/globals.css`; cada duración es positiva; `--duration-wipe-out + --duration-stagger-in + --duration-hold + --duration-circle` está entre 500 y 800 ms; `--duration-reduced` ≤ 200 ms; `--duration-splash` ≤ 1500 ms; existen `--ease-out` y `--ease-in-out`; además comprobar que `tests/unit/tokens.test.ts` recorre `src/components/scene` y `src/components/menu` sin encontrar colores, duraciones ni curvas sueltas
+- [x] T069 [US8] Verificar manualmente (guía `quickstart.md`, sección 4): cambiar el nombre y el orden de una opción en `src/content/menu.ts` y comprobar menú, pestañas y teclado; cambiar `--duration-hold` en `globals.css` y comprobar la transición; revertir todo y confirmar con `git status` que no hay cambios en `src/components/`
 
 **Punto de control**: opciones y tiempos desacoplados de los componentes. Hacer commit (`test(motion): proteger los tokens de movimiento`).
 

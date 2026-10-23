@@ -15,7 +15,6 @@ export default async function Page({ params }: PageProps<"/[lang]">) {
   const options = menu.map((option) => ({
     id: option.id,
     name: localize(option.name, lang),
-    description: localize(option.description, lang),
   }));
 
   return (

@@ -13,7 +13,6 @@ import { useScene } from "../scene/SceneShell.tsx";
 export interface MenuItem {
   id: SceneId;
   name: string;
-  description: string;
 }
 
 interface MainMenuProps {

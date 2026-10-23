@@ -246,3 +246,14 @@ Pendiente: la confirmación de Edward en la revisión final con el video (T070).
 - **Entrada consumida**: `SplashController` consume la primera tecla o el primer clic (con `stopPropagation` en fase de captura) para que no active el menú que hay debajo; solo escucha `click` y no `pointerdown`, porque cerrar en `pointerdown` dejaba que el `click` posterior cayera sobre el enlace que quedó debajo. Cuenta el splash como visto al mostrarse, así que recargar durante el splash no lo repite.
 - **Error corregido con la suite completa**: con movimiento reducido la capa está oculta por CSS pero el controlador igualmente registraba su escucha y se comía el primer clic o tecla del visitante. Ahora no actúa si la capa no se muestra; hay una prueba de regresión.
 - **Pruebas**: las que no son del splash dan la sesión por vista antes de cargar (`markSplashSeen`); las de "omitir" congelan la animación del cierre automático para no depender de la velocidad de la máquina, y miden desde que el evento llega a la página.
+
+### R9. Revisión con `vercel-react-best-practices` (T074)
+
+| Antes | Después | Por qué |
+|---|---|---|
+| `MainMenu` recibía la `description` de cada opción y no la usaba | Se quitó de sus props y de la página | Menos datos serializados hacia el cliente (`server-serialization`) |
+| (Verificado) componentes de cliente | Solo `SceneShell`, `GuideBar`, `MainMenu`, `MotionToggle`, `SplashController` y `LanguageSwitcher` (más la capa estática `TransitionLayer`, que se empaqueta con `SceneShell`) | Las pantallas y secciones siguen siendo de servidor |
+| (Verificado) importaciones | Todas directas al archivo; el barril `src/content/index.ts` solo lo usan las pruebas | `bundle-barrel-imports` |
+| (Verificado) condicionales | Ternarios o retorno temprano, sin `&&` con valores que puedan renderizarse | `rendering-conditional-render` |
+| (Verificado) contexto de `SceneShell` | Valor memoizado y funciones estables con `useCallback` | Evita renders de los consumidores |
+| (Verificado) datos de los layouts | `scenes` y `labels` ya traducidos desde el servidor | No viaja el diccionario completo |

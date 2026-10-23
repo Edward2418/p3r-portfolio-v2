@@ -59,8 +59,8 @@ export interface TransitionController {
   enter(): Promise<boolean>;
   /** Solo la entrada, corta (botón Atrás o Adelante del navegador). */
   enterShort(): Promise<void>;
-  /** Variante reducida: fundido de opacidad del contenido. */
-  fadeIn(): Promise<void>;
+  /** Variante reducida: fundido de opacidad del contenido (y del personaje si cambió de vista). */
+  fadeIn(includeCharacter?: boolean): Promise<void>;
   /** Termina de inmediato todas las animaciones y deja el destino visible; devuelve si había algo en curso. */
   skip(): boolean;
   /** Oculta la capa sin animar (por ejemplo, si el destino tarda demasiado). */
@@ -80,6 +80,11 @@ export function createTransitionController(): TransitionController {
     phase = next;
     const element = layer();
     if (element) element.dataset.phase = next;
+    // Señal para el resto de la escena (por ejemplo, el idle del personaje se pausa mientras haya
+    // una transición en curso para no competir por el hilo principal).
+    const root = document.documentElement;
+    if (next === "idle") root.removeAttribute("data-scene-busy");
+    else root.setAttribute("data-scene-busy", "true");
   }
 
   /** Reproduce una animación y la registra para poder terminarla al interrumpir. */
@@ -136,7 +141,7 @@ export function createTransitionController(): TransitionController {
       run(
         document.querySelector("[data-character]"),
         [
-          { transform: "translateX(40%) rotate(8deg)", opacity: 0 },
+          { transform: "translateX(30vw) rotate(8deg)", opacity: 0 },
           { transform: "translateX(0) rotate(0deg)", opacity: 1 },
         ],
         { duration: totalMs, easing: tokens.easeOut, fill: "backwards" },
@@ -223,12 +228,15 @@ export function createTransitionController(): TransitionController {
       releaseLayer();
     },
 
-    async fadeIn() {
+    async fadeIn(includeCharacter = false) {
       const tokens = readTokens();
-      await run(document.querySelector("main"), [{ opacity: 0 }, { opacity: 1 }], {
-        duration: tokens.reduced,
-        easing: tokens.easeOut,
-      });
+      const keyframes = [{ opacity: 0 }, { opacity: 1 }];
+      const options: KeyframeAnimationOptions = { duration: tokens.reduced, easing: tokens.easeOut };
+      // Al cambiar de vista el personaje cambia de lugar: se funde en vez de saltar de un lado al otro.
+      await Promise.all([
+        run(document.querySelector("main"), keyframes, options),
+        includeCharacter ? run(document.querySelector("[data-character]"), keyframes, { ...options, fill: "backwards" }) : Promise.resolve(),
+      ]);
     },
 
     skip() {

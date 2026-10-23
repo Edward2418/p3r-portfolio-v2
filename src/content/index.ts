@@ -1,4 +1,6 @@
+export { character } from "./character.ts";
 export { characters } from "./characters.ts";
+export { sounds } from "./audio.ts";
 export { contact } from "./contact.ts";
 export { menu } from "./menu.ts";
 export { profile } from "./profile.ts";

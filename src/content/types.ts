@@ -88,6 +88,30 @@ export type SceneId = "profile" | "stack" | "projects" | "social-link" | "system
 /** Modo efectivo de movimiento: reducido si el sistema o el sitio lo piden. */
 export type MotionMode = "full" | "reduced";
 
+/** Efecto de sonido de la interfaz. */
+export type SoundId = "cursor" | "confirm" | "cancel" | "open" | "close" | "levelup";
+
+/** Preferencia de sonido del visitante; por defecto `off`. */
+export type SoundPreference = "on" | "off";
+
+/** Vista de la escena: el menú principal o una de las pantallas internas. */
+export type ViewKind = "menu" | "screen";
+
+/** Recurso del personaje: imagen fija (primer cuadro del idle) y video con transparencia. */
+export interface CharacterAsset {
+  poster: { src: string; width: number; height: number };
+  idle: { src: string; type: string };
+  /** Descripción accesible; el arte es decorativo y se oculta a los lectores de pantalla. */
+  alt: Localized;
+}
+
+/** Efecto de sonido: identificador único y archivo en `public/audio/`. */
+export interface SoundEffect {
+  id: SoundId;
+  /** Ruta pública con la forma `/audio/<id>.mp3`. */
+  src: string;
+}
+
 /** Opción del menú principal; el orden del arreglo `menu` es el orden del menú y de las pestañas. */
 export interface MenuOption {
   /** Único; coincide con la dirección de la pantalla. */

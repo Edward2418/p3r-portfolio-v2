@@ -81,7 +81,7 @@ export function MotionToggle({ label, onText, offText, lockedText }: MotionToggl
         aria-describedby={system ? "motion-locked" : undefined}
         disabled={system}
         onClick={toggle}
-        className="inline-flex min-h-11 items-center gap-2 border border-cyan px-4 text-cyan transition-transform duration-(--duration-fast) ease-(--ease-out) active:scale-[0.97] hover:bg-cyan hover:text-bg aria-pressed:bg-cyan aria-pressed:text-bg disabled:cursor-not-allowed"
+        className="inline-flex min-h-11 items-center gap-2 border border-cyan bg-navy px-4 text-cyan transition-transform duration-(--duration-fast) ease-(--ease-out) active:scale-[0.97] hover:bg-cyan hover:text-bg aria-pressed:bg-cyan aria-pressed:text-bg disabled:cursor-not-allowed"
       >
         {label}
         <span aria-hidden="true" className="text-xs font-semibold uppercase">

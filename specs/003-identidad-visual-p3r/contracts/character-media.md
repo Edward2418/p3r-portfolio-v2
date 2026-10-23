@@ -1,0 +1,42 @@
+# Contrato: medios del personaje (póster e idle)
+
+**Especificación**: [../spec.md](../spec.md) | **Modelo de datos**: [../data-model.md](../data-model.md) | **Investigación**: [../research.md](../research.md) (D3 y D5)
+
+## Imagen fija
+
+- Archivo: `/img/oguri/idle-poster.webp` (540×960, con transparencia, 54 KiB). Es el primer cuadro del idle.
+- Elemento: `<img>` con `width` y `height`, `decoding="async"`, `fetchpriority="low"`, `alt=""` y `aria-hidden` (decorativo). Aparece en el HTML inicial.
+
+## Elegibilidad del idle
+
+`shouldLoadIdle(entrada)` (función pura, `src/lib/motion/idle.ts`) devuelve `true` solo si:
+
+| Condición | Valor requerido |
+|---|---|
+| Movimiento reducido (sistema o sitio) | No |
+| Ahorro de datos (`navigator.connection.saveData`) | No |
+| Soporte de `video/webm; codecs="vp9"` (`canPlayType`) | Sí |
+| Motor WebKit (Safari) | No (el alfa de WebM no se dibuja) |
+| Vista actual | Solo el menú: en las pantallas de lectura no se descarga ni se reproduce |
+
+## Momento de carga
+
+1. El menú es utilizable (el contenido está en el HTML; no se espera nada).
+2. El video se pide "bajo demanda": en la primera interacción del visitante (`pointerdown`, `keydown`, `touchstart` o `wheel`), con un margen de 1.5 s para que termine la transición que esa interacción suele iniciar, o, sin ella, 8 s después del evento `load` de la página. Así no entra en la medición de carga (Lighthouse y PageSpeed).
+3. Llegado ese momento se espera a `requestIdleCallback` con `timeout` de 2000 ms (respaldo: `setTimeout` de 2000 ms).
+4. Si sigue siendo elegible, se asigna el `src` del `<video muted playsinline loop>` y se llama a `play()`.
+5. Con el evento `playing`, el video aparece con un fundido de `opacity` sobre la imagen fija.
+6. Con `error` o un `play()` rechazado, se quita el video y queda la imagen fija, sin mensajes.
+
+## Pausas y cambios
+
+- El video se pausa mientras `<html data-scene-busy>` esté presente (transición en curso), con la pestaña oculta (`visibilitychange`) y cuando aparece `data-motion="reduced"`; se reanuda al terminar la transición y al volver la pestaña, si sigue siendo elegible.
+- Cuando el movimiento pasa a reducido, el video se oculta con un fundido corto (`--duration-reduced`, la excepción a la regla que anula las transiciones) y se pausa; sigue montado y queda la imagen fija.
+- Fuera del menú el video se pausa y se oculta (`data-video="off"`); al volver al menú se reanuda donde estaba.
+- Bucle: sin `loop` nativo. Al terminar (`ended`) se funde a la imagen fija (150 ms) y se reinicia desde el primer cuadro, porque el último cuadro no coincide con el primero (SSIM 0.73, PSNR 17 dB) y el salto se vería cada 10 s.
+
+## Observable (para las pruebas)
+
+- Atributo `data-idle` en el contenedor del personaje: `pending`, `loading`, `playing`, `failed` u `off` (inelegible).
+- Atributo `data-video` (`on` u `off`): si el video se ve en este momento (reproduciéndose, en el menú, sin movimiento reducido y fuera del hueco del bucle).
+- Ninguna petición a `idle.webm` sin interacción durante los primeros segundos (4 s en las pruebas), ni con movimiento reducido o ahorro de datos.

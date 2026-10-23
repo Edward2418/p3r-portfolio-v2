@@ -6,10 +6,11 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import type { Lang, SceneId } from "../../content/types.ts";
+import type { Lang, SceneId, ViewKind } from "../../content/types.ts";
 import { neighbors, resolveScreenKey, shouldIgnoreKey } from "../../lib/motion/navigation.ts";
 import type { ScreenAction } from "../../lib/motion/navigation.ts";
 import { detectSwipe } from "../../lib/motion/swipe.ts";
+import { useSound } from "../audio/SoundProvider.tsx";
 import { GuideBar } from "./GuideBar.tsx";
 import { TransitionLayer } from "./TransitionLayer.tsx";
 import {
@@ -45,6 +46,8 @@ interface SceneContextValue {
   labels: SceneLabels;
   /** Pantalla actual; `null` en el menú. */
   sceneId: SceneId | null;
+  /** Vista actual: el menú o una pantalla interna (fija la posición del personaje y del panel). */
+  view: ViewKind;
   /** Pantalla de la que se viene (para resaltarla al volver al menú). */
   previousSceneId: SceneId | null;
   activeMenuId: SceneId;
@@ -77,6 +80,7 @@ export function SceneShell({ lang, scenes, labels, children }: SceneShellProps) 
   const router = useRouter();
   const pathname = usePathname();
   const [controller] = useState(createTransitionController);
+  const { play } = useSound();
 
   // Seguimiento de la pantalla actual y la anterior; se ajusta durante el renderizado para que el
   // menú ya nazca con la opción correcta al volver (sin un parpadeo posterior).
@@ -92,6 +96,9 @@ export function SceneShell({ lang, scenes, labels, children }: SceneShellProps) 
     if (sceneId === null) setActiveMenuId(track.sceneId ?? scenes[0].id);
   }
   const { sceneId, previousSceneId } = track;
+  const view: ViewKind = sceneId === null ? "menu" : "screen";
+  // Vista anterior: decide si la llegada suena `open` (menú → pantalla) o `close` (pantalla → menú).
+  const previousView = useRef<ViewKind>(view);
 
   // Destino lógico: la ruta que se pidió más recientemente. La URL y el estado de React se actualizan
   // un instante después de pedir la navegación; si varias teclas llegan seguidas, cada una debe partir
@@ -190,6 +197,7 @@ export function SceneShell({ lang, scenes, labels, children }: SceneShellProps) 
   const go = useCallback(
     (action: ScreenAction) => {
       if (action === "menu") {
+        play("cancel");
         navigate(`/${lang}`);
         return;
       }
@@ -197,9 +205,12 @@ export function SceneShell({ lang, scenes, labels, children }: SceneShellProps) 
       if (!current) return;
       const { prev, next } = neighbors(scenes, current);
       const target = action === "prev" ? prev : next;
-      if (target) navigate(`/${lang}/${target.id}`);
+      if (target) {
+        play("screen-change");
+        navigate(`/${lang}/${target.id}`);
+      }
     },
-    [lang, navigate, scenes],
+    [lang, navigate, play, scenes],
   );
 
   // Precarga las pantallas vecinas y el menú para que el destino ya esté listo al navegar.
@@ -300,6 +311,13 @@ export function SceneShell({ lang, scenes, labels, children }: SceneShellProps) 
       return;
     }
 
+    // Sonido de llegada: una sola vez por cambio de vista y por cualquier camino (transición completa,
+    // interrupción, movimiento reducido o botón Atrás del navegador). Entre pantallas solo suena el cursor.
+    const viewChanged = previousView.current !== view;
+    if (previousView.current === "menu" && view === "screen") play("arrive-screen");
+    else if (previousView.current === "screen" && view === "menu") play("arrive-menu");
+    previousView.current = view;
+
     const pending = arrival.current;
     if (pending && pending.path === pathname) {
       arrival.current = null;
@@ -307,7 +325,7 @@ export function SceneShell({ lang, scenes, labels, children }: SceneShellProps) 
     } else if (skipEntrance.current) {
       skipEntrance.current = false; // llegada por una interrupción: sin entrada, el destino ya está visible
     } else if (!supportsWaapi() || prefersReducedMotion()) {
-      void controller.fadeIn();
+      void controller.fadeIn(viewChanged);
     } else {
       void controller.enterShort();
     }
@@ -325,13 +343,13 @@ export function SceneShell({ lang, scenes, labels, children }: SceneShellProps) 
   }, [pathname]);
 
   const value = useMemo<SceneContextValue>(
-    () => ({ lang, scenes, labels, sceneId, previousSceneId, activeMenuId, setActiveMenuId, navigate, go }),
-    [lang, scenes, labels, sceneId, previousSceneId, activeMenuId, navigate, go],
+    () => ({ lang, scenes, labels, sceneId, view, previousSceneId, activeMenuId, setActiveMenuId, navigate, go }),
+    [lang, scenes, labels, sceneId, view, previousSceneId, activeMenuId, navigate, go],
   );
 
   return (
     <SceneContext.Provider value={value}>
-      <div className="flex min-h-screen touch-pan-y flex-col">
+      <div data-view={view} className="relative flex min-h-screen touch-pan-y flex-col">
         {children}
         <GuideBar />
         <TransitionLayer />

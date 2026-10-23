@@ -1,13 +1,14 @@
 "use client";
 
 // Menú principal: lista de enlaces reales (Enter, clic y toque funcionan sin JavaScript).
-// La opción activa va resaltada en rojo y blanco y recibe el foco al moverse con el teclado;
-// el título de fondo es decorativo.
+// Cada opción es una ficha inclinada (token `--angle-skew`): las inactivas en azul marino con texto
+// cian, la activa en blanco con borde rojo. La activa recibe el foco al moverse con el teclado.
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import type { MouseEvent } from "react";
 import type { Lang, SceneId } from "../../content/types.ts";
 import { nextIndex, shouldIgnoreKey } from "../../lib/motion/navigation.ts";
+import { useSound } from "../audio/SoundProvider.tsx";
 import { useScene } from "../scene/SceneShell.tsx";
 
 export interface MenuItem {
@@ -24,8 +25,14 @@ interface MainMenuProps {
 
 const MENU_KEYS = ["ArrowDown", "ArrowUp", "ArrowLeft", "ArrowRight", "Home", "End"];
 
+const chipClass =
+  "block min-h-11 px-5 py-3 font-display text-3xl uppercase tracking-wide sm:text-4xl";
+const activeClass = `${chipClass} border-[3px] border-red bg-panel text-on-panel`;
+const inactiveClass = `${chipClass} border-[3px] border-transparent border-l-cyan bg-navy text-cyan`;
+
 export function MainMenu({ lang, label, options }: MainMenuProps) {
   const { activeMenuId, setActiveMenuId, navigate } = useScene();
+  const { play } = useSound();
   const activeIndex = Math.max(0, options.findIndex((option) => option.id === activeMenuId));
   const links = useRef<(HTMLAnchorElement | null)[]>([]);
 
@@ -50,6 +57,7 @@ export function MainMenu({ lang, label, options }: MainMenuProps) {
       if (MENU_KEYS.includes(event.key)) {
         event.preventDefault();
         const index = nextIndex(activeIndex, event.key, options.length);
+        if (index !== activeIndex) play("move");
         setActiveMenuId(options[index].id);
         links.current[index]?.focus();
         return;
@@ -59,48 +67,46 @@ export function MainMenu({ lang, label, options }: MainMenuProps) {
         const focused = document.activeElement as HTMLElement | null;
         if (focused && focused !== document.body && focused.closest("a, button, input, select, textarea, summary")) return;
         event.preventDefault();
+        play("confirm");
         navigate(`/${lang}/${options[activeIndex].id}`);
       }
     }
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
-  }, [activeIndex, lang, navigate, options, setActiveMenuId]);
+  }, [activeIndex, lang, navigate, options, play, setActiveMenuId]);
 
   function onLinkClick(event: MouseEvent<HTMLAnchorElement>, href: string) {
     // Los clics con modificadores conservan el comportamiento nativo (abrir en otra pestaña).
     if (event.defaultPrevented || event.button !== 0) return;
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     event.preventDefault();
+    play("confirm");
     navigate(href);
   }
 
   return (
     <nav aria-label={label} className="relative">
-      <p
-        aria-hidden="true"
-        data-title={options[activeIndex]?.name}
-        className="pointer-events-none absolute -top-6 left-0 -z-10 w-full overflow-hidden whitespace-nowrap font-display text-[22vw] uppercase leading-none text-cyan before:opacity-10 before:content-[attr(data-title)] md:text-[9rem]"
-      />
       <ul className="flex flex-col gap-2">
         {options.map((option, index) => {
           const isActive = index === activeIndex;
           const href = `/${lang}/${option.id}`;
           return (
-            <li key={option.id} data-stagger className={isActive ? "-skew-x-6" : "-skew-x-6 pl-6"}>
+            <li key={option.id} data-stagger className={isActive ? "" : "pl-6"}>
               <Link
                 href={href}
+                data-menu-item
                 ref={(element) => {
                   links.current[index] = element;
                 }}
                 aria-current={isActive ? "true" : undefined}
                 onClick={(event) => onLinkClick(event, href)}
-                onPointerEnter={() => setActiveMenuId(option.id)}
+                onPointerEnter={(event) => {
+                  // El cursor suena solo con el ratón: con el tacto, tocar ya es confirmar.
+                  if (event.pointerType === "mouse" && option.id !== activeMenuId) play("move");
+                  setActiveMenuId(option.id);
+                }}
                 onFocus={() => setActiveMenuId(option.id)}
-                className={
-                  isActive
-                    ? "block bg-red-fill px-5 py-3 font-display text-3xl uppercase tracking-wide text-text sm:text-4xl"
-                    : "block border-l-4 border-cyan px-5 py-3 font-display text-3xl uppercase tracking-wide text-text sm:text-4xl"
-                }
+                className={isActive ? activeClass : inactiveClass}
               >
                 {option.name}
               </Link>

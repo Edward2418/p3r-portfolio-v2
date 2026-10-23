@@ -20,24 +20,38 @@ export function SplashController() {
       // Con el almacenamiento bloqueado el splash puede repetirse; nada se rompe.
     }
 
-    function close() {
+    // La entrada de Oguri espera al final del splash (retraso en CSS mientras `data-splash` no sea
+    // `seen`). Si el splash se omite a mitad, ese retraso desaparece con la animación ya "vencida" y Oguri
+    // aparecería de golpe: se reinicia la animación para que entre en el momento de omitirlo.
+    function replayCharacterEntrance() {
+      const character = document.querySelector<HTMLElement>("[data-character]");
+      if (!character) return;
+      character.style.animationName = "none";
+      void character.offsetWidth; // fuerza el recálculo de estilo: la animación vuelve a empezar
+      character.style.animationName = "";
+    }
+    function close(skipped: boolean) {
       root.dataset.splash = "seen";
+      if (skipped) replayCharacterEntrance();
       document.removeEventListener("keydown", onInput, true);
       document.removeEventListener("click", onInput, true);
+    }
+    function onEnd() {
+      close(false);
     }
     function onInput(event: Event) {
       event.stopPropagation();
       if (event.type === "click") event.preventDefault();
-      close();
+      close(true);
     }
 
     document.addEventListener("keydown", onInput, true);
     document.addEventListener("click", onInput, true);
-    layer.addEventListener("animationend", close);
+    layer.addEventListener("animationend", onEnd);
     return () => {
       document.removeEventListener("keydown", onInput, true);
       document.removeEventListener("click", onInput, true);
-      layer.removeEventListener("animationend", close);
+      layer.removeEventListener("animationend", onEnd);
     };
   }, []);
 

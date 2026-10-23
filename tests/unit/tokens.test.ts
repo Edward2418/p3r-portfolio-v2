@@ -56,6 +56,42 @@ test("el rojo de marca cumple contraste para texto grande y gráficos (3:1)", ()
   assert.ok(ratio >= 3, `--color-red sobre --color-bg tiene ${ratio.toFixed(2)}:1, mínimo 3:1`);
 });
 
+test("los tokens de la identidad visual P3R existen", () => {
+  for (const name of ["sky", "deep", "panel", "navy", "on-panel", "focus-inner", "focus-outer"]) {
+    assert.ok(tokens[name], `falta el token --color-${name}`);
+  }
+});
+
+test("las superficies de la identidad visual cumplen contraste AA para texto (4.5:1)", () => {
+  const pairs: [string, string][] = [
+    ["text", "navy"],
+    ["cyan", "navy"],
+    ["on-panel", "panel"],
+  ];
+  for (const [fg, bg] of pairs) {
+    const ratio = contrast(tokens[fg], tokens[bg]);
+    assert.ok(ratio >= 4.5, `--color-${fg} sobre --color-${bg} tiene ${ratio.toFixed(2)}:1, mínimo 4.5:1`);
+  }
+});
+
+test("el borde rojo y el anillo de foco cumplen contraste de gráficos (3:1) sobre cada superficie", () => {
+  // El borde rojo rodea la opción activa, que es blanca.
+  const red = contrast(tokens.red, tokens.panel);
+  assert.ok(red >= 3, `--color-red sobre --color-panel tiene ${red.toFixed(2)}:1, mínimo 3:1`);
+
+  // Anillo de doble capa: sobre cada superficie debe verse al menos una de las dos capas.
+  const surfaces: [string, string][] = [
+    ["panel", "focus-inner"],
+    ["sky", "focus-inner"],
+    ["navy", "focus-outer"],
+    ["deep", "focus-outer"],
+  ];
+  for (const [surface, ring] of surfaces) {
+    const ratio = contrast(tokens[ring], tokens[surface]);
+    assert.ok(ratio >= 3, `--color-${ring} sobre --color-${surface} tiene ${ratio.toFixed(2)}:1, mínimo 3:1`);
+  }
+});
+
 /** Lista recursivamente los archivos con las extensiones dadas. */
 function listFiles(dir: string, extensions: string[]): string[] {
   return readdirSync(dir).flatMap((name) => {

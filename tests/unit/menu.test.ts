@@ -49,7 +49,7 @@ test("todo texto del menú y de los textos nuevos tiene español e inglés no va
   }
   const newKeys = [
     "menuLabel", "confirm", "back", "tabPrevious", "tabNext", "splashTitle",
-    "motionToggleLabel", "motionOn", "motionOff", "motionLockedBySystem", "characterLabel",
+    "motionToggleLabel", "motionOn", "motionOff", "motionLockedBySystem",
     "guideMenuHint", "guideScreenHint", "guideLabel",
   ] as const;
   for (const key of newKeys) {

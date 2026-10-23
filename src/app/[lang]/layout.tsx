@@ -41,7 +41,6 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
     description: localize(option.description, lang),
   }));
   const labels = {
-    menuLabel: t("menuLabel", lang),
     confirm: t("confirm", lang),
     back: t("back", lang),
     tabPrevious: t("tabPrevious", lang),
@@ -50,7 +49,6 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
     tabNextShort: t("tabNextShort", lang),
     guideLabel: t("guideLabel", lang),
     guideScreenHint: t("guideScreenHint", lang),
-    screenAnnouncement: t("screenAnnouncement", lang),
   };
 
   return (

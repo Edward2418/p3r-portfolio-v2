@@ -18,9 +18,8 @@ export function GuideBar() {
     : labels.guideScreenHint;
 
   return (
-    <div
+    <aside
       data-guide
-      role="group"
       aria-label={labels.guideLabel}
       className="fixed bottom-4 right-4 z-30 flex max-w-[calc(100vw-2rem)] flex-col items-end gap-2"
     >
@@ -28,10 +27,10 @@ export function GuideBar() {
       <div className="flex flex-wrap justify-end gap-2">
         {inMenu ? null : (
           <>
-            <button type="button" aria-label={labels.tabPrevious} disabled={!prev} onClick={() => go("prev")} className={buttonClass}>
+            <button type="button" aria-label={`${labels.tabPreviousShort} — ${labels.tabPrevious}`} disabled={!prev} onClick={() => go("prev")} className={buttonClass}>
               {labels.tabPreviousShort}
             </button>
-            <button type="button" aria-label={labels.tabNext} disabled={!next} onClick={() => go("next")} className={buttonClass}>
+            <button type="button" aria-label={`${labels.tabNextShort} — ${labels.tabNext}`} disabled={!next} onClick={() => go("next")} className={buttonClass}>
               {labels.tabNextShort}
             </button>
           </>
@@ -48,6 +47,6 @@ export function GuideBar() {
           {labels.confirm}
         </button>
       </div>
-    </div>
+    </aside>
   );
 }

@@ -29,7 +29,6 @@ export interface SceneInfo {
 }
 
 export interface SceneLabels {
-  menuLabel: string;
   confirm: string;
   back: string;
   tabPrevious: string;
@@ -38,7 +37,6 @@ export interface SceneLabels {
   tabNextShort: string;
   guideLabel: string;
   guideScreenHint: string;
-  screenAnnouncement: string;
 }
 
 interface SceneContextValue {
@@ -291,9 +289,10 @@ export function SceneShell({ lang, scenes, labels, children }: SceneShellProps) 
   }, []);
 
   // Tras cada cambio de ruta: llegada del destino (continúa la transición), entrada corta o fundido
-  // cuando el cambio no lo pidió `navigate` (botón Atrás o Adelante del navegador), foco en el <h1>
-  // (o en la opción activa del menú) y anuncio a los lectores de pantalla. No actúa en la carga inicial.
-  const [announcement, setAnnouncement] = useState("");
+  // cuando el cambio no lo pidió `navigate` (botón Atrás o Adelante del navegador) y foco en el <h1>
+  // (o en la opción activa del menú). No actúa en la carga inicial. El anuncio a los lectores de
+  // pantalla lo hace el anunciador de rutas de Next.js con el <title> de cada pantalla; una región
+  // propia lo duplicaba.
   const isFirstRender = useRef(true);
   useEffect(() => {
     if (isFirstRender.current) {
@@ -320,8 +319,6 @@ export function SceneShell({ lang, scenes, labels, children }: SceneShellProps) 
         document.querySelector<HTMLElement>('nav a[aria-current="true"]')?.focus({ preventScroll: true });
       }
     });
-    const name = sceneId ? scenes.find((scene) => scene.id === sceneId)?.name : labels.menuLabel;
-    setAnnouncement(`${labels.screenAnnouncement}: ${name ?? ""}`);
     return () => cancelAnimationFrame(frame);
     // Solo debe ejecutarse al cambiar de ruta.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -338,9 +335,6 @@ export function SceneShell({ lang, scenes, labels, children }: SceneShellProps) 
         {children}
         <GuideBar />
         <TransitionLayer />
-        <div role="status" aria-live="polite" className="sr-only">
-          {announcement}
-        </div>
       </div>
     </SceneContext.Provider>
   );

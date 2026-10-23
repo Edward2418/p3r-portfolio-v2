@@ -325,3 +325,13 @@ Realizada el 2026-10-22 tras `rm -rf node_modules .next` y `npm ci`, por etapas 
 | E2E Firefox 1280 px | 114 pasadas y 7 omitidas a propósito (gestos táctiles y limitador de CPU, que usan CDP de Chromium) |
 
 Sin pruebas intermitentes: con 2 trabajadores las de tiempo (duración de la transición e interrupción) pasaron a la primera.
+
+### R12. Revisión de accesibilidad automatizada (T071, parte automática)
+
+Realizada el 2026-10-22 con axe-core 4.14 (reglas WCAG 2.0, 2.1 y 2.2 AA y buenas prácticas) sobre 12 casos: menú con y sin splash, en español e inglés, con movimiento reducido, en móvil, y las cinco pantallas.
+
+- **Hallazgo 1 (corregido)**: la guía y los botones (abajo a la derecha) quedaban fuera de cualquier región de la página (regla `region`). Ahora son un `<aside aria-label="Guía y controles">`.
+- **Hallazgo 2 (corregido)**: el nombre accesible de las pestañas L y R ("Pantalla anterior") no incluía el texto visible ("L"). Ahora es "L — Pantalla anterior" (criterio 2.5.3, etiqueta en el nombre).
+- **Hallazgo 3 (corregido)**: el cambio de pantalla se anunciaba dos veces, con nuestra región `aria-live` y con el anunciador de rutas de Next.js. Se dejó solo el de Next, que lee el `<title>` ("Stack | Edward Negrete — Portafolio").
+- **Resultado final**: 0 violaciones en los 12 casos.
+- Queda la revisión humana con un lector de pantalla real (T071), que no se puede automatizar.

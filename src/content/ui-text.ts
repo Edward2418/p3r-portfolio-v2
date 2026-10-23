@@ -44,7 +44,6 @@ export const uiText = {
   tabNext: { es: "Pantalla siguiente", en: "Next screen" },
   tabPreviousShort: { es: "L", en: "L" },
   tabNextShort: { es: "R", en: "R" },
-  screenAnnouncement: { es: "Pantalla", en: "Screen" },
   splashTitle: { es: "Portafolio", en: "Portfolio" },
   motionToggleLabel: { es: "Movimiento reducido", en: "Reduced motion" },
   motionOn: { es: "Activado", en: "On" },

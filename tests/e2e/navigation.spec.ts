@@ -133,10 +133,12 @@ test.describe("foco y anuncio tras cambiar de pantalla", () => {
     await expect(optionLink(page, 2)).toBeFocused();
   });
 
-  test("se anuncia el nombre de la pantalla en una región aria-live", async ({ page }) => {
+  test("el anunciador de rutas de Next anuncia el título de la pantalla, una sola vez", async ({ page }) => {
     await openReady(page, `/${lang}`);
     await optionLink(page, 1).click();
-    await expect(page.getByRole("status")).toHaveText(`${uiText.screenAnnouncement[lang]}: ${menu[1].name[lang]}`);
+    await expect(page.getByRole("alert")).toHaveText(`${menu[1].name[lang]} | ${uiText.siteTitle[lang]}`);
+    // No hay otra región viva que repita el anuncio.
+    await expect(page.getByRole("status")).toHaveCount(0);
   });
 });
 

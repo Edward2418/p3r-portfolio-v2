@@ -313,6 +313,7 @@ export function SceneShell({ lang, scenes, labels, children }: SceneShellProps) 
 
     // Sonido de llegada: una sola vez por cambio de vista y por cualquier camino (transición completa,
     // interrupción, movimiento reducido o botón Atrás del navegador). Entre pantallas solo suena el cursor.
+    const viewChanged = previousView.current !== view;
     if (previousView.current === "menu" && view === "screen") play("arrive-screen");
     else if (previousView.current === "screen" && view === "menu") play("arrive-menu");
     previousView.current = view;
@@ -324,7 +325,7 @@ export function SceneShell({ lang, scenes, labels, children }: SceneShellProps) 
     } else if (skipEntrance.current) {
       skipEntrance.current = false; // llegada por una interrupción: sin entrada, el destino ya está visible
     } else if (!supportsWaapi() || prefersReducedMotion()) {
-      void controller.fadeIn();
+      void controller.fadeIn(viewChanged);
     } else {
       void controller.enterShort();
     }

@@ -59,8 +59,8 @@ export interface TransitionController {
   enter(): Promise<boolean>;
   /** Solo la entrada, corta (botón Atrás o Adelante del navegador). */
   enterShort(): Promise<void>;
-  /** Variante reducida: fundido de opacidad del contenido. */
-  fadeIn(): Promise<void>;
+  /** Variante reducida: fundido de opacidad del contenido (y del personaje si cambió de vista). */
+  fadeIn(includeCharacter?: boolean): Promise<void>;
   /** Termina de inmediato todas las animaciones y deja el destino visible; devuelve si había algo en curso. */
   skip(): boolean;
   /** Oculta la capa sin animar (por ejemplo, si el destino tarda demasiado). */
@@ -228,12 +228,15 @@ export function createTransitionController(): TransitionController {
       releaseLayer();
     },
 
-    async fadeIn() {
+    async fadeIn(includeCharacter = false) {
       const tokens = readTokens();
-      await run(document.querySelector("main"), [{ opacity: 0 }, { opacity: 1 }], {
-        duration: tokens.reduced,
-        easing: tokens.easeOut,
-      });
+      const keyframes = [{ opacity: 0 }, { opacity: 1 }];
+      const options: KeyframeAnimationOptions = { duration: tokens.reduced, easing: tokens.easeOut };
+      // Al cambiar de vista el personaje cambia de lugar: se funde en vez de saltar de un lado al otro.
+      await Promise.all([
+        run(document.querySelector("main"), keyframes, options),
+        includeCharacter ? run(document.querySelector("[data-character]"), keyframes, { ...options, fill: "backwards" }) : Promise.resolve(),
+      ]);
     },
 
     skip() {

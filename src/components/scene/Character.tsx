@@ -5,12 +5,14 @@
 // la cobertura del barrido. La imagen fija es el primer cuadro del idle (mismo encuadre) y el video
 // con transparencia (1.2 MB) se pide "bajo demanda": en la primera interacción del visitante o, si no
 // hay ninguna, unos segundos después de cargar la página, y siempre cuando el navegador esté en
-// reposo; solo si el movimiento no está reducido ni hay ahorro de datos (research.md, D5 y R8;
+// reposo; solo en el menú (en las pantallas de lectura Oguri queda quieta) y solo si el movimiento no
+// está reducido ni hay ahorro de datos (research.md, D5, R8 y R10;
 // specs/003-identidad-visual-p3r/contracts/character-media.md).
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { character } from "../../content/character.ts";
 import { isWebkit, shouldLoadIdle } from "../../lib/motion/idle.ts";
 import { useMotionState } from "../../lib/motion/use-motion-state.ts";
+import { useScene } from "./SceneShell.tsx";
 
 /** Espera máxima tras cargar la página, sin ninguna interacción, antes de pedir el video. */
 const IDLE_DELAY_MS = 8000;
@@ -18,6 +20,11 @@ const IDLE_DELAY_MS = 8000;
 const SETTLE_AFTER_INTERACTION_MS = 1500;
 /** Tope de espera hasta el reposo del navegador una vez llegado el momento de pedir el video. */
 const IDLE_TIMEOUT_MS = 2000;
+/**
+ * Pausa entre el final del video y su reinicio: el video se funde a la imagen fija (el primer cuadro) y
+ * vuelve, en vez de saltar del último cuadro al primero. Iguala a `--duration-fast`, que dura el fundido.
+ */
+const LOOP_GAP_MS = 150;
 
 const FIRST_INTERACTION_EVENTS = ["pointerdown", "keydown", "touchstart", "wheel"] as const;
 
@@ -101,30 +108,35 @@ function scheduleOnDemand(callback: () => void): () => void {
 
 export function Character() {
   const { reduced, busy } = useMotionState();
+  const { view } = useScene();
   // La inelegibilidad del entorno (ahorro de datos, sin WebM, WebKit) se conoce al hidratar: en el
   // servidor se asume elegible y el cliente corrige sin discrepancia de hidratación.
   const environmentOk = useSyncExternalStore(subscribeNever, environmentAllowsIdle, () => true);
   const [state, setState] = useState<IdleState>("pending");
   const [videoSrc, setVideoSrc] = useState<string | null>(null);
+  // `true` entre el final del video y su reinicio: la imagen fija queda a la vista (fundido del bucle).
+  const [gap, setGap] = useState(false);
   const video = useRef<HTMLVideoElement | null>(null);
 
-  // Pide el video bajo demanda, si el entorno lo permite. Con movimiento reducido no se programa
-  // nada; si pasa a reducido después, se descarta más abajo al renderizar.
+  // Pide el video bajo demanda, si el entorno lo permite y Oguri está en el menú. Con movimiento
+  // reducido no se programa nada; quien entra directo a una pantalla de lectura no lo descarga.
   useEffect(() => {
-    if (reduced || !environmentOk) return;
+    if (reduced || !environmentOk || view !== "menu" || videoSrc !== null) return;
     return scheduleOnDemand(() => {
       setVideoSrc(character.idle.src);
       setState("loading");
     });
-  }, [reduced, environmentOk]);
+  }, [reduced, environmentOk, view, videoSrc]);
 
-  // Pausa el video durante las transiciones y con la pestaña oculta; lo reanuda al terminar.
+  // Reproduce solo en el menú, sin movimiento reducido y sin transición en curso; en las pantallas de
+  // lectura, con la pestaña oculta o durante el hueco del bucle se queda pausado (sin decodificar).
+  const shouldPlay = !busy && view === "menu" && !reduced && !gap;
   useEffect(() => {
     const element = video.current;
     if (!element || !videoSrc) return;
     function sync() {
       if (!element) return;
-      if (busy || document.hidden) {
+      if (!shouldPlay || document.hidden) {
         element.pause();
       } else {
         element.play().catch(() => {
@@ -137,14 +149,23 @@ export function Character() {
     sync();
     document.addEventListener("visibilitychange", sync);
     return () => document.removeEventListener("visibilitychange", sync);
-  }, [busy, videoSrc]);
+  }, [shouldPlay, videoSrc]);
 
-  // Con movimiento reducido no se muestra el video aunque ya estuviera cargado.
-  const showVideo = videoSrc !== null && !reduced;
+  // Hueco del bucle: tras el último cuadro se funde a la imagen fija y se reinicia desde el primero.
+  useEffect(() => {
+    if (!gap) return;
+    const timer = window.setTimeout(() => {
+      if (video.current) video.current.currentTime = 0;
+      setGap(false);
+    }, LOOP_GAP_MS);
+    return () => window.clearTimeout(timer);
+  }, [gap]);
+
+  const videoVisible = state === "playing" && view === "menu" && !reduced && !gap;
   const dataIdle: IdleState = reduced || !environmentOk ? "off" : state;
 
   return (
-    <div data-character-root aria-hidden="true" data-idle={dataIdle}>
+    <div data-character-root aria-hidden="true" data-idle={dataIdle} data-video={videoVisible ? "on" : "off"}>
       <div data-character>
         {/* Imagen decorativa y estática con dimensiones fijas: next/image no aporta nada (research D3). */}
         {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -157,15 +178,15 @@ export function Character() {
           fetchPriority="low"
           draggable={false}
         />
-        {showVideo ? (
+        {videoSrc !== null ? (
           <video
             ref={video}
             src={videoSrc}
             muted
-            loop
             playsInline
             preload="auto"
             onPlaying={() => setState("playing")}
+            onEnded={() => setGap(true)}
             onError={() => {
               setState("failed");
               setVideoSrc(null);

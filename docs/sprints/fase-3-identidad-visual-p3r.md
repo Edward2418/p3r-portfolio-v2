@@ -72,7 +72,7 @@ Que el menú principal y el cambio entre pantallas se vean y se sientan como el 
 - [x] CA-6 En 390, 768 y 1280 px no hay desplazamiento horizontal ni opciones tapadas por el personaje. Evidencia: `tests/e2e/mobile-layout.spec.ts` y `tests/e2e/layout.spec.ts`.
 - [x] CA-7 Con movimiento reducido no hay barridos ni idle en movimiento. Evidencia: `tests/e2e/reduced-motion.spec.ts`, `tests/e2e/character.spec.ts` y `tests/e2e/character-transition.spec.ts`.
 - [x] CA-8 Carga inicial ≤ 350 KiB, Lighthouse accesibilidad 100, axe-core sin violaciones y contraste AA. Evidencia: axe-core con 0 violaciones en 12 casos, contrastes en `tests/unit/tokens.test.ts` y Lighthouse local de 281 KiB (`research.md`, R8).
-- [ ] CA-9 Lint, compilación, pruebas unitarias y E2E pasan; `review-animations` sin hallazgos abiertos; Edward compara el resultado con la referencia visual y el video. Hecho: lint, compilación, 103 pruebas unitarias y E2E en 390, 768 y 1280 px (Chromium) y 1280 px (Firefox), desde instalación limpia (`research.md`, R9). Pendiente de Edward: `/review-animations` y la comparación con la referencia y el video (T056).
+- [ ] CA-9 Lint, compilación, pruebas unitarias y E2E pasan; `review-animations` sin hallazgos abiertos; Edward compara el resultado con la referencia visual y el video. Hecho: lint, compilación, 103 pruebas unitarias y E2E en 390, 768 y 1280 px (Chromium) y 1280 px (Firefox), desde instalación limpia (`research.md`, R9). `/review-animations` ejecutada y corregida (`research.md`, R10). Pendiente de Edward: confirmar el cierre (T063).
 
 ## 8. Fuera de alcance de esta fase
 

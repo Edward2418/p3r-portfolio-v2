@@ -157,14 +157,14 @@ test.describe("el personaje en la transición", () => {
 test.describe("movimiento reducido", () => {
   test.use({ reducedMotion: "reduce" });
 
-  test("el personaje no se desplaza: sin animaciones de transform sobre él", async ({ page }) => {
+  test("el personaje no se desplaza: solo se funde (opacidad) al cambiar de vista", async ({ page }) => {
     await openPrefetched(page, `/${lang}`);
     await observe(page);
     await optionLink(page, 1).click();
     await expect(page).toHaveURL(urlEndsWith(`/${lang}/${ids[1]}`));
     await page.waitForTimeout(600);
     const result = await probe(page);
-    expect(result.props, "con movimiento reducido el personaje no debe animarse").toEqual([]);
+    expect(result.props, "con movimiento reducido el personaje solo debe fundirse, sin transform").toEqual(["opacity"]);
     await expect(page.locator("[data-character]")).toBeVisible();
   });
 });
@@ -172,7 +172,7 @@ test.describe("movimiento reducido", () => {
 test.describe("idle durante la transición", () => {
   test.skip(({ browserName }) => browserName !== "chromium", "la pausa del idle se comprueba en Chromium");
 
-  test("el video se pausa durante la transición y se reanuda al terminar", async ({ page }) => {
+  test("el video se pausa durante la transición y, al llegar a una pantalla de lectura, sigue pausado", async ({ page }) => {
     await openPrefetched(page, `/${lang}`);
     await page.keyboard.press("a"); // la primera interacción adelanta la carga del idle
     await expect(page.locator("[data-character-root]")).toHaveAttribute("data-idle", "playing", { timeout: 15_000 });
@@ -184,6 +184,7 @@ test.describe("idle durante la transición", () => {
     await expect.poll(paused, { message: "durante la transición el video debe estar pausado" }).toBe(true);
 
     await waitForTransition(page);
-    await expect.poll(paused, { message: "al terminar la transición el video debe reanudarse" }).toBe(false);
+    // El idle solo corre en el menú: en la pantalla de destino queda pausado (ver character-motion.spec.ts).
+    await expect.poll(paused, { message: "en una pantalla de lectura el video debe seguir pausado" }).toBe(true);
   });
 });

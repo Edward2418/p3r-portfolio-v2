@@ -161,3 +161,17 @@ Realizada el 2026-10-23 tras `rm -rf node_modules .next` y `npm ci`, por etapas 
 | E2E Firefox 1280 px | 174 pasadas y 11 omitidas a propósito (gestos táctiles, limitador de CPU, pausa del idle y prueba lenta del idle, que usan CDP o cuestan tiempo y solo van en Chromium) |
 
 Una primera pasada dio un fallo real en 390 y 768 px (el fundido del video del idle aparecía en pleno barrido porque la primera interacción lo cargaba a la vez que iniciaba la transición); se corrigió con un margen de 1.5 s tras la primera interacción (R8) y se repitió todo.
+
+### R10. Revisión de animaciones de la fase 3 (T056)
+
+Revisión con la skill `review-animations` (veredicto: **Block**, con correcciones pequeñas). Se verificaron con mediciones antes de corregir, y una prueba E2E por cada una (la del splash se comprobó que falla sin la corrección):
+
+| Hallazgo | Evidencia | Corrección |
+|---|---|---|
+| Oguri aparecía de golpe al omitir el splash | Con el splash completo su opacidad sube de 0 a 1 entre 1.2 y 1.6 s; omitiéndolo a los 300 ms pasaba a 1.00 en ~80 ms: `data-splash="seen"` quitaba el retraso con la animación ya vencida | `SplashController` reinicia la entrada de Oguri solo cuando el splash se **omite** (si terminara solo, cambiar la animación por el atributo la repetiría a los 1.5 s) |
+| Salto del bucle del idle cada 10 s | Primer y último cuadro del video difieren (SSIM 0.73) | Sin `loop` nativo: al `ended` se funde a la imagen fija (150 ms) y se reinicia |
+| El video se desmontaba de golpe con movimiento reducido | Revisión del código (`showVideo`) | Sigue montado, se pausa y se oculta con `--duration-reduced` (excepción en CSS a la regla que anula las transiciones) |
+| Oguri saltaba de lado sin transición con movimiento reducido | Revisión del código (`fadeIn` solo animaba `main`) | `fadeIn(includeCharacter)`: el personaje se funde cuando cambia la vista |
+| Idle en bucle junto al texto de lectura (decisión de Edward) | Movimiento continuo junto a contenido | El idle solo se descarga y se reproduce en el menú; en las pantallas de lectura queda la imagen fija |
+
+Aceptado sin cambios: la transición completa (610–700 ms) supera los 300 ms de una interfaz y se activa con teclado, pero la exige el Principio II, es interrumpible y la visita es de tipo ocasional; el resaltado del menú (lo frecuente con teclado) no se anima. Vigilar en un móvil real (T058): la capa `fixed` del personaje cubre toda la ventana y, con `opacity` < 1 en móvil, es una capa compuesta completa; si hay tirones, limitarla a la caja del personaje.

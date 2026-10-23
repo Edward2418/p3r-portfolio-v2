@@ -59,11 +59,11 @@ Tokens en `src/app/globals.css` (única fuente; el controlador los lee de los es
 
 | Token | Valor | Uso |
 |---|---|---|
-| `--duration-wipe-out` | 170 ms | Salida con barrido |
-| `--duration-stagger-in` | 260 ms | Entrada escalonada |
+| `--duration-wipe-out` | 150 ms | Salida con barrido |
+| `--duration-stagger-in` | 240 ms | Entrada escalonada |
 | `--stagger-step` | 35 ms | Retraso entre fichas |
-| `--duration-hold` | 70 ms | Pausa |
-| `--duration-circle` | 200 ms | Cierre con círculo |
+| `--duration-hold` | 50 ms | Pausa |
+| `--duration-circle` | 170 ms | Cierre con círculo |
 | `--duration-reduced` | 120 ms | Fundido de la variante reducida |
 | `--duration-splash` | 1500 ms | Cierre automático del splash |
 | `--duration-nav-timeout` | 1500 ms | Espera máxima del destino antes de mostrarlo sin entrada escalonada |

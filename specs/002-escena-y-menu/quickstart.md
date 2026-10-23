@@ -47,10 +47,10 @@ Ejecuta `npm run build` y `npm run start`, o abre la vista previa de Vercel, con
 
 | Tramo | Referencia (ms) | Implementado (ms) | Observaciones |
 |---|---|---|---|
-| Salida con barrido (incluye cubrimiento) | ~480 (320 + 160) | 170 | Comprimida al ~35 % |
-| Entrada escalonada | ~270 | 260 | Casi a escala real |
-| Pausa | ~630 | 70 | Comprimida al ~11 % a propósito |
-| Cierre con círculo | ~170 | 200 | Ligeramente más largo para que se aprecie |
+| Salida con barrido (incluye cubrimiento) | ~480 (320 + 160) | 150 (medido ~210 con la navegación) | Comprimida al ~31 % |
+| Entrada escalonada | ~270 | 240 | Casi a escala real |
+| Pausa | ~630 | 50 | Comprimida al ~8 % a propósito |
+| Cierre con círculo | ~170 | 170 | Igual que la referencia |
 
 ## 4. Contenido y datos sin tocar componentes (SC-010)
 

@@ -1,8 +1,8 @@
 "use client";
 
 // Contenedor persistente de la escena: vive en el layout de `[lang]`, así que se conserva entre las
-// pantallas. Ofrece `navigate`, `go`, la opción activa del menú y las entradas de teclado y de
-// deslizamiento. En la historia de las transiciones, `navigate` pasa a orquestar la animación.
+// pantallas. Ofrece `navigate` (que orquesta la transición), `go`, la opción activa del menú y las
+// entradas de teclado y de deslizamiento.
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import { usePathname, useRouter } from "next/navigation";
@@ -11,6 +11,13 @@ import { neighbors, resolveScreenKey, shouldIgnoreKey } from "../../lib/motion/n
 import type { ScreenAction } from "../../lib/motion/navigation.ts";
 import { detectSwipe } from "../../lib/motion/swipe.ts";
 import { GuideBar } from "./GuideBar.tsx";
+import { TransitionLayer } from "./TransitionLayer.tsx";
+import {
+  createTransitionController,
+  prefersReducedMotion,
+  readTokens,
+  supportsWaapi,
+} from "./transition.ts";
 
 export interface SceneInfo {
   id: SceneId;
@@ -67,6 +74,7 @@ interface SceneShellProps {
 export function SceneShell({ lang, scenes, labels, children }: SceneShellProps) {
   const router = useRouter();
   const pathname = usePathname();
+  const [controller] = useState(createTransitionController);
 
   // Seguimiento de la pantalla actual y la anterior; se ajusta durante el renderizado para que el
   // menú ya nazca con la opción correcta al volver (sin un parpadeo posterior).
@@ -91,12 +99,66 @@ export function SceneShell({ lang, scenes, labels, children }: SceneShellProps) 
     logicalPath.current = pathname;
   }, [pathname]);
 
+  // Espera de la ruta destino: la resuelve el efecto de cambio de ruta cuando el destino ya se pintó.
+  const arrival = useRef<{ path: string; resolve: (arrived: boolean) => void } | null>(null);
+  const runId = useRef(0);
+
+  const waitForArrival = useCallback((path: string, timeoutMs: number) => {
+    return new Promise<boolean>((resolve) => {
+      arrival.current?.resolve(false);
+      const timer = setTimeout(() => {
+        if (arrival.current?.path === path) arrival.current = null;
+        resolve(false);
+      }, timeoutMs);
+      arrival.current = {
+        path,
+        resolve: (arrived) => {
+          clearTimeout(timer);
+          resolve(arrived);
+        },
+      };
+    });
+  }, []);
+
   const navigate = useCallback(
     (href: string) => {
-      logicalPath.current = href;
-      router.push(href);
+      const path = href.split("?")[0];
+      if (path === logicalPath.current && !controller.isBusy()) return;
+      logicalPath.current = path;
+
+      // Sin movimiento (preferencia reducida o sin Web Animations): cambio directo con fundido corto.
+      if (!supportsWaapi() || prefersReducedMotion()) {
+        controller.skip();
+        router.push(href);
+        return;
+      }
+
+      const id = ++runId.current;
+      controller.skip(); // una navegación nueva termina de inmediato la que estuviera en curso
+      router.prefetch(href);
+      void (async () => {
+        try {
+          const exited = await controller.exit();
+          if (id !== runId.current) return;
+          router.push(href);
+          const arrived = await waitForArrival(path, readTokens().navTimeout);
+          if (id !== runId.current) return;
+          if (!arrived) {
+            // El destino tardó demasiado: se muestra sin entrada escalonada cuando llegue.
+            performance.mark("scene-transition-waited");
+            controller.release();
+            return;
+          }
+          if (exited) await controller.enter();
+          else controller.release();
+        } catch {
+          // Si el movimiento falla por cualquier causa, la navegación sigue sin animación.
+          controller.release();
+          if (id === runId.current) router.push(href);
+        }
+      })();
     },
-    [router],
+    [controller, router, waitForArrival],
   );
 
   const go = useCallback(
@@ -200,8 +262,9 @@ export function SceneShell({ lang, scenes, labels, children }: SceneShellProps) 
     };
   }, []);
 
-  // Tras cada cambio de ruta: el foco va al <h1> de la pantalla (o a la opción activa del menú) y se
-  // anuncia el cambio a los lectores de pantalla. No actúa en la carga inicial.
+  // Tras cada cambio de ruta: llegada del destino (continúa la transición), entrada corta o fundido
+  // cuando el cambio no lo pidió `navigate` (botón Atrás o Adelante del navegador), foco en el <h1>
+  // (o en la opción activa del menú) y anuncio a los lectores de pantalla. No actúa en la carga inicial.
   const [announcement, setAnnouncement] = useState("");
   const isFirstRender = useRef(true);
   useEffect(() => {
@@ -209,6 +272,17 @@ export function SceneShell({ lang, scenes, labels, children }: SceneShellProps) 
       isFirstRender.current = false;
       return;
     }
+
+    const pending = arrival.current;
+    if (pending && pending.path === pathname) {
+      arrival.current = null;
+      pending.resolve(true);
+    } else if (!supportsWaapi() || prefersReducedMotion()) {
+      void controller.fadeIn();
+    } else {
+      void controller.enterShort();
+    }
+
     const frame = requestAnimationFrame(() => {
       if (sceneId) {
         document.querySelector<HTMLElement>("main h1")?.focus({ preventScroll: true });
@@ -233,6 +307,7 @@ export function SceneShell({ lang, scenes, labels, children }: SceneShellProps) 
       <div className="flex min-h-screen touch-pan-y flex-col">
         {children}
         <GuideBar />
+        <TransitionLayer />
         <div role="status" aria-live="polite" className="sr-only">
           {announcement}
         </div>

@@ -7,7 +7,7 @@ import { neighbors } from "../../lib/motion/navigation.ts";
 import { useScene } from "./SceneShell.tsx";
 
 const buttonClass =
-  "inline-flex min-h-11 min-w-11 items-center justify-center border border-cyan px-3 font-display text-lg uppercase text-cyan hover:bg-cyan hover:text-bg disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-transparent disabled:hover:text-cyan";
+  "inline-flex min-h-11 min-w-11 items-center justify-center border border-cyan px-3 font-display text-lg uppercase text-cyan transition-transform duration-(--duration-fast) ease-(--ease-out) active:scale-[0.97] hover:bg-cyan hover:text-bg disabled:cursor-not-allowed disabled:opacity-50 disabled:hover:bg-transparent disabled:hover:text-cyan";
 
 export function GuideBar() {
   const { lang, scenes, labels, sceneId, activeMenuId, navigate, go } = useScene();

@@ -34,7 +34,7 @@ export function LanguageSwitcher({ target, label }: LanguageSwitcherProps) {
       lang={target}
       aria-label={`${LANG_NAMES[target]} — ${label}`}
       onClick={rememberLanguage}
-      className="inline-flex min-h-11 items-center border border-cyan px-4 text-cyan hover:bg-cyan hover:text-bg"
+      className="inline-flex min-h-11 items-center border border-cyan px-4 text-cyan transition-transform duration-(--duration-fast) ease-(--ease-out) active:scale-[0.97] hover:bg-cyan hover:text-bg"
     >
       {LANG_NAMES[target]}
     </a>

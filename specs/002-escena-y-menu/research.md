@@ -45,12 +45,12 @@ Cada decisión indica su razón y las alternativas evaluadas. Las skills `animat
 
 | Tramo | Token | Valor | Referencia medida |
 |---|---|---|---|
-| Salida con barrido (incluye el cubrimiento) | `--duration-wipe-out` | 170 ms | ~320 ms de barrido + ~160 ms de contracción del contorno |
-| Entrada escalonada (incluye el escalonado) | `--duration-stagger-in` | 260 ms | ~270 ms (casi todas las fichas entran en ~100 ms) |
+| Salida con barrido (incluye el cubrimiento) | `--duration-wipe-out` | 150 ms | ~320 ms de barrido + ~160 ms de contracción del contorno |
+| Entrada escalonada (incluye el escalonado) | `--duration-stagger-in` | 240 ms | ~270 ms (casi todas las fichas entran en ~100 ms) |
 | Paso entre fichas | `--stagger-step` | 35 ms | ~12–15 ms por ficha en el original; 35 ms con menos fichas por pantalla |
-| Pausa | `--duration-hold` | 70 ms | ~630 ms (se comprime al ~11 %) |
-| Cierre con círculo | `--duration-circle` | 200 ms | ~170 ms |
-| **Total** | suma | **700 ms** (entre 500 y 800) | ~1.55 s |
+| Pausa | `--duration-hold` | 50 ms | ~630 ms (se comprime al ~11 %) |
+| Cierre con círculo | `--duration-circle` | 170 ms | ~170 ms |
+| **Total (suma de tokens)** | suma | **610 ms**; medido en el navegador ~720–830 ms con la versión de 700 ms, ver R4 | ~1.55 s |
 | Variante reducida | `--duration-reduced` | 120 ms | — |
 | Splash | `--duration-splash` | 1500 ms | — |
 | Espera máxima del destino | `--duration-nav-timeout` | 1500 ms | — |
@@ -181,3 +181,46 @@ Decisiones tomadas con Edward tras el análisis de consistencia entre `spec.md`,
 - **Señal de hidratación**: `SceneShell` pone `data-scene-ready="true"` en `<html>` al montar; las pruebas esperan esa señal (`tests/e2e/helpers.ts`, `openReady`) antes de pulsar teclas. Sin ella, la primera tecla podía llegar antes de que se registrara el teclado.
 - **Anuncio**: se confirmó la desviación de R1: una región `aria-live="polite"` oculta anuncia "Pantalla: {nombre}" tras cada cambio; el foco va al `<h1>` o, en el menú, a la opción activa.
 - **Clics en el menú**: los enlaces llaman a `navigate()` (con `preventDefault`) salvo clics con modificadores, que conservan el comportamiento nativo; así la transición de US4 podrá interceptarlos sin cambiar el menú.
+
+### R4. La duración medida incluye la navegación (T036 y T040)
+
+La transición completa que mide `performance.measure("scene-transition")` incluye, además de los tramos animados, la espera del destino tras la salida (`router.push` y el pintado de la pantalla nueva) y los relevos de fotogramas entre tramos. Medición con la versión inicial de los tokens (suma 700 ms), tres corridas en Chromium a 1280 px:
+
+| Tramo | Token | Medido |
+|---|---|---|
+| Salida + navegación | 170 ms | 213–238 ms |
+| Entrada escalonada | 260 ms | 277–292 ms |
+| Pausa | 70 ms | 78–85 ms |
+| Cierre | 200 ms | 197–220 ms |
+| **Total** | 700 ms | **769–828 ms** (superaba el límite de 800 ms) |
+
+El sobrecoste real es de unos 110 a 130 ms. SC-004 se mide sobre la transición completa, así que los tokens se ajustaron a una suma de **610 ms** (150 + 240 + 50 + 170) para que la medición real caiga con margen dentro de 500–800 ms. Se mantiene la proporción de la referencia (la pausa sigue siendo el tramo más comprimido). No se adelanta el `router.push` para ganar tiempo: con el barrido a medias se vería un borde de la pantalla nueva antes de que el panel termine de cubrir.
+
+### R5. Revisión del movimiento con las skills y comparación con el video (T043 y T044)
+
+Revisión con `animation-performance` y `emil-design-eng` (la skill `animate` se aplicó al diseñar el plan):
+
+| Antes | Después | Por qué |
+|---|---|---|
+| Sin feedback al pulsar los botones de la guía y el selector de idioma | `transition-transform` con `--duration-fast` y `--ease-out`, y `active:scale-[0.97]` | Los botones deben sentir que escuchan la pulsación |
+| Una referencia sin uso en `SceneShell` | Eliminada | Menos estado sin propósito |
+| (Verificado, sin cambio) propiedades animadas | Solo `transform` y `opacity`; una prueba E2E lo comprueba con los fotogramas clave | Principio II |
+| (Verificado, sin cambio) retrasos del escalonado | Se pasan a cada animación (`delay` de WAAPI), sin variables CSS heredadas | Evita recalcular estilos en los descendientes |
+| (Verificado, sin cambio) `will-change` | Solo mientras corre una animación y se limpia al terminar; no se usa en las fichas | No reservar capas de más |
+| (Verificado, sin cambio) hover | Tailwind 4 aplica `hover:` solo en dispositivos con puntero | Sin falsos positivos al tocar |
+| (Verificado, sin cambio) `transition: all` y `scale(0)` | No existen; el anillo empieza en `scale(0.1)` | Reglas de la skill |
+
+**Compromiso documentado**: la skill indica no animar acciones por teclado muy frecuentes. La especificación exige la transición completa al cambiar de pantalla, también con teclado; se mitiga con la interrupción inmediata (historia 5) y dejando el resaltado de la opción activa sin animación (instantáneo).
+
+**Comparación con el video** (grabación de la transición real de Stack → Proyectos y comparación con los cuadros de la referencia):
+
+| Tramo | Referencia | Implementación | Diferencia aceptada |
+|---|---|---|---|
+| Barrido diagonal de salida | Polígono gris-oscuro que cubre | Panel azul marino inclinado que cubre de derecha a izquierda | Color propio (identidad, Principio V) |
+| Contorno hexagonal que se contrae | Sí, sobre el fondo cubierto | Sí (cuadro de la grabación con el hexágono blanco) | Ninguna |
+| Entrada escalonada | Fichas desde abajo, personaje desde la derecha rotado | Fichas de abajo hacia arriba con `translateY` y `opacity`; el marcador del personaje entra desde la derecha y rotado en el menú | El personaje solo existe en el menú en esta fase |
+| Pausa | ~630 ms | 50 ms | Comprimida a propósito |
+| Cierre con arco circular | Arco blanco que revela y recorta las fichas | Anillo blanco que crece y se desvanece, sin recorte | Aproximación con `transform` y `opacity` (D3) |
+| Duración total | ~1.55 s | **685 ms medidos** (tokens: 610 ms) | Dentro de 500–800 ms |
+
+Pendiente: la confirmación de Edward en la revisión final con el video (T070).

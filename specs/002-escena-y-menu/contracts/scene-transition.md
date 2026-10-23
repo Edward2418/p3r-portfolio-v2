@@ -6,15 +6,15 @@ Define la secuencia de la transición, sus tokens, su variante reducida y cómo 
 
 ## Secuencia (movimiento completo)
 
-Total: **500 a 800 ms** (calibrado: 700 ms). Los valores salen de los tokens de `src/app/globals.css`.
+Total: **500 a 800 ms medidos** (suma de tokens: 610 ms, más ~110 a 130 ms de navegación y relevos de fotogramas). Los valores salen de los tokens de `src/app/globals.css`.
 
 | # | Tramo | Qué se ve | Propiedades animadas | Token |
 |---|---|---|---|---|
-| 1 | Salida | Barrido diagonal oscuro que cubre la pantalla; el título de fondo gira | `transform`, `opacity` | `--duration-wipe-out` (170 ms), curva `--ease-in-out` |
+| 1 | Salida | Barrido diagonal oscuro que cubre la pantalla; el título de fondo gira | `transform`, `opacity` | `--duration-wipe-out` (150 ms), curva `--ease-in-out` |
 | 2 | Navegación | La ruta cambia con el barrido cubriendo la pantalla | — | (se ejecuta entre 1 y 3) |
-| 3 | Entrada escalonada | Las fichas del destino suben una a una; el marcador del personaje entra desde la derecha, rotado | `transform`, `opacity` | `--duration-stagger-in` (260 ms), `--stagger-step` (35 ms), curva `--ease-out` |
-| 4 | Pausa | Todo quieto un instante | — | `--duration-hold` (70 ms) |
-| 5 | Cierre | Un disco blanco se expande y se desvanece revelando la pantalla | `transform`, `opacity` | `--duration-circle` (200 ms), curva `--ease-out` |
+| 3 | Entrada escalonada | Las fichas del destino suben una a una; el marcador del personaje entra desde la derecha, rotado | `transform`, `opacity` | `--duration-stagger-in` (240 ms), `--stagger-step` (35 ms), curva `--ease-out` |
+| 4 | Pausa | Todo quieto un instante | — | `--duration-hold` (50 ms) |
+| 5 | Cierre | Un disco blanco se expande y se desvanece revelando la pantalla | `transform`, `opacity` | `--duration-circle` (170 ms), curva `--ease-out` |
 
 Reglas:
 

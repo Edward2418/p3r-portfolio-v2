@@ -23,6 +23,8 @@ Define cómo cambian la posición, la escala y la inclinación de Oguri entre "Q
 
 Por debajo de 1024 px se mantiene la regla de la fase 3: detrás del panel, recortada por el borde derecho y atenuada (`--opacity-character-dim`, máximo 0.5), sin importar la pantalla.
 
+**Valores finales (T033, revisados a 1024, 1280 y 1920 px):** sin cambios respecto a los iniciales.
+
 ## Reglas
 
 - Las propiedades personalizadas (`--character-right`, `--character-height`, `--character-tilt`) se definen por `data-scene`; la inclinación se aplica a la imagen y al video interiores de `[data-character]`, **no** a `[data-character]`, porque este lo anima WAAPI en la transición (un solo elemento animado por JavaScript).

@@ -99,6 +99,8 @@ export function SceneShell({ lang, scenes, labels, children }: SceneShellProps) 
   const view: ViewKind = sceneId === null ? "menu" : "screen";
   // Vista anterior: decide si la llegada suena `open` (menú → pantalla) o `close` (pantalla → menú).
   const previousView = useRef<ViewKind>(view);
+  // Pantalla anterior: con movimiento reducido el personaje se funde también al pasar de una pantalla a otra.
+  const previousScene = useRef<SceneId | null>(sceneId);
 
   // Destino lógico: la ruta que se pidió más recientemente. La URL y el estado de React se actualizan
   // un instante después de pedir la navegación; si varias teclas llegan seguidas, cada una debe partir
@@ -314,6 +316,8 @@ export function SceneShell({ lang, scenes, labels, children }: SceneShellProps) 
     // Sonido de llegada: una sola vez por cambio de vista y por cualquier camino (transición completa,
     // interrupción, movimiento reducido o botón Atrás del navegador). Entre pantallas solo suena el cursor.
     const viewChanged = previousView.current !== view;
+    const sceneChanged = previousScene.current !== sceneId;
+    previousScene.current = sceneId;
     if (previousView.current === "menu" && view === "screen") play("arrive-screen");
     else if (previousView.current === "screen" && view === "menu") play("arrive-menu");
     previousView.current = view;
@@ -325,7 +329,7 @@ export function SceneShell({ lang, scenes, labels, children }: SceneShellProps) 
     } else if (skipEntrance.current) {
       skipEntrance.current = false; // llegada por una interrupción: sin entrada, el destino ya está visible
     } else if (!supportsWaapi() || prefersReducedMotion()) {
-      void controller.fadeIn(viewChanged);
+      void controller.fadeIn(viewChanged || sceneChanged);
     } else {
       void controller.enterShort();
     }
@@ -349,7 +353,7 @@ export function SceneShell({ lang, scenes, labels, children }: SceneShellProps) 
 
   return (
     <SceneContext.Provider value={value}>
-      <div data-view={view} className="relative flex min-h-screen touch-pan-y flex-col">
+      <div data-view={view} data-scene={sceneId ?? ""} className="relative flex min-h-screen touch-pan-y flex-col">
         {children}
         <GuideBar />
         <TransitionLayer />

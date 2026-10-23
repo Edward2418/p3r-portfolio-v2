@@ -218,16 +218,39 @@ body {
   height: min(78vh, 150vw);
 }
 
-/* Pantallas desde 1024 px: a la derecha, grande y fuera del panel de contenido, sin atenuar. */
+/*
+ * Pantallas desde 1024 px: a la derecha, grande y fuera del panel de contenido, sin atenuar. Cada pantalla
+ * ajusta su lado, su altura y la inclinación de la imagen con propiedades personalizadas definidas en el
+ * contenedor raíz (data-scene); la inclinación va en la imagen y el video interiores y no en
+ * [data-character], cuyo transform anima la transición (specs/004-quien-soy-y-stack/contracts/character-per-scene.md).
+ */
 @media (min-width: 1024px) {
   [data-view="screen"] [data-character-root] {
     opacity: 1;
   }
 
   [data-view="screen"] [data-character] {
-    right: 3vw;
-    height: min(90vh, 60vw);
+    right: var(--character-right, 3vw);
+    height: var(--character-height, min(90vh, 60vw));
   }
+
+  [data-view][data-scene="profile"] {
+    --character-right: 3vw;
+    --character-height: min(90vh, 60vw);
+    --character-tilt: 0deg;
+  }
+
+  [data-view][data-scene="stack"] {
+    --character-right: 2vw;
+    --character-height: min(78vh, 52vw);
+    --character-tilt: 3deg;
+  }
+}
+
+[data-character] > img,
+[data-character] > video {
+  transform: rotate(var(--character-tilt, 0deg));
+  transform-origin: 50% 100%;
 }
 
 /* Entrada inicial al abrir el sitio: CSS, tras el splash si este se muestra (no depende de React). */
@@ -269,7 +292,7 @@ html[data-motion="reduced"] [data-character] > video {
  * libre el lado derecho, donde está Oguri (contracts/scene-layout.md).
  */
 @media (min-width: 1024px) {
-  [data-view="screen"] [data-scene],
+  [data-view="screen"] main[data-scene],
   [data-view="screen"] [data-footer] {
     width: min(46rem, calc(100vw - 54vw));
     max-width: none;

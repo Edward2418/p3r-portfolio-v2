@@ -14,6 +14,8 @@ import { useMotionState } from "../../lib/motion/use-motion-state.ts";
 
 /** Espera máxima tras cargar la página, sin ninguna interacción, antes de pedir el video. */
 const IDLE_DELAY_MS = 8000;
+/** Margen tras la primera interacción: deja terminar la transición que esa interacción suele iniciar. */
+const SETTLE_AFTER_INTERACTION_MS = 1500;
 /** Tope de espera hasta el reposo del navegador una vez llegado el momento de pedir el video. */
 const IDLE_TIMEOUT_MS = 2000;
 
@@ -54,8 +56,9 @@ function scheduleWhenIdle(callback: () => void): () => void {
 }
 
 /**
- * Ejecuta `callback` en la primera interacción o, sin ella, tras `IDLE_DELAY_MS` desde que la página
- * terminó de cargar; en ambos casos esperando antes al reposo del navegador.
+ * Ejecuta `callback` en la primera interacción (con un margen para que termine la transición que suele
+ * iniciar) o, sin ella, tras `IDLE_DELAY_MS` desde que la página terminó de cargar; en ambos casos
+ * esperando antes al reposo del navegador.
  */
 function scheduleOnDemand(callback: () => void): () => void {
   let cancelIdle: (() => void) | null = null;
@@ -67,14 +70,19 @@ function scheduleOnDemand(callback: () => void): () => void {
     for (const type of FIRST_INTERACTION_EVENTS) window.removeEventListener(type, start, { capture: true });
     window.removeEventListener("load", onLoad);
   };
-  function start() {
+  function begin(settleMs: number) {
     if (started) return;
     started = true;
     stopListening();
-    cancelIdle = scheduleWhenIdle(callback);
+    timer = window.setTimeout(() => {
+      cancelIdle = scheduleWhenIdle(callback);
+    }, settleMs);
+  }
+  function start() {
+    begin(SETTLE_AFTER_INTERACTION_MS);
   }
   function onLoad() {
-    timer = window.setTimeout(start, IDLE_DELAY_MS);
+    timer = window.setTimeout(() => begin(0), IDLE_DELAY_MS);
   }
 
   for (const type of FIRST_INTERACTION_EVENTS) {
@@ -86,6 +94,7 @@ function scheduleOnDemand(callback: () => void): () => void {
   return () => {
     started = true; // evita que un evento tardío arranque la carga tras desmontar
     stopListening();
+    window.clearTimeout(timer);
     cancelIdle?.();
   };
 }

@@ -21,7 +21,7 @@
 ## Momento de carga
 
 1. El menú es utilizable (el contenido está en el HTML; no se espera nada).
-2. El video se pide "bajo demanda": en la primera interacción del visitante (`pointerdown`, `keydown`, `touchstart` o `wheel`) o, sin ella, 8 s después del evento `load` de la página. Así no entra en la medición de carga (Lighthouse y PageSpeed).
+2. El video se pide "bajo demanda": en la primera interacción del visitante (`pointerdown`, `keydown`, `touchstart` o `wheel`), con un margen de 1.5 s para que termine la transición que esa interacción suele iniciar, o, sin ella, 8 s después del evento `load` de la página. Así no entra en la medición de carga (Lighthouse y PageSpeed).
 3. Llegado ese momento se espera a `requestIdleCallback` con `timeout` de 2000 ms (respaldo: `setTimeout` de 2000 ms).
 4. Si sigue siendo elegible, se asigna el `src` del `<video muted playsinline loop>` y se llama a `play()`.
 5. Con el evento `playing`, el video aparece con un fundido de `opacity` sobre la imagen fija.

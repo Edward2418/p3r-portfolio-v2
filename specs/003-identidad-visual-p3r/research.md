@@ -142,4 +142,22 @@ Sin el video la carga inicial es de unos 282 KiB (dentro de los 350 KiB), pero e
 | `/es` (con splash) | 85, 82 y 84 | 100 | 281.3 | no / no |
 | `/es/stack` (entrada directa) | 82, 83 y 84 | 100 | 267.8 | no / no |
 
-El rendimiento queda al nivel de la fase 2 (85–86 local, el límite del framework). El usuario real que interactúa tiene el idle en pocos segundos y quien no interactúa lo tiene a los 8 s.
+El rendimiento queda al nivel de la fase 2 (85–86 local, el límite del framework). El usuario real que interactúa tiene el idle en pocos segundos y quien no interactúa lo tiene a los 8 s. Tras la primera interacción se espera además 1.5 s: esa interacción suele iniciar la primera transición y el video no debe competir con ella (una prueba de la fase 2 lo detectó, porque el fundido del video aparecía en pleno barrido).
+
+### R9. Verificación desde instalación limpia (T060)
+
+Realizada el 2026-10-23 tras `rm -rf node_modules .next` y `npm ci`, por etapas y con 2 trabajadores de Playwright (un navegador a la vez):
+
+| Etapa | Resultado |
+|---|---|
+| `npm ci` | 290 paquetes |
+| `npm run lint` | Sin errores |
+| `npm run test:unit` | 103 de 103 |
+| `npm audit --omit=dev` | 0 vulnerabilidades |
+| `npm run build` y `tsc --noEmit` | Compilación correcta; sin errores de tipos |
+| E2E Chromium 390 px | 184 pasadas y 1 omitida |
+| E2E Chromium 768 px | 182 pasadas y 3 omitidas |
+| E2E Chromium 1280 px | 183 pasadas y 2 omitidas |
+| E2E Firefox 1280 px | 174 pasadas y 11 omitidas a propósito (gestos táctiles, limitador de CPU, pausa del idle y prueba lenta del idle, que usan CDP o cuestan tiempo y solo van en Chromium) |
+
+Una primera pasada dio un fallo real en 390 y 768 px (el fundido del video del idle aparecía en pleno barrido porque la primera interacción lo cargaba a la vez que iniciaba la transición); se corrigió con un margen de 1.5 s tras la primera interacción (R8) y se repitió todo.

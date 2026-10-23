@@ -159,13 +159,13 @@ Proyecto único en la raíz del repositorio: `src/`, `tests/`, `public/` (ver pl
 
 ### Pruebas de la historia (escribirlas primero y comprobar que fallan)
 
-- [ ] T041 [P] [US6] Crear `tests/e2e/mobile-layout.spec.ts`: a 390 px, `elementFromPoint` en el centro de cada una de las cinco opciones devuelve su enlace (nunca el personaje); cada opción mide al menos 44 px de alto y casi todo el ancho; sin desplazamiento horizontal en el menú y en las cinco pantallas a 390, 768 y 1280 px; en horizontal (844×390) las cinco opciones siguen alcanzables y sin recortes; con zoom del texto al 200 % el menú sigue siendo utilizable; la opacidad calculada del personaje en móvil no supera `0.5` (token `--opacity-character-dim`).
+- [x] T041 [P] [US6] Crear `tests/e2e/mobile-layout.spec.ts`: a 390 px, `elementFromPoint` en el centro de cada una de las cinco opciones devuelve su enlace (nunca el personaje); cada opción mide al menos 44 px de alto y casi todo el ancho; sin desplazamiento horizontal en el menú y en las cinco pantallas a 390, 768 y 1280 px; en horizontal (844×390) las cinco opciones siguen alcanzables y sin recortes; con zoom del texto al 200 % el menú sigue siendo utilizable; la opacidad calculada del personaje en móvil no supera `0.5` (token `--opacity-character-dim`).
 
 ### Implementación de la historia
 
-- [ ] T042 [US6] Ajustar `src/app/globals.css` y `src/components/scene/Character.tsx` para la vista móvil: recorte con `overflow: clip` en el contenedor del personaje (no en la página), opacidad de `--opacity-character-dim`, sin ocupar espacio y por debajo del contenido; en horizontal reducir el tamaño del personaje.
-- [ ] T043 [US6] Ajustar `src/components/menu/MainMenu.tsx` y el panel/título vertical para móvil: fichas a todo el ancho con al menos 44 px de alto, banda estrecha del panel sin tapar texto y sin desplazamiento horizontal.
-- [ ] T044 [US6] Revisar en 390 px y en horizontal con capturas (y en un móvil real si es posible), y corregir lo que quede mal.
+- [x] T042 [US6] Ajustar `src/app/globals.css` y `src/components/scene/Character.tsx` para la vista móvil: recorte con `overflow: clip` en el contenedor del personaje (no en la página), opacidad de `--opacity-character-dim`, sin ocupar espacio y por debajo del contenido; en horizontal reducir el tamaño del personaje.
+- [x] T043 [US6] Ajustar `src/components/menu/MainMenu.tsx` y el panel/título vertical para móvil: fichas a todo el ancho con al menos 44 px de alto, banda estrecha del panel sin tapar texto y sin desplazamiento horizontal.
+- [x] T044 [US6] Revisar en 390 px y en horizontal con capturas (y en un móvil real si es posible), y corregir lo que quede mal.
 
 **Punto de control**: el menú es utilizable en móvil. Commit: `feat(menu): adaptar el menú y el personaje al móvil`.
 

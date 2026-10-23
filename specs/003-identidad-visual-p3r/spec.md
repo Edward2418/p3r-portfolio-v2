@@ -153,7 +153,7 @@ Como Edward, quiero que el arte, los sonidos, el título vertical y los textos n
 
 - **FR-001**: El menú principal MUST mostrar un fondo en degradado de cian a azul profundo, un panel blanco inclinado con un título vertical y las cinco opciones inclinadas, con la activa en blanco y con borde rojo.
 - **FR-002**: El título vertical del panel y los textos nuevos MUST salir de datos bilingües, no de los componentes.
-- **FR-003**: El menú MUST mostrar a Oguri como imagen principal sin que cubra ninguna opción en 390, 768 y 1280 px. En móvil, Oguri MUST ir detrás de las opciones, recortada por el borde derecho y con menos opacidad (como máximo 0.5), sin ocupar espacio del diseño; las opciones MUST ir encima y ocupar todo el ancho.
+- **FR-003**: El menú MUST mostrar a Oguri como imagen principal sin que cubra ninguna opción en 390, 768 y 1280 px. En móvil, Oguri MUST ir detrás de las opciones, recortada por el borde derecho y con menos opacidad (como máximo 0.5), sin ocupar espacio del diseño; las opciones MUST ir encima y ocupar todo el ancho disponible (menos la banda del título vertical, que queda visible a la izquierda).
 - **FR-004**: Oguri MUST entrar con una animación breve al mostrar el menú, y el menú MUST ser utilizable sin esperar a que termine.
 - **FR-005**: El movimiento en reposo de Oguri MUST empezar a cargarse cuando el navegador quede en reposo tras cargar el menú, con un tope de unos 2 s, MUST NOT bloquear la carga inicial ni competir con el contenido y MUST tener una imagen fija como alternativa.
 - **FR-006**: El movimiento en reposo MUST NOT cargarse ni reproducirse con movimiento reducido (del sistema o del sitio) ni con el ahorro de datos activado.

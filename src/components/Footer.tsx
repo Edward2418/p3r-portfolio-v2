@@ -6,7 +6,7 @@ import { t } from "../lib/i18n/t.ts";
 export function Footer({ lang }: { lang: Lang }) {
   return (
     <footer className="relative z-10 mt-auto px-4 pb-32 pt-6 text-sm">
-      <p className="mx-auto max-w-3xl bg-navy px-4 py-3">{t("nonAffiliation", lang)}</p>
+      <p data-footer className="mx-auto max-w-3xl bg-navy px-4 py-3">{t("nonAffiliation", lang)}</p>
     </footer>
   );
 }

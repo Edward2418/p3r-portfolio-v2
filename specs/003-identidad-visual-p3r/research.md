@@ -89,3 +89,27 @@ Cada decisión indica su razón y las alternativas evaluadas. Las skills `animat
 
 - **Decisión**: además de las pruebas, se compara el resultado con la referencia visual (captura de la v1) y con el video de referencia con capturas de Playwright (o con Claude in Chrome si está conectada) en 390, 768 y 1280 px, y se ejecuta `review-animations` (la lanza Edward) antes de cerrar la fase.
 - **Razón**: Principio II y la constitución: el movimiento se compara con la referencia, no "a ojo".
+
+## Notas de implementación (Fase 3)
+
+### R1. Póster e idle limpios (T027, D3)
+
+- El póster salía del video con fondo verde recortado y dejaba un halo verdoso sobre el panel blanco. Se probaron tres limpiezas con ffmpeg: `despill` (quita el verde pero vira el amarillo a naranja), doble erosión del alfa (come hebras finas del cabello) y **una erosión de un píxel** (sin halo y sin alterar colores ni detalles). Se eligió la última.
+- La misma limpieza se aplicó al video (decodificado con `libvpx-vp9` para leer el alfa y vuelto a codificar con `yuva420p`, `crf 33`): **de 1.8 MB a 1.2 MB** y con `alpha_mode` presente. El póster pasó de 54 KB a 37 KB.
+- `portrait.webp` (115 KB) no se usa en ninguna parte y se retiró del repositorio.
+
+### R2. La inclinación va en el enlace, no en el li (US1)
+
+La entrada escalonada de la fase 2 anima el `transform` del `<li data-stagger>` con WAAPI; si el `<li>` llevara también la inclinación, la animación la pisaría y la ficha "saltaría". La inclinación (`skewX(var(--angle-skew))`) se aplica al enlace interior (`[data-menu-item]`).
+
+### R3. Capas sin contexto de apilamiento (US1)
+
+El fondo es una capa `fixed` con `z-index: -1` y el contenido va en `relative z-10`; el personaje es una capa `fixed` de `z-index: 0`. La capa del personaje cubre la ventana con `overflow: clip` y su caja interior `[data-character]` es la que anima la transición, de modo que la entrada "desde la derecha" no se recorta y la atenuación (opacidad de la capa) no compite con la animación de opacidad.
+
+### R4. Contraste verificable (US1)
+
+axe no puede calcular el contraste de texto sobre un panel translúcido encima de un degradado; el panel de contenido es opaco (`--color-navy`) y los controles del encabezado, la guía y el pie llevan ficha marino. Quedan solo avisos de solapamiento geométrico (la guía fija sobre el contenido al hacer scroll).
+
+### R5. Animación del personaje (T029, skills animate y animation-performance)
+
+Solo `transform` y `opacity`; la entrada inicial es CSS (`character-in`, 300 ms, `--ease-out`) con retraso igual al 80 % del splash, el fundido imagen a video es una transición de `opacity` de 150 ms y el video se pausa durante las transiciones (`data-scene-busy`) y con la pestaña oculta. No hay `transition: all` ni `will-change` permanente.

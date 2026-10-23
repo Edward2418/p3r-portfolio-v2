@@ -148,6 +148,120 @@ body {
   display: none;
 }
 
+/*
+ * Personaje (src/components/scene/Character.tsx). La capa cubre la ventana y recorta lo que se sale por
+ * los bordes (no recibe punteros ni ocupa espacio del diseño); `[data-character]` es la caja posicionada
+ * que anima la transición (transform y opacity). La atenuación va en la capa, no en la caja, para no
+ * competir con la animación de opacidad. La posición cambia con la vista sin animarse, mientras el
+ * barrido cubre la pantalla (contracts/scene-layout.md).
+ */
+[data-character-root] {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: clip;
+  pointer-events: none;
+  opacity: var(--opacity-character-dim);
+}
+
+[data-character] {
+  position: absolute;
+  bottom: 0;
+  aspect-ratio: 540 / 960;
+  transform-origin: 50% 100%;
+}
+
+[data-character] > img,
+[data-character] > video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: 50% 100%;
+}
+
+/* El video aparece sobre la imagen cuando empieza a reproducirse. */
+[data-character] > video {
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+[data-character-root][data-idle="playing"] > [data-character] > video {
+  opacity: 1;
+}
+
+/* Menú, ancho de móvil: detrás de las opciones, recortado por el borde derecho y atenuado. */
+[data-view="menu"] [data-character] {
+  right: -22vw;
+  height: min(86vh, 160vw);
+}
+
+/* Menú desde 768 px: a la izquierda, grande y sobre el panel blanco, sin atenuar. */
+@media (min-width: 768px) {
+  [data-view="menu"] [data-character-root] {
+    opacity: 1;
+  }
+
+  [data-view="menu"] [data-character] {
+    right: auto;
+    left: 3vw;
+    height: min(94vh, 80vw);
+  }
+}
+
+/* Pantallas, ancho estrecho: detrás del panel de contenido, recortado y atenuado. */
+[data-view="screen"] [data-character] {
+  right: -22vw;
+  height: min(78vh, 150vw);
+}
+
+/* Pantallas desde 1024 px: a la derecha, grande y fuera del panel de contenido, sin atenuar. */
+@media (min-width: 1024px) {
+  [data-view="screen"] [data-character-root] {
+    opacity: 1;
+  }
+
+  [data-view="screen"] [data-character] {
+    right: 3vw;
+    height: min(90vh, 60vw);
+  }
+}
+
+/* Entrada inicial al abrir el sitio: CSS, tras el splash si este se muestra (no depende de React). */
+@keyframes character-in {
+  from {
+    transform: translateX(10%) rotate(4deg);
+    opacity: 0;
+  }
+}
+
+[data-character] {
+  animation: character-in var(--duration-character-in) var(--ease-out) backwards;
+}
+
+html:not([data-splash="seen"]) [data-character] {
+  animation-delay: calc(var(--duration-splash) * 0.8);
+}
+
+html[data-motion="reduced"] [data-character] {
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-character] {
+    animation: none;
+  }
+}
+
+/* En el menú de escritorio el aviso del pie queda en la columna derecha, sin tapar a Oguri. */
+@media (min-width: 768px) {
+  [data-view="menu"] [data-footer] {
+    max-width: none;
+    margin-left: 46%;
+  }
+}
+
 /* Fichas inclinadas del menú: la inclinación sale del token y el texto se inclina con la ficha. */
 [data-menu-item] {
   transform: skewX(var(--angle-skew));

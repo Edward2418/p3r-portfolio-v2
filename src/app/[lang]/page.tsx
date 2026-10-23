@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation";
-import { CharacterSlot } from "../../components/menu/CharacterSlot.tsx";
 import { MainMenu } from "../../components/menu/MainMenu.tsx";
 import { Splash } from "../../components/Splash.tsx";
 import { menu } from "../../content/menu.ts";
@@ -23,8 +22,10 @@ export default async function Page({ params }: PageProps<"/[lang]">) {
       className="relative z-10 mx-auto grid w-full max-w-5xl flex-1 items-center gap-8 px-4 pb-32 pt-10 md:grid-cols-[1fr_1.2fr]"
     >
       <h1 className="sr-only">{t("siteTitle", lang)}</h1>
-      <CharacterSlot lang={lang} />
-      <MainMenu lang={lang} label={t("menuLabel", lang)} options={options} />
+      {/* La columna izquierda queda libre en escritorio: allí está Oguri, que vive en el layout. */}
+      <div className="pl-20 md:col-start-2 md:pl-0">
+        <MainMenu lang={lang} label={t("menuLabel", lang)} options={options} />
+      </div>
       <Splash lang={lang} />
     </main>
   );

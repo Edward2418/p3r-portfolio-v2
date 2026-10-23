@@ -52,7 +52,6 @@ export const uiText = {
     es: "Tu sistema ya pide movimiento reducido.",
     en: "Your system already asks for reduced motion.",
   },
-  characterLabel: { es: "Marcador del personaje", en: "Character placeholder" },
   panelTitle: { es: "PORTFOLIO", en: "PORTFOLIO" },
   soundToggleLabel: { es: "Sonido", en: "Sound" },
   soundOn: { es: "Activado", en: "On" },

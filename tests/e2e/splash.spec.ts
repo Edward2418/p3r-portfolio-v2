@@ -65,10 +65,14 @@ test.describe("splash", () => {
   test("aparece en la primera visita y se cierra solo en un máximo de 1.5 s", async ({ page }) => {
     await page.goto(`/${lang}`, { waitUntil: "commit" });
     await expect(splash(page)).toBeVisible();
-    const startedAt = Date.now();
+    // La duración se comprueba en la propia animación (no con el reloj de pared, que depende de la carga
+    // de la máquina): el cierre automático dura como máximo 1.5 s.
+    const duration = await splash(page).evaluate(
+      (el) => (el.getAnimations()[0]?.effect?.getTiming().duration as number | undefined) ?? null,
+    );
+    expect(duration, "el splash debe tener una animación de cierre automático").not.toBeNull();
+    expect(duration!, "el cierre automático dura como máximo 1.5 s").toBeLessThanOrEqual(1500);
     await expect(splash(page)).toBeHidden({ timeout: 4000 });
-    const elapsed = Date.now() - startedAt;
-    expect(elapsed, "el splash debe cerrarse solo en un máximo de 1.5 s (con margen de la prueba)").toBeLessThan(2000);
     await expect(menuLinks(page).first()).toBeVisible();
   });
 

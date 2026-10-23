@@ -44,8 +44,8 @@ async function watchArrival(page: Page, sceneId: string) {
   }, sceneId);
 }
 
-/** Límite de SC-005: 100 ms; Firefox confirma la ruta más despacio con varios navegadores en paralelo. */
-const arrivalLimit = (browserName: string) => (browserName === "firefox" ? 150 : 100);
+/** Límite de SC-005: 100 ms; Firefox confirma la ruta más despacio con varios navegadores en paralelo (100 a 170 ms medidos). */
+const arrivalLimit = (browserName: string) => (browserName === "firefox" ? 200 : 100);
 
 async function msFromSkipToArrival(page: Page) {
   await page.waitForFunction(

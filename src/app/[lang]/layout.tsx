@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { lang as getLang } from "next/root-params";
+import { Footer } from "../../components/Footer.tsx";
 import { LanguageSwitcher } from "../../components/LanguageSwitcher.tsx";
 import { anton, inter } from "../fonts.ts";
 import { isLang, LANGS } from "../../lib/i18n/config.ts";
@@ -38,10 +39,11 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
         >
           {t("skipToContent", lang)}
         </a>
-        <header className="mx-auto flex w-full max-w-3xl justify-end px-4 pt-4">
+        <header className="mx-auto flex w-full max-w-5xl justify-end px-4 pt-4">
           <LanguageSwitcher target={lang === "es" ? "en" : "es"} label={t("switchLanguage", lang)} />
         </header>
         {children}
+        <Footer lang={lang} />
       </body>
     </html>
   );

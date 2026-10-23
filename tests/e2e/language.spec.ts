@@ -1,5 +1,5 @@
 import { expect, test } from "@playwright/test";
-import { uiText } from "../../src/content/index.ts";
+import { menu, uiText } from "../../src/content/index.ts";
 
 type Lang = "es" | "en";
 
@@ -13,29 +13,46 @@ function leakedTexts(visible: string, otherLang: Lang): string[] {
   return Object.values(uiText)
     .filter((text) => text.es !== text.en)
     .map((text) => text[otherLang])
-    .filter((text) => visible.includes(text));
+    .filter((text) => containsWholeText(visible, text));
+}
+
+/** Busca el texto como palabra o frase completa (para que "Back" no coincida con "Backend"). */
+function containsWholeText(haystack: string, text: string): boolean {
+  const escaped = text.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return new RegExp(`(^|[^\\p{L}])${escaped}($|[^\\p{L}])`, "u").test(haystack);
 }
 
 test.describe("selector de idioma", () => {
   test.use({ locale: "es-MX" });
 
-  test("cambia de /es a /en y actualiza todos los textos", async ({ page }) => {
+  test("cambia de /es a /en desde el menú y actualiza todos los textos", async ({ page }) => {
     await page.goto("/es");
     await page.getByRole("link", { name: switchName.es }).click();
 
     await expect(page).toHaveURL(/\/en$/);
     await expect(page.locator("html")).toHaveAttribute("lang", "en");
+    const firstOption = page.getByRole("navigation", { name: uiText.menuLabel.en }).getByRole("link").first();
+    await expect(firstOption).toHaveText(menu[0].name.en);
+    expect(leakedTexts(await page.locator("body").innerText(), "es")).toEqual([]);
+  });
+
+  test("cambia de /es a /en en una pantalla y conserva la pantalla", async ({ page }) => {
+    await page.goto("/es/projects");
+    await page.getByRole("link", { name: switchName.es }).click();
+
+    await expect(page).toHaveURL(/\/en\/projects$/);
+    await expect(page.locator("html")).toHaveAttribute("lang", "en");
     await expect(page.getByRole("heading", { level: 2, name: uiText.sectionProjects.en })).toBeVisible();
     expect(leakedTexts(await page.locator("body").innerText(), "es")).toEqual([]);
   });
 
-  test("cambia de /en a /es y actualiza todos los textos", async ({ page }) => {
-    await page.goto("/en");
+  test("cambia de /en a /es en una pantalla y conserva la pantalla", async ({ page }) => {
+    await page.goto("/en/stack");
     await page.getByRole("link", { name: switchName.en }).click();
 
-    await expect(page).toHaveURL(/\/es$/);
+    await expect(page).toHaveURL(/\/es\/stack$/);
     await expect(page.locator("html")).toHaveAttribute("lang", "es");
-    await expect(page.getByRole("heading", { level: 2, name: uiText.sectionProjects.es })).toBeVisible();
+    await expect(page.getByRole("heading", { level: 2, name: uiText.sectionStack.es })).toBeVisible();
     expect(leakedTexts(await page.locator("body").innerText(), "en")).toEqual([]);
   });
 

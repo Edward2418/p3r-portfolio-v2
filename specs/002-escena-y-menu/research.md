@@ -159,3 +159,18 @@ Decisiones tomadas con Edward tras el análisis de consistencia entre `spec.md`,
 - **U2, marca provisional del menú**: se quita el campo `provisional` de `MenuOption`; sus descripciones son textos de interfaz y ninguna parte los mostraría.
 - **I1, calibración**: se adelanta al final de la historia de las transiciones; la ruta del video de referencia se pide antes de empezar esa historia.
 - **E1 a E3 y E5**: se añaden pruebas de acceso a las tres pantallas en 3 interacciones o menos, de títulos por pantalla e idioma, de la alternativa sin WAAPI y de ausencia de peticiones de audio y video.
+
+## Registro de implementación (cambios respecto al plan)
+
+### R1. Guías de Next 16.4.2 leídas (T002)
+
+- `use-router.md`: `router.push(href, { scroll })` y `router.prefetch(href)` existen como se planeó; `Link` precarga las rutas visibles en producción. Por defecto una navegación desplaza al inicio de la página.
+- `preventing-flash-before-hydration.md`: confirma el enfoque del script en línea que cambia atributos antes de pintar, con `suppressHydrationWarning` en el elemento modificado (aquí `<html>`); un script insertado por actualización del DOM no se ejecuta en navegaciones suaves, pero el nuestro solo se necesita en la carga completa.
+- `generate-metadata.md` y `use-pathname.md`: sin cambios respecto a la fase 1.
+- **Desviación**: la documentación de esta versión no menciona el anunciador de rutas integrado. Para garantizar FR-020 se añade una región `aria-live="polite"` visualmente oculta en `SceneShell` que anuncia el nombre de la pantalla tras cada cambio, además del `<title>` por ruta y del foco en el `<h1>`.
+
+### R2. Título de las pantallas y encabezados (T009, T015–T022)
+
+- El título del documento de cada pantalla es `{nombre de la opción} | {título del sitio}` (no se usa un segundo guion largo porque el título del sitio ya lo contiene); lo calcula `src/lib/scene/titles.ts`.
+- El menú tiene un `<h1>` solo para lectores de pantalla con el título del sitio; cada pantalla tiene un único `<h1>` con el nombre de la opción y el nombre del perfil pasa a `<h2>`.
+- El título de fondo del menú se dibuja con un pseudoelemento (`content: attr(data-title)`) para que no cuente como texto del documento.

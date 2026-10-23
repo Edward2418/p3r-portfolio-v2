@@ -22,7 +22,21 @@
   --duration-fast: 150ms;
   --duration-base: 250ms;
   --duration-slow: 600ms;
+
+  /* Transición de escena, calibrada con el video de referencia
+     (specs/002-escena-y-menu/research.md, D4). La suma
+     wipe-out + stagger-in + hold + circle debe estar entre 500 y 800 ms. */
+  --duration-wipe-out: 170ms;
+  --duration-stagger-in: 260ms;
+  --stagger-step: 35ms;
+  --duration-hold: 70ms;
+  --duration-circle: 200ms;
+  --duration-reduced: 120ms;
+  --duration-splash: 1500ms;
+  --duration-nav-timeout: 1500ms;
+
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
 }
 
 /* Tipografías: las variables --font-anton e --font-inter las define next/font. */

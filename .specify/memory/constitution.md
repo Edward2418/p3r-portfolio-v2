@@ -42,7 +42,7 @@ comerciales. Debe tener identidad propia y no parecer una copia del juego.
 *Razón:* credibilidad ante reclutadores y cumplimiento de derechos de terceros.
 
 ### VI. Desarrollo guiado por especificación, por fases y con trazabilidad
-Se trabaja con Spec Kit en las seis fases de la sección 14 de `docs/project-context.md`, en orden y
+Se trabaja con Spec Kit en las fases de la sección 14 de `docs/project-context.md`, en orden y
 sin implementar todo de una vez. Cada fase MUST terminar con algo demostrable y probado antes de
 pasar a la siguiente, y su insumo MUST estar en `docs/sprints/fase-N-<nombre>.md` antes de
 `/speckit.specify`. MUST mantenerse la trazabilidad objetivo → requisito → historia → fase →
@@ -102,4 +102,4 @@ resuelve actualizando ambos con aprobación de Edward.
   y después del diseño, y cada revisión de fase MUST comprobar su cumplimiento. Toda complejidad o
   desviación MUST justificarse por escrito.
 
-**Version**: 1.0.0 | **Ratified**: 2026-10-22 | **Last Amended**: 2026-10-22
+**Version**: 1.0.1 | **Ratified**: 2026-10-22 | **Last Amended**: 2026-10-23

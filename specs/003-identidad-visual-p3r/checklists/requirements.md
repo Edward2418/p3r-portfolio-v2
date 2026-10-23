@@ -34,4 +34,4 @@
 - `transform` y `opacity` (FR-010) aparecen por mandato de la constitución (principio II), igual que en la fase 2; se mantienen como restricción y no como diseño.
 - Las decisiones que se asumen (título "PORTFOLIO", una sola pose, sonido de subida de nivel al activar, preferencia en el navegador) están en Supuestos y se pueden revisar con `/speckit-clarify`.
 - El insumo `docs/sprints/fase-3-identidad-visual-p3r.md` existe antes de la especificación (principio VI).
-- La fase se intercala antes de "Quién soy y Stack" (ahora fase 4). La constitución menciona "seis fases"; ver la propuesta de enmienda pendiente de aprobación de Edward.
+- La fase se intercala antes de "Quién soy y Stack" (ahora fase 4). La constitución menciona "seis fases"; la constitución se enmendó a 1.0.1 (2026-10-23) para decir "las fases de la sección 14".

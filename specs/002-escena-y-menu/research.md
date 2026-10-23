@@ -257,3 +257,16 @@ Pendiente: la confirmación de Edward en la revisión final con el video (T070).
 | (Verificado) condicionales | Ternarios o retorno temprano, sin `&&` con valores que puedan renderizarse | `rendering-conditional-render` |
 | (Verificado) contexto de `SceneShell` | Valor memoizado y funciones estables con `useCallback` | Evita renders de los consumidores |
 | (Verificado) datos de los layouts | `scenes` y `labels` ya traducidos desde el servidor | No viaja el diccionario completo |
+
+### R10. Rendimiento medido con la fase 2 (T072)
+
+Lighthouse 12 móvil sobre la compilación de producción local, el 2026-10-22 (dos corridas cada una, estables):
+
+| Ruta | Rendimiento | Accesibilidad | SEO | Prácticas | LCP | TBT | KiB |
+|---|---|---|---|---|---|---|---|
+| `/es` (visita nueva, con splash) | 86 | 100 | 100 | 96 | 2.7–2.8 s | 410–440 ms | 240.5 |
+| `/es/stack` (entrada directa, sin splash) | 85 | 100 | 100 | 96 | 2.9 s | 410 ms | 228.3 |
+
+- **Sin regresión respecto a la fase 1** (85–86 local; 208 KiB). La carga inicial sube unos 20–30 KiB por el JavaScript de la escena (menú, transición, splash, interruptor) y sigue muy por debajo de 350 KiB. El rendimiento local está al nivel de una página "hola mundo" de Next.js en esta máquina (86–89, ver R9 de la fase 1), así que el límite es el entorno de ejecución de React y Next.
+- **Splash**: no empeora el rendimiento medido (el splash es una capa en el HTML del servidor con una animación CSS de opacidad, sin JavaScript para cerrarse).
+- Pendiente: medir en la dirección pública de Vercel tras fusionar (la misma prueba que dio 100 en PageSpeed Insights para la fase 1).

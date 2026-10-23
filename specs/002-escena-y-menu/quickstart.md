@@ -70,8 +70,9 @@ Ejecuta `npm run build` y `npm run start`, o abre la vista previa de Vercel, con
 
 | Fecha | Dirección | Condición | Rendimiento | Accesibilidad | KiB |
 |---|---|---|---|---|---|
-| (pendiente) | | Splash visible | | | |
-| (pendiente) | | Splash cerrado | | | |
+| 2026-10-22 | `http://localhost:3200/es` (producción local) | Splash visible (visita nueva) | 86 (2 corridas) | 100 | 240.5 |
+| 2026-10-22 | `http://localhost:3200/es/stack` (producción local) | Entrada directa, sin splash | 85 (2 corridas) | 100 | 228.3 |
+| (pendiente) | Dirección pública de Vercel | Splash visible y entrada directa | | | |
 
 ## 6. Despliegue
 

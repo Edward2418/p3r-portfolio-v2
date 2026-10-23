@@ -46,7 +46,9 @@ Comprueban, entre otras cosas: ninguna petición de `idle.webm` ni de `/audio/` 
 |---|---|---|---|---|---|
 | 2026-10-23 | `/es` (producción local) | Splash visible, idle bajo demanda | 85, 82 y 84 | 100 | 281.3 |
 | 2026-10-23 | `/es/stack` (producción local) | Entrada directa, sin splash | 82, 83 y 84 | 100 | 267.8 |
-| (pendiente) | Dirección pública de Vercel | Splash visible y entrada directa | | | |
+| 2026-10-23 | `https://p3r-portfolio-v2.vercel.app/es` (producción) | Splash visible, idle bajo demanda | 84, 87 y 87 | 100 | 285.2 |
+| 2026-10-23 | `https://p3r-portfolio-v2.vercel.app/es/stack` (producción) | Entrada directa, sin splash | 87, 88 y 85 | 100 | 272.2 |
+| (pendiente) | PageSpeed Insights (web de Google) | Lo ejecuta Edward | | | |
 
 Metas: carga inicial ≤ 350 KiB, accesibilidad 100 y rendimiento ≥ 90 en la dirección pública (en local, al nivel de la fase 2: 85 a 86). axe-core debe dar 0 violaciones en el menú y las cinco pantallas, en español e inglés, a 390 y 1280 px.
 

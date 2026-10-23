@@ -3,7 +3,7 @@
 > **Documento de contexto para desarrollo asistido por IA (Claude Code + Spec Kit)**
 >
 > **Nombre del proyecto:** Portafolio personal de Edward Negrete (v2)
-> **Estado:** Fase 1 (Base y datos) completada el 2026-10-22; fase 2 (Escena y menú) fusionada a `main` el 2026-10-23; fase 3 (Identidad visual P3R, intercalada por decisión de Edward) implementada y en revisión
+> **Estado:** Fase 1 (Base y datos) completada el 2026-10-22; fase 2 (Escena y menú) fusionada a `main` el 2026-10-23; fase 3 (Identidad visual P3R, intercalada por decisión de Edward) fusionada a `main` el 2026-10-23; pendientes de Edward: lector de pantalla, móvil real y PageSpeed
 > **Tipo:** Portafolio profesional y proyecto de aprendizaje
 > **Fecha de redacción:** 22/10/2026
 

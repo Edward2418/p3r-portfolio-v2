@@ -1,6 +1,6 @@
 import { expect, test } from "@playwright/test";
 import type { Page } from "@playwright/test";
-import { menu, profile, uiText } from "../../src/content/index.ts";
+import { menu, profile, trajectory, uiText } from "../../src/content/index.ts";
 import { openReady } from "./helpers.ts";
 
 // Pantalla "Quién soy" (specs/004-quien-soy-y-stack, historias 1 y 2).
@@ -53,3 +53,60 @@ for (const lang of LANGS) {
     });
   });
 }
+
+// --- Trayectoria (historia 2) ---
+
+const trajectorySection = (page: Page) => page.locator('section[aria-labelledby="trajectory-title"]');
+
+for (const lang of LANGS) {
+  test.describe(`trayectoria de Quién soy en /${lang}`, () => {
+    test("es una lista ordenada con los cinco hitos en orden cronológico", async ({ page }) => {
+      await openReady(page, `/${lang}/${menu[0].id}`);
+      await expect(trajectorySection(page).getByRole("heading", { level: 2 })).toHaveText(uiText.sectionTrajectory[lang]);
+      const items = trajectorySection(page).locator("ol > li");
+      await expect(items).toHaveCount(trajectory.length);
+      for (const [index, entry] of trajectory.entries()) {
+        await expect(items.nth(index)).toContainText(entry.period[lang]);
+        await expect(items.nth(index)).toContainText(entry.title[lang]);
+        if (entry.description) await expect(items.nth(index)).toContainText(entry.description[lang]);
+      }
+    });
+
+    test("el hito actual lleva la etiqueta Actual y la meta la etiqueta Meta con contorno punteado", async ({ page }) => {
+      await openReady(page, `/${lang}/${menu[0].id}`);
+      const current = trajectorySection(page).locator('li[data-kind="current"]');
+      const goal = trajectorySection(page).locator('li[data-kind="goal"]');
+      await expect(current).toHaveCount(1);
+      await expect(goal).toHaveCount(1);
+      await expect(current).toContainText(uiText.trajectoryCurrent[lang]);
+      await expect(goal).toContainText(uiText.trajectoryGoal[lang]);
+      await expect(goal).toHaveCSS("border-left-style", "dashed");
+      await expect(current).toHaveCSS("border-left-style", "solid");
+    });
+
+    test("la meta no muestra año y es el último hito", async ({ page }) => {
+      await openReady(page, `/${lang}/${menu[0].id}`);
+      const items = trajectorySection(page).locator("ol > li");
+      const last = items.last();
+      await expect(last).toHaveAttribute("data-kind", "goal");
+      expect(await last.innerText(), "la meta no debe mostrar un año").not.toMatch(/\d{4}/);
+    });
+
+    test("todos los hitos muestran la etiqueta Provisional", async ({ page }) => {
+      await openReady(page, `/${lang}/${menu[0].id}`);
+      const items = trajectorySection(page).locator("ol > li");
+      for (let index = 0; index < trajectory.length; index++) {
+        await expect(items.nth(index)).toContainText(uiText.provisional[lang]);
+      }
+    });
+  });
+}
+
+test("al cambiar de idioma la pantalla se conserva y la trayectoria cambia de idioma", async ({ page }) => {
+  await openReady(page, `/es/${menu[0].id}`);
+  await expect(trajectorySection(page).getByRole("heading", { level: 2 })).toHaveText(uiText.sectionTrajectory.es);
+  await page.getByRole("link", { name: uiText.switchLanguage.es }).click();
+  await expect(page).toHaveURL(new RegExp(`/en/${menu[0].id}$`));
+  await expect(trajectorySection(page).getByRole("heading", { level: 2 })).toHaveText(uiText.sectionTrajectory.en);
+  await expect(trajectorySection(page)).toContainText(trajectory[0].title.en);
+});

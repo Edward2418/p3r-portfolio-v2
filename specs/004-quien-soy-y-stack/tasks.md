@@ -89,14 +89,14 @@ Proyecto único en la raíz del repositorio: `src/`, `tests/`, `public/` (ver pl
 
 ### Pruebas de la historia (escribirlas primero y comprobar que fallan)
 
-- [ ] T018 [P] [US2] Ampliar `tests/e2e/profile.spec.ts` (parte de la trayectoria): una sección con `<h2>` "Trayectoria" / "Background" y una lista ordenada (`<ol>`) de cinco `<li>` en el orden de `trajectory`; cada hito muestra periodo, título y descripción; el hito actual muestra la etiqueta "Actual" y el último la etiqueta "Meta" con la clase de contorno punteado; la meta no muestra año; los cinco muestran "Provisional"; con el cambio de idioma los textos cambian y la pantalla se conserva; la regla de que sin hitos la sección no aparece se prueba con `hasTrajectory` en T004 (los datos se renderizan en el servidor y no se pueden inyectar en la página).
+- [x] T018 [P] [US2] Ampliar `tests/e2e/profile.spec.ts` (parte de la trayectoria): una sección con `<h2>` "Trayectoria" / "Background" y una lista ordenada (`<ol>`) de cinco `<li>` en el orden de `trajectory`; cada hito muestra periodo, título y descripción; el hito actual muestra la etiqueta "Actual" y el último la etiqueta "Meta" con la clase de contorno punteado; la meta no muestra año; los cinco muestran "Provisional"; con el cambio de idioma los textos cambian y la pantalla se conserva; la regla de que sin hitos la sección no aparece se prueba con `hasTrajectory` en T004 (los datos se renderizan en el servidor y no se pueden inyectar en la página).
 
 ### Implementación de la historia
 
-- [ ] T019 [P] [US2] Crear `src/components/profile/Trajectory.tsx` (componente de servidor): `<section>` con `<h2>` `sectionTrajectory` y `<ol>` con un `<li>` por hito: periodo, título, descripción (si no existe, sin hueco), etiqueta visible "Actual" o "Meta" según `kind` y `ProvisionalBadge` si `provisional`; no se renderiza si `hasTrajectory` es `false` (`contracts/profile-screen.md`).
-- [ ] T020 [US2] Agregar a `src/app/globals.css` los estilos de la trayectoria: línea vertical con marcadores a la izquierda, la meta con contorno punteado, la etiqueta "Actual" con el rojo de marca como relleno y texto claro, ajuste de textos largos (`overflow-wrap`) en 390 px y sin desplazamiento horizontal.
-- [ ] T021 [US2] Modificar `src/app/[lang]/profile/page.tsx` para añadir `Trajectory` como bloque de `ScreenFrame` tras la ficha (cada bloque con `data-stagger`, sin movimiento nuevo); debe pasar T018.
-- [ ] T022 [US2] Capturar la trayectoria a 1280 y 390 px, comprobar que los cinco hitos y sus etiquetas se leen, y mostrar las capturas a Edward.
+- [x] T019 [P] [US2] Crear `src/components/profile/Trajectory.tsx` (componente de servidor): `<section>` con `<h2>` `sectionTrajectory` y `<ol>` con un `<li>` por hito: periodo, título, descripción (si no existe, sin hueco), etiqueta visible "Actual" o "Meta" según `kind` y `ProvisionalBadge` si `provisional`; no se renderiza si `hasTrajectory` es `false` (`contracts/profile-screen.md`).
+- [x] T020 [US2] Agregar a `src/app/globals.css` los estilos de la trayectoria: línea vertical con marcadores a la izquierda, la meta con contorno punteado, la etiqueta "Actual" con el rojo de marca como relleno y texto claro, ajuste de textos largos (`overflow-wrap`) en 390 px y sin desplazamiento horizontal.
+- [x] T021 [US2] Modificar `src/app/[lang]/profile/page.tsx` para añadir `Trajectory` como bloque de `ScreenFrame` tras la ficha (cada bloque con `data-stagger`, sin movimiento nuevo); debe pasar T018.
+- [x] T022 [US2] Capturar la trayectoria a 1280 y 390 px, comprobar que los cinco hitos y sus etiquetas se leen, y mostrar las capturas a Edward.
 
 **Punto de control**: "Quién soy" completa. Commit: `feat(profile): agregar la trayectoria`.
 

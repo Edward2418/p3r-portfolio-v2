@@ -360,3 +360,162 @@ html[data-motion="reduced"] *::after {
     transition-duration: 0s !important;
   }
 }
+
+/*
+ * Stack en tres círculos (src/components/stack/StackCircles.tsx, contracts/stack-circles.md). Cada
+ * categoría es un círculo con borde de color y un tinte translúcido detrás del texto (pseudoelemento
+ * decorativo con `--opacity-circle-tint`). Por debajo de 768 px los círculos se apilan con solapamiento
+ * vertical parcial; desde 768 px se colocan solapados dentro de un contenedor cuadrado. El texto nunca se
+ * recorta: si no cabe, el círculo crece hacia abajo.
+ */
+.stack-venn {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.stack-center {
+  margin: 0 0 0.5rem;
+  text-align: center;
+  font-family: var(--font-display);
+  font-size: 2rem;
+  line-height: 1;
+  text-transform: uppercase;
+  color: var(--color-text);
+}
+
+.stack-circle {
+  --circle-color: var(--color-cyan);
+  position: relative;
+  isolation: isolate;
+  aspect-ratio: 1 / 0.8;
+  border: 2px solid var(--circle-color);
+  border-radius: 50%;
+  padding: 15% 15%;
+}
+
+.stack-circle + .stack-circle {
+  margin-top: -9%;
+}
+
+.stack-circle::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background: var(--circle-color);
+  opacity: var(--opacity-circle-tint);
+}
+
+[data-circle="backend"] {
+  --circle-color: var(--color-red);
+}
+
+[data-circle="data-tools"] {
+  --circle-color: var(--color-panel);
+}
+
+.stack-circle-title {
+  margin: 0 0 0.5rem;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-cyan);
+}
+
+.stack-list {
+  display: grid;
+  gap: 0.3rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stack-tech {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.1rem 0.5rem;
+  font-size: 0.85rem;
+  line-height: 1.25;
+}
+
+.stack-tech-meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.75rem;
+  opacity: 0.95;
+}
+
+.stack-legend {
+  margin: 0;
+  font-size: 0.8rem;
+  opacity: 0.85;
+}
+
+.stack-pips {
+  display: inline-flex;
+  gap: 0.1rem;
+}
+
+.stack-pip {
+  display: inline-block;
+  width: 0.45rem;
+  height: 0.45rem;
+  border: 1.5px solid var(--color-cyan);
+  transform: skewX(var(--angle-skew));
+}
+
+.stack-pip[data-filled="true"] {
+  background: var(--color-cyan);
+}
+
+@media (min-width: 768px) {
+  .stack-venn {
+    display: block;
+    aspect-ratio: 1;
+    max-width: 36rem;
+    margin-inline: auto;
+  }
+
+  .stack-center {
+    position: absolute;
+    top: 51%;
+    left: 50%;
+    z-index: 2;
+    margin: 0;
+    transform: translate(-50%, -50%);
+  }
+
+  .stack-circle {
+    position: absolute;
+    width: 62%;
+    aspect-ratio: 1;
+    margin: 0;
+    padding: 9% 22% 6% 7%;
+  }
+
+  .stack-circle + .stack-circle {
+    margin-top: 0;
+  }
+
+  [data-circle="frontend"] {
+    top: 0;
+    left: 0;
+  }
+
+  [data-circle="backend"] {
+    top: 0;
+    right: 0;
+    padding: 9% 7% 6% 22%;
+  }
+
+  [data-circle="data-tools"] {
+    bottom: 0;
+    left: 19%;
+    padding: 22% 14% 6%;
+  }
+}

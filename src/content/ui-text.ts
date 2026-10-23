@@ -19,6 +19,7 @@ export const uiText = {
   sectionContact: { es: "Contacto", en: "Contact" },
   provisional: { es: "Provisional", en: "Provisional" },
   level: { es: "Nivel", en: "Level" },
+  stackLevelLegend: { es: "Nivel de 1 a 5", en: "Level from 1 to 5" },
   profileInstitution: { es: "Institución", en: "Institution" },
   profileSemester: { es: "Semestre", en: "Semester" },
   profileSpecialty: { es: "Especialidad", en: "Specialty" },

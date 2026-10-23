@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { characters, contact, menu, profile, projects, stack, trajectory, uiText } from "../../src/content/index.ts";
+import { provisionalBadgeCount } from "../../src/lib/stack/layout.ts";
 
 type Lang = "es" | "en";
 const LANGS: Lang[] = ["es", "en"];
@@ -7,7 +8,7 @@ const LANGS: Lang[] = ["es", "en"];
 // Cantidad de bloques de datos marcados como provisionales (FR-012), repartidos entre pantallas.
 const provisionalCount =
   [profile, ...trajectory, ...projects, ...characters].filter((item) => item.provisional).length +
-  stack.flatMap((category) => category.technologies).filter((tech) => tech.provisional).length;
+  provisionalBadgeCount(stack);
 
 test.describe("idioma inicial según el navegador", () => {
   test.describe("navegador en español", () => {

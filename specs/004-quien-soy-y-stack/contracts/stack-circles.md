@@ -12,7 +12,7 @@ Define los círculos, los niveles, la etiqueta central, el equivalente textual y
 | 2 | `<section>` con `<h2>` "Stack" | Contiene el conjunto de círculos |
 | 3 | Etiqueta central (`<p>`) | "Full-Stack"; solo si las tres categorías tienen tecnologías; en el DOM va antes de las categorías |
 | 4 | Una `<section>` por categoría, con `<h3>` y `<ul>` | Frontend, Backend y Bases de datos y herramientas, en ese orden |
-| 5 | `<li>` por tecnología | Nombre, "Nivel: n/5" como texto, cinco puntos decorativos y, si es provisional, la etiqueta "Provisional" |
+| 5 | `<li>` por tecnología, en una sola línea | El nombre a la izquierda; a la derecha "n/5" y cinco puntos decorativos; el texto "Nivel: " solo se lee con lector de pantalla (`sr-only`) y una leyenda visible "Nivel de 1 a 5" aclara la escala |
 
 ## Los círculos
 
@@ -21,9 +21,14 @@ Define los círculos, los niveles, la etiqueta central, el equivalente textual y
 - Cada tecnología pertenece a un solo círculo; las zonas donde se solapan los trazos son decorativas y no contienen información. La excepción es la zona central de los tres, que lleva la etiqueta "Full-Stack".
 - Los círculos no son interactivos: no hay enfoque, ni hover con significado, ni enlaces.
 
+## Marca provisional
+
+- Si **todas** las tecnologías de una categoría son provisionales, la etiqueta "Provisional" aparece **una vez**, en el encabezado de la categoría; si hay una mezcla, solo en las tecnologías provisionales; si ninguna lo es, no hay etiqueta (`provisionalScope` y `provisionalBadgeCount` en `src/lib/stack/layout.ts`).
+- Razón: dentro de un círculo no cabe una etiqueta por línea sin partir el nivel en dos líneas.
+
 ## Nivel
 
-- Texto visible "Nivel: n/5" (`level` + valor) en cada tecnología.
+- Texto visible "n/5" en cada tecnología, con el prefijo "Nivel: " para lectores de pantalla y la leyenda visible "Nivel de 1 a 5" sobre los círculos.
 - Cinco puntos `aria-hidden`: rellenos hasta el nivel, de contorno el resto. La forma (relleno o contorno) los distingue; no dependen del color.
 - Un nivel fuera de 1 a 5 se rechaza en la validación de datos y nunca llega a la pantalla.
 

@@ -89,3 +89,11 @@ Cada decisión indica su razón y las alternativas evaluadas. No quedaba ningún
 
 - **Decisión**: el asistente propone, como provisional, la presentación, las descripciones de los hitos (a partir de los datos de la v1) y todas las traducciones al inglés; Edward las revisa y confirma. Los borradores están en [data-model.md](./data-model.md).
 - **Razón**: Principio V; nada se publica como cierto sin su confirmación.
+
+## Notas de implementación (Fase 4)
+
+### R1. Los círculos con texto compacto (US3)
+
+El primer diseño (dos líneas por tecnología y una etiqueta "Provisional" en cada una) desbordaba el círculo del frontend, que ya tiene seis tecnologías: el texto cruzaba los trazos vecinos y la etiqueta central. Se compactó: **una línea por tecnología** (nombre a la izquierda; "n/5" y cinco puntos a la derecha), una leyenda visible "Nivel de 1 a 5", el prefijo "Nivel: " solo para lectores de pantalla y la marca "Provisional" **una vez por categoría** cuando todas sus tecnologías son provisionales (`provisionalScope`). Las pruebas comprueban que el texto queda dentro del trazo elíptico de su círculo con los datos reales, y que con ocho tecnologías el bloque crece y no se recorta.
+
+Por debajo de 768 px los círculos se apilan como elipses más anchas que altas (`aspect-ratio: 1 / 0.8`) con solapamiento vertical parcial, para no desperdiciar altura.

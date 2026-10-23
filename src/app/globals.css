@@ -17,12 +17,28 @@
   --color-red-text: #f03a52;
   /* Relleno rojo con texto claro encima (5.63:1). */
   --color-red-fill: #c4122b;
+  /* Panel del barrido de la transición (decorativo, no es texto). */
+  --color-wipe: #12255a;
 
   /* Movimiento */
   --duration-fast: 150ms;
   --duration-base: 250ms;
   --duration-slow: 600ms;
+
+  /* Transición de escena, calibrada con el video de referencia
+     (specs/002-escena-y-menu/research.md, D4). La suma
+     wipe-out + stagger-in + hold + circle debe estar entre 500 y 800 ms. */
+  --duration-wipe-out: 150ms;
+  --duration-stagger-in: 240ms;
+  --stagger-step: 35ms;
+  --duration-hold: 50ms;
+  --duration-circle: 170ms;
+  --duration-reduced: 120ms;
+  --duration-splash: 1500ms;
+  --duration-nav-timeout: 1500ms;
+
   --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
 }
 
 /* Tipografías: las variables --font-anton e --font-inter las define next/font. */
@@ -45,4 +61,74 @@ body {
 :focus-visible {
   outline: 2px solid var(--color-cyan);
   outline-offset: 3px;
+}
+
+/*
+ * Capa de la transición de escena (src/components/scene/TransitionLayer.tsx). En reposo está oculta;
+ * el controlador (transition.ts) cambia `data-phase` y anima solo transform y opacity.
+ * Los estados iniciales dejan cada pieza fuera de pantalla o transparente.
+ */
+[data-transition-layer][data-phase="idle"] {
+  visibility: hidden;
+}
+
+[data-transition-layer] [data-wipe] {
+  transform: translateX(110%) skewX(-20deg);
+}
+
+[data-transition-layer] [data-outline],
+[data-transition-layer] [data-circle] {
+  opacity: 0;
+}
+
+/*
+ * Splash (src/components/Splash.tsx): se cierra solo con una animación de opacidad de
+ * `--duration-splash`, sin necesitar JavaScript. Se oculta de inmediato si ya se vio en la sesión
+ * (`data-splash="seen"`, que fija el script del <head> o el propio splash) y con movimiento reducido.
+ */
+[data-splash-layer] {
+  animation: splash-out var(--duration-splash) var(--ease-out) forwards;
+}
+
+@keyframes splash-out {
+  0%,
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+html[data-splash="seen"] [data-splash-layer],
+html[data-motion="reduced"] [data-splash-layer] {
+  display: none;
+}
+
+/*
+ * Movimiento reducido (sistema o sitio): sin capas decorativas ni transiciones. El cambio de pantalla
+ * queda en un fundido de opacidad corto que reproduce transition.ts.
+ */
+html[data-motion="reduced"] [data-transition-layer] {
+  display: none;
+}
+
+html[data-motion="reduced"] *,
+html[data-motion="reduced"] *::before,
+html[data-motion="reduced"] *::after {
+  transition-duration: 0s !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-transition-layer],
+  [data-splash-layer] {
+    display: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0s !important;
+  }
 }

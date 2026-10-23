@@ -81,3 +81,18 @@ export interface Contact {
   linkedin?: string;
   cv?: string;
 }
+
+/** Identificador de pantalla; también es su dirección bajo `/es` y `/en`. */
+export type SceneId = "profile" | "stack" | "projects" | "social-link" | "system";
+
+/** Modo efectivo de movimiento: reducido si el sistema o el sitio lo piden. */
+export type MotionMode = "full" | "reduced";
+
+/** Opción del menú principal; el orden del arreglo `menu` es el orden del menú y de las pestañas. */
+export interface MenuOption {
+  /** Único; coincide con la dirección de la pantalla. */
+  id: SceneId;
+  name: Localized;
+  /** Texto de la guía contextual cuando la opción está activa. */
+  description: Localized;
+}

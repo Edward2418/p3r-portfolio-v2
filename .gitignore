@@ -45,3 +45,6 @@ Thumbs.db
 
 # Certificados
 *.pem
+
+# Video de referencia de P3R (material de terceros, solo para consulta local)
+/Pause Menu - Persona 3 Reload*

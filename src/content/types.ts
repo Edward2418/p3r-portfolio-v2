@@ -13,10 +13,30 @@ export interface Provisionable {
 }
 
 export interface Profile extends Provisionable {
-  /** Nombre completo de Edward; no se traduce. */
+  /** Nombre público de Edward ("Edward Negrete", sin el apellido completo); no se traduce. */
   name: string;
   headline: Localized;
   summary: Localized;
+  /** Especialidad, por ejemplo "Desarrollo Full-Stack y videojuegos". */
+  specialty: Localized;
+  /** Institución, por ejemplo "TecNM · Instituto Tecnológico Superior de Huauchinango". */
+  institution: Localized;
+  /** Semestre actual como texto editable, por ejemplo "7.º semestre". */
+  semester: Localized;
+}
+
+/** Tipo de hito de la trayectoria; `goal` es el hito futuro. */
+export type TrajectoryKind = "formation" | "progress" | "current" | "goal";
+
+/** Hito de la formación y la trayectoria breve de "Quién soy" (lo que antes era el Timeline de la v1). */
+export interface TrajectoryEntry extends Provisionable {
+  /** Único. */
+  id: string;
+  /** Periodo en texto ("2023", "Hoy", "Futuro"); el hito `goal` no incluye año. */
+  period: Localized;
+  title: Localized;
+  description?: Localized;
+  kind: TrajectoryKind;
 }
 
 export type StackCategoryId = "frontend" | "backend" | "data-tools";

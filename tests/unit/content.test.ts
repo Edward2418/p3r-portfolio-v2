@@ -6,6 +6,8 @@ import {
   profile,
   projects,
   stack,
+  stackCenterLabel,
+  trajectory,
   uiText,
 } from "../../src/content/index.ts";
 import type { Character, Project, StackCategory } from "../../src/content/types.ts";
@@ -137,6 +139,53 @@ test("los bloques de ejemplo están marcados como provisionales", () => {
     stack.every((cat) => cat.technologies.every((t) => t.provisional === true)),
     "los niveles de ejemplo deben ser provisionales",
   );
+});
+
+// --- Fase 4: perfil, trayectoria y stack (specs/004-quien-soy-y-stack/data-model.md) ---
+
+test("el perfil, la trayectoria y la etiqueta central tienen español e inglés no vacíos", () => {
+  const errors = [
+    ...localizedErrors(profile, "profile"),
+    ...localizedErrors(trajectory, "trajectory"),
+    ...localizedErrors(stackCenterLabel, "stackCenterLabel"),
+  ];
+  assert.deepEqual(errors, [], "no debe haber idiomas vacíos o ausentes");
+});
+
+test("el perfil publica la especialidad, la institución y el semestre", () => {
+  for (const field of ["specialty", "institution", "semester"] as const) {
+    assert.ok(profile[field].es.trim() && profile[field].en.trim(), `el perfil necesita ${field} en ambos idiomas`);
+  }
+  assert.equal(profile.name, "Edward Negrete", "el nombre público es Edward Negrete");
+});
+
+test("los hitos de la trayectoria tienen id único", () => {
+  assert.deepEqual(duplicates(trajectory.map((entry) => entry.id)), [], "id de hito repetido");
+});
+
+test("hay exactamente un hito goal, siempre el último, y como máximo un hito current", () => {
+  const goals = trajectory.filter((entry) => entry.kind === "goal");
+  assert.equal(goals.length, 1, "debe haber exactamente un hito goal");
+  assert.equal(trajectory.at(-1)?.kind, "goal", "el hito goal debe ser el último");
+  assert.ok(trajectory.filter((entry) => entry.kind === "current").length <= 1, "como máximo un hito current");
+});
+
+test("el hito goal no muestra año en su periodo ni en su título", () => {
+  const goal = trajectory.find((entry) => entry.kind === "goal")!;
+  for (const text of [goal.period.es, goal.period.en, goal.title.es, goal.title.en]) {
+    assert.doesNotMatch(text, /d{4}/, `el hito goal no debe incluir un año: "${text}"`);
+  }
+});
+
+test("no se publican el apellido completo ni el año de titulación", () => {
+  const published = JSON.stringify({ profile, trajectory, stack, stackCenterLabel, uiText });
+  assert.doesNotMatch(published, /Bustos/, "no debe publicarse el apellido completo");
+  assert.doesNotMatch(published, /2027/, "no debe publicarse el año de titulación previsto");
+});
+
+test("los hitos de la trayectoria sin confirmar están marcados como provisionales", () => {
+  assert.ok(trajectory.length === 5, "deben ser los cinco hitos de la versión anterior");
+  assert.ok(trajectory.every((entry) => entry.provisional === true), "los hitos deben ser provisionales hasta que Edward los confirme");
 });
 
 // --- CA-6: agregar un proyecto solo requiere datos ---

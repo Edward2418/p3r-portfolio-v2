@@ -39,6 +39,8 @@
   --duration-character-in: 300ms;
   /* Opacidad del personaje cuando va detrás del contenido (móvil y pantallas estrechas; máximo 0.5). */
   --opacity-character-dim: 0.45;
+  /* Opacidad del tinte de cada círculo del stack (specs/004-quien-soy-y-stack/research.md, D10). */
+  --opacity-circle-tint: 0.14;
 
   /* Movimiento */
   --duration-fast: 150ms;

@@ -92,6 +92,44 @@ test("el borde rojo y el anillo de foco cumplen contraste de gráficos (3:1) sob
   }
 });
 
+// --- Fase 4: tinte y trazo de los círculos del stack (specs/004-quien-soy-y-stack/research.md, D10) ---
+
+/** Mezcla `top` con opacidad `alpha` sobre `base` (colores #rrggbb). */
+function blend(top: string, base: string, alpha: number): string {
+  const channel = (hex: string, i: number) => parseInt(hex.slice(i, i + 2), 16);
+  const mixed = [1, 3, 5].map((i) => Math.round(channel(top, i) * alpha + channel(base, i) * (1 - alpha)));
+  return "#" + mixed.map((v) => v.toString(16).padStart(2, "0")).join("");
+}
+
+function readOpacityToken(name: string): number | null {
+  const match = readFileSync(GLOBALS_CSS, "utf8").match(new RegExp(`--opacity-${name}:\\s*([0-9.]+)\\s*;`));
+  return match ? Number(match[1]) : null;
+}
+
+test("el token --opacity-circle-tint existe y es un tinte suave (entre 0.08 y 0.2)", () => {
+  const tint = readOpacityToken("circle-tint");
+  assert.ok(tint !== null, "falta el token --opacity-circle-tint");
+  assert.ok(tint >= 0.08 && tint <= 0.2, `el tinte debe estar entre 0.08 y 0.2, es ${tint}`);
+});
+
+test("el texto sobre el tinte de cada círculo mantiene contraste AA (4.5:1)", () => {
+  const tint = readOpacityToken("circle-tint") ?? 0.14;
+  for (const circle of ["cyan", "red", "panel"]) {
+    const surface = blend(tokens[circle], tokens.navy, tint);
+    for (const text of ["text", "cyan"]) {
+      const ratio = contrast(tokens[text], surface);
+      assert.ok(ratio >= 4.5, `--color-${text} sobre el tinte de --color-${circle} tiene ${ratio.toFixed(2)}:1, mínimo 4.5:1`);
+    }
+  }
+});
+
+test("el trazo de cada círculo mantiene contraste de gráficos (3:1) contra el panel marino", () => {
+  for (const circle of ["cyan", "red", "panel"]) {
+    const ratio = contrast(tokens[circle], tokens.navy);
+    assert.ok(ratio >= 3, `el trazo --color-${circle} sobre --color-navy tiene ${ratio.toFixed(2)}:1, mínimo 3:1`);
+  }
+});
+
 /** Lista recursivamente los archivos con las extensiones dadas. */
 function listFiles(dir: string, extensions: string[]): string[] {
   return readdirSync(dir).flatMap((name) => {

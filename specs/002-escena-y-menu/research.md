@@ -174,3 +174,10 @@ Decisiones tomadas con Edward tras el análisis de consistencia entre `spec.md`,
 - El título del documento de cada pantalla es `{nombre de la opción} | {título del sitio}` (no se usa un segundo guion largo porque el título del sitio ya lo contiene); lo calcula `src/lib/scene/titles.ts`.
 - El menú tiene un `<h1>` solo para lectores de pantalla con el título del sitio; cada pantalla tiene un único `<h1>` con el nombre de la opción y el nombre del perfil pasa a `<h2>`.
 - El título de fondo del menú se dibuja con un pseudoelemento (`content: attr(data-title)`) para que no cuente como texto del documento.
+
+### R3. Navegación por teclado y gestos (T024–T034)
+
+- **Destino lógico**: la URL y el estado de React se actualizan un instante después de pedir una navegación. Una segunda tecla rápida calculaba la pantalla vecina desde la pantalla vieja (saltaba de Proyectos a Quién soy). `SceneShell` mantiene una referencia con la última ruta pedida y `go()` parte siempre de ella; la historia de interrupción (US5) se apoya en lo mismo.
+- **Señal de hidratación**: `SceneShell` pone `data-scene-ready="true"` en `<html>` al montar; las pruebas esperan esa señal (`tests/e2e/helpers.ts`, `openReady`) antes de pulsar teclas. Sin ella, la primera tecla podía llegar antes de que se registrara el teclado.
+- **Anuncio**: se confirmó la desviación de R1: una región `aria-live="polite"` oculta anuncia "Pantalla: {nombre}" tras cada cambio; el foco va al `<h1>` o, en el menú, a la opción activa.
+- **Clics en el menú**: los enlaces llaman a `navigate()` (con `preventDefault`) salvo clics con modificadores, que conservan el comportamiento nativo; así la transición de US4 podrá interceptarlos sin cambiar el menú.

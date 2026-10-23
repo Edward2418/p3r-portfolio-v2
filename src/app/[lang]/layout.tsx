@@ -3,11 +3,13 @@ import { notFound } from "next/navigation";
 import { lang as getLang } from "next/root-params";
 import { Footer } from "../../components/Footer.tsx";
 import { LanguageSwitcher } from "../../components/LanguageSwitcher.tsx";
+import { SceneShell } from "../../components/scene/SceneShell.tsx";
+import { menu } from "../../content/menu.ts";
+import { uiText } from "../../content/ui-text.ts";
 import { anton, inter } from "../fonts.ts";
 import { isLang, LANGS } from "../../lib/i18n/config.ts";
 import { localize } from "../../lib/i18n/localize.ts";
 import { t } from "../../lib/i18n/t.ts";
-import { uiText } from "../../content/ui-text.ts";
 import "../globals.css";
 
 // Solo existen /es y /en: cualquier otro idioma da 404 (contracts/routing-i18n.md).
@@ -30,20 +32,40 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
   const lang = await getLang();
   if (!isLang(lang)) notFound();
 
+  // Datos ya traducidos para el componente de cliente: así no viaja el diccionario completo.
+  const scenes = menu.map((option) => ({
+    id: option.id,
+    name: localize(option.name, lang),
+    description: localize(option.description, lang),
+  }));
+  const labels = {
+    menuLabel: t("menuLabel", lang),
+    confirm: t("confirm", lang),
+    back: t("back", lang),
+    tabPrevious: t("tabPrevious", lang),
+    tabNext: t("tabNext", lang),
+    tabPreviousShort: t("tabPreviousShort", lang),
+    tabNextShort: t("tabNextShort", lang),
+    guideScreenHint: t("guideScreenHint", lang),
+    screenAnnouncement: t("screenAnnouncement", lang),
+  };
+
   return (
     <html lang={lang} className={`${anton.variable} ${inter.variable}`}>
-      <body className="flex min-h-screen flex-col">
+      <body>
         <a
           href="#content"
-          className="sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:bg-bg focus:px-3 focus:py-2"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-2 focus:top-2 focus:z-40 focus:bg-bg focus:px-3 focus:py-2"
         >
           {t("skipToContent", lang)}
         </a>
-        <header className="mx-auto flex w-full max-w-5xl justify-end px-4 pt-4">
-          <LanguageSwitcher target={lang === "es" ? "en" : "es"} label={t("switchLanguage", lang)} />
-        </header>
-        {children}
-        <Footer lang={lang} />
+        <SceneShell lang={lang} scenes={scenes} labels={labels}>
+          <header className="mx-auto flex w-full max-w-5xl justify-end px-4 pt-4">
+            <LanguageSwitcher target={lang === "es" ? "en" : "es"} label={t("switchLanguage", lang)} />
+          </header>
+          {children}
+          <Footer lang={lang} />
+        </SceneShell>
       </body>
     </html>
   );

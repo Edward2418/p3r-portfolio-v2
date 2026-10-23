@@ -189,7 +189,7 @@ Proyecto único en la raíz del repositorio: `src/`, `tests/`, `public/` (ver pl
 
 **Propósito**: limpieza, accesibilidad, rendimiento, documentación y fusión.
 
-- [ ] T042 Eliminar `src/components/sections/ProfileSection.tsx` y `src/components/sections/StackSection.tsx`, y las claves de `ui-text.ts` o importaciones que queden sin uso (`grep -r "ProfileSection\|StackSection" src tests`); ajustar `tests/e2e/language.spec.ts`, `tests/e2e/layout.spec.ts` y `tests/e2e/screen-frame.spec.ts` solo si dependen del DOM anterior.
+- [x] T042 Eliminar `src/components/sections/ProfileSection.tsx` y `src/components/sections/StackSection.tsx`, y las claves de `ui-text.ts` o importaciones que queden sin uso (`grep -r "ProfileSection\|StackSection" src tests`); ajustar `tests/e2e/language.spec.ts`, `tests/e2e/layout.spec.ts` y `tests/e2e/screen-frame.spec.ts` solo si dependen del DOM anterior.
 - [ ] T043 [P] Pasar axe-core sobre 12 casos (menú con y sin splash, en español e inglés, con movimiento reducido, en móvil, y las cinco pantallas) y recorrer el orden de tabulación; debe dar 0 violaciones.
 - [ ] T044 Medir Lighthouse móvil sobre la compilación de producción local en `/es/profile` y `/es/stack`, tres corridas cada una, y la carga inicial (≤ 350 KiB); anotar los resultados en la tabla de `quickstart.md` y en `research.md`.
 - [ ] T045 **Acción de Edward**: revisar y confirmar el contenido de ambas pantallas (presentación, **semestre actual exacto** —el "7.º" es un valor de la v1, no confirmado—, institución, hitos y sus descripciones, tecnologías y niveles, y las traducciones al inglés) y decir qué datos dejan de ser provisionales; el asistente quita entonces `provisional` de lo confirmado.

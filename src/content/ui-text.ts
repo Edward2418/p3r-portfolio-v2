@@ -12,7 +12,6 @@ export const uiText = {
   },
   skipToContent: { es: "Saltar al contenido", en: "Skip to content" },
   switchLanguage: { es: "Cambiar a inglés", en: "Switch to Spanish" },
-  sectionProfile: { es: "Quién soy", en: "About me" },
   sectionStack: { es: "Stack", en: "Stack" },
   sectionProjects: { es: "Proyectos", en: "Projects" },
   sectionCharacters: { es: "Social Link", en: "Social Link" },

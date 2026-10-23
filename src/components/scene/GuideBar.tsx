@@ -4,6 +4,7 @@
 // Atrás y Confirmar. Atrás está deshabilitado en el menú, Confirmar en las pantallas, y L o R en los
 // extremos del orden del menú. El texto de la guía es la descripción de la opción activa en el menú.
 import { neighbors } from "../../lib/motion/navigation.ts";
+import { useSound } from "../audio/SoundProvider.tsx";
 import { useScene } from "./SceneShell.tsx";
 
 const buttonClass =
@@ -11,6 +12,7 @@ const buttonClass =
 
 export function GuideBar() {
   const { lang, scenes, labels, sceneId, activeMenuId, navigate, go } = useScene();
+  const { play } = useSound();
   const inMenu = sceneId === null;
   const { prev, next } = sceneId ? neighbors(scenes, sceneId) : { prev: null, next: null };
   const hint = inMenu
@@ -41,7 +43,10 @@ export function GuideBar() {
         <button
           type="button"
           disabled={!inMenu}
-          onClick={() => navigate(`/${lang}/${activeMenuId}`)}
+          onClick={() => {
+            play("confirm");
+            navigate(`/${lang}/${activeMenuId}`);
+          }}
           className={buttonClass}
         >
           {labels.confirm}

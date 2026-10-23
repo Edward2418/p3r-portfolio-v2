@@ -10,6 +10,7 @@ import type { Lang, SceneId, ViewKind } from "../../content/types.ts";
 import { neighbors, resolveScreenKey, shouldIgnoreKey } from "../../lib/motion/navigation.ts";
 import type { ScreenAction } from "../../lib/motion/navigation.ts";
 import { detectSwipe } from "../../lib/motion/swipe.ts";
+import { useSound } from "../audio/SoundProvider.tsx";
 import { GuideBar } from "./GuideBar.tsx";
 import { TransitionLayer } from "./TransitionLayer.tsx";
 import {
@@ -79,6 +80,7 @@ export function SceneShell({ lang, scenes, labels, children }: SceneShellProps) 
   const router = useRouter();
   const pathname = usePathname();
   const [controller] = useState(createTransitionController);
+  const { play } = useSound();
 
   // Seguimiento de la pantalla actual y la anterior; se ajusta durante el renderizado para que el
   // menú ya nazca con la opción correcta al volver (sin un parpadeo posterior).
@@ -95,6 +97,8 @@ export function SceneShell({ lang, scenes, labels, children }: SceneShellProps) 
   }
   const { sceneId, previousSceneId } = track;
   const view: ViewKind = sceneId === null ? "menu" : "screen";
+  // Vista anterior: decide si la llegada suena `open` (menú → pantalla) o `close` (pantalla → menú).
+  const previousView = useRef<ViewKind>(view);
 
   // Destino lógico: la ruta que se pidió más recientemente. La URL y el estado de React se actualizan
   // un instante después de pedir la navegación; si varias teclas llegan seguidas, cada una debe partir
@@ -193,6 +197,7 @@ export function SceneShell({ lang, scenes, labels, children }: SceneShellProps) 
   const go = useCallback(
     (action: ScreenAction) => {
       if (action === "menu") {
+        play("cancel");
         navigate(`/${lang}`);
         return;
       }
@@ -200,9 +205,12 @@ export function SceneShell({ lang, scenes, labels, children }: SceneShellProps) 
       if (!current) return;
       const { prev, next } = neighbors(scenes, current);
       const target = action === "prev" ? prev : next;
-      if (target) navigate(`/${lang}/${target.id}`);
+      if (target) {
+        play("screen-change");
+        navigate(`/${lang}/${target.id}`);
+      }
     },
-    [lang, navigate, scenes],
+    [lang, navigate, play, scenes],
   );
 
   // Precarga las pantallas vecinas y el menú para que el destino ya esté listo al navegar.
@@ -302,6 +310,12 @@ export function SceneShell({ lang, scenes, labels, children }: SceneShellProps) 
       isFirstRender.current = false;
       return;
     }
+
+    // Sonido de llegada: una sola vez por cambio de vista y por cualquier camino (transición completa,
+    // interrupción, movimiento reducido o botón Atrás del navegador). Entre pantallas solo suena el cursor.
+    if (previousView.current === "menu" && view === "screen") play("arrive-screen");
+    else if (previousView.current === "screen" && view === "menu") play("arrive-menu");
+    previousView.current = view;
 
     const pending = arrival.current;
     if (pending && pending.path === pathname) {

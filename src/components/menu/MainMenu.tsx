@@ -8,6 +8,7 @@ import Link from "next/link";
 import type { MouseEvent } from "react";
 import type { Lang, SceneId } from "../../content/types.ts";
 import { nextIndex, shouldIgnoreKey } from "../../lib/motion/navigation.ts";
+import { useSound } from "../audio/SoundProvider.tsx";
 import { useScene } from "../scene/SceneShell.tsx";
 
 export interface MenuItem {
@@ -31,6 +32,7 @@ const inactiveClass = `${chipClass} border-[3px] border-transparent border-l-cya
 
 export function MainMenu({ lang, label, options }: MainMenuProps) {
   const { activeMenuId, setActiveMenuId, navigate } = useScene();
+  const { play } = useSound();
   const activeIndex = Math.max(0, options.findIndex((option) => option.id === activeMenuId));
   const links = useRef<(HTMLAnchorElement | null)[]>([]);
 
@@ -55,6 +57,7 @@ export function MainMenu({ lang, label, options }: MainMenuProps) {
       if (MENU_KEYS.includes(event.key)) {
         event.preventDefault();
         const index = nextIndex(activeIndex, event.key, options.length);
+        if (index !== activeIndex) play("move");
         setActiveMenuId(options[index].id);
         links.current[index]?.focus();
         return;
@@ -64,18 +67,20 @@ export function MainMenu({ lang, label, options }: MainMenuProps) {
         const focused = document.activeElement as HTMLElement | null;
         if (focused && focused !== document.body && focused.closest("a, button, input, select, textarea, summary")) return;
         event.preventDefault();
+        play("confirm");
         navigate(`/${lang}/${options[activeIndex].id}`);
       }
     }
     document.addEventListener("keydown", onKeyDown);
     return () => document.removeEventListener("keydown", onKeyDown);
-  }, [activeIndex, lang, navigate, options, setActiveMenuId]);
+  }, [activeIndex, lang, navigate, options, play, setActiveMenuId]);
 
   function onLinkClick(event: MouseEvent<HTMLAnchorElement>, href: string) {
     // Los clics con modificadores conservan el comportamiento nativo (abrir en otra pestaña).
     if (event.defaultPrevented || event.button !== 0) return;
     if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
     event.preventDefault();
+    play("confirm");
     navigate(href);
   }
 
@@ -95,7 +100,11 @@ export function MainMenu({ lang, label, options }: MainMenuProps) {
                 }}
                 aria-current={isActive ? "true" : undefined}
                 onClick={(event) => onLinkClick(event, href)}
-                onPointerEnter={() => setActiveMenuId(option.id)}
+                onPointerEnter={(event) => {
+                  // El cursor suena solo con el ratón: con el tacto, tocar ya es confirmar.
+                  if (event.pointerType === "mouse" && option.id !== activeMenuId) play("move");
+                  setActiveMenuId(option.id);
+                }}
                 onFocus={() => setActiveMenuId(option.id)}
                 className={isActive ? activeClass : inactiveClass}
               >

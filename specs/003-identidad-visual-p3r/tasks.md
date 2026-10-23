@@ -218,7 +218,7 @@ Proyecto único en la raíz del repositorio: `src/`, `tests/`, `public/` (ver pl
 - [ ] T058 [P] **Acción de Edward (móvil real)**: comprobar la fluidez (60 fps) de la transición con el idle activo, que el idle no entrecorte el barrido en un móvil de gama media y que el deslizamiento no choque con el gesto "atrás" del sistema; anotar el modelo.
 - [x] T059 Actualizar `README.md`: el aspecto, el personaje y su idle diferido, el sonido y su preferencia, la estructura nueva (`SceneBackdrop`, `Character`, `src/lib/audio/`), los tokens nuevos y cómo cambiar el arte, los sonidos y el título del panel.
 - [x] T060 Ejecutar `npm run verify` desde una instalación limpia (`npm ci`), por etapas y con `--workers=2` si la memoria es limitada (lint, unitarias, compilación, E2E de cada proyecto y `npm audit --omit=dev`); registrar el resultado en `research.md`.
-- [ ] T061 Subir la rama, revisar la vista previa de Vercel (protegida con inicio de sesión) y recorrer la sección 2 de `quickstart.md`.
+- [x] T061 Subir la rama, revisar la vista previa de Vercel (protegida con inicio de sesión) y recorrer la sección 2 de `quickstart.md`.
 - [ ] T062 **Acción de Edward**: revisar y fusionar el pull request `003-identidad-visual-p3r` → `main`; luego medir PageSpeed en la dirección pública y anotar los resultados (rendimiento ≥ 90, accesibilidad 100, ≤ 350 KiB).
 - [ ] T063 Marcar CA-1 a CA-9 en `docs/sprints/fase-3-identidad-visual-p3r.md` con su evidencia, registrar los cambios finales y las lecciones en `research.md`, actualizar el estado en `docs/project-context.md` y confirmar el cierre con Edward.
 

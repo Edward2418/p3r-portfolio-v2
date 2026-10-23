@@ -64,15 +64,15 @@ Que el menú principal y el cambio entre pantallas se vean y se sientan como el 
 
 ## 7. Criterios de aceptación
 
-- [ ] CA-1 El menú muestra el fondo, el panel inclinado con título vertical y las opciones inclinadas con la activa en blanco y borde rojo, coherente con la referencia visual.
-- [ ] CA-2 Oguri aparece con entrada animada y, después de que el menú sea utilizable, con idle; el idle no se carga con movimiento reducido ni con el ahorro de datos activado.
-- [ ] CA-3 La transición entre pantallas incluye a Oguri entrando desde la derecha, rotada, sin salir del rango de 500 a 800 ms ni de ser interrumpible.
-- [ ] CA-4 El sonido está desactivado por defecto, se activa y desactiva desde System, se recuerda entre visitas y no descarga audio hasta activarse.
-- [ ] CA-5 Las cinco pantallas comparten marco, fondo y cabecera.
-- [ ] CA-6 En 390, 768 y 1280 px no hay desplazamiento horizontal ni opciones tapadas por el personaje.
-- [ ] CA-7 Con movimiento reducido no hay barridos ni idle en movimiento.
-- [ ] CA-8 Carga inicial ≤ 350 KiB, Lighthouse accesibilidad 100, axe-core sin violaciones y contraste AA.
-- [ ] CA-9 Lint, compilación, pruebas unitarias y E2E pasan; `review-animations` sin hallazgos abiertos; Edward compara el resultado con la referencia visual y el video.
+- [x] CA-1 El menú muestra el fondo, el panel inclinado con título vertical y las opciones inclinadas con la activa en blanco y borde rojo, coherente con la referencia visual. Evidencia: `tests/e2e/visual-menu.spec.ts` y capturas a 1280 y 390 px comparadas con la referencia (`research.md`, R2 a R4).
+- [x] CA-2 Oguri aparece con entrada animada y, después de que el menú sea utilizable, con idle; el idle no se carga con movimiento reducido ni con el ahorro de datos activado. Evidencia: `tests/e2e/character.spec.ts` y `tests/unit/idle.test.ts`; el video se pide bajo demanda (primera interacción o 8 s tras cargar, `research.md`, R8) y nunca con movimiento reducido ni ahorro de datos.
+- [x] CA-3 La transición entre pantallas incluye a Oguri entrando desde la derecha, rotada, sin salir del rango de 500 a 800 ms ni de ser interrumpible. Evidencia: `tests/e2e/character-transition.spec.ts` (solo `transform` y `opacity`, 500–800 ms, interrupción) y la hoja de contactos de `research.md`, R6.
+- [x] CA-4 El sonido está desactivado por defecto, se activa y desactiva desde System, se recuerda entre visitas y no descarga audio hasta activarse. Evidencia: `tests/e2e/sound.spec.ts`, `tests/unit/sound-preference.test.ts` y `tests/unit/sound-events.test.ts`.
+- [x] CA-5 Las cinco pantallas comparten marco, fondo y cabecera. Evidencia: `tests/e2e/screen-frame.spec.ts`.
+- [x] CA-6 En 390, 768 y 1280 px no hay desplazamiento horizontal ni opciones tapadas por el personaje. Evidencia: `tests/e2e/mobile-layout.spec.ts` y `tests/e2e/layout.spec.ts`.
+- [x] CA-7 Con movimiento reducido no hay barridos ni idle en movimiento. Evidencia: `tests/e2e/reduced-motion.spec.ts`, `tests/e2e/character.spec.ts` y `tests/e2e/character-transition.spec.ts`.
+- [x] CA-8 Carga inicial ≤ 350 KiB, Lighthouse accesibilidad 100, axe-core sin violaciones y contraste AA. Evidencia: axe-core con 0 violaciones en 12 casos, contrastes en `tests/unit/tokens.test.ts` y Lighthouse local de 281 KiB (`research.md`, R8).
+- [ ] CA-9 Lint, compilación, pruebas unitarias y E2E pasan; `review-animations` sin hallazgos abiertos; Edward compara el resultado con la referencia visual y el video. Hecho: lint, compilación, 103 pruebas unitarias y E2E en 390, 768 y 1280 px (Chromium) y 1280 px (Firefox), desde instalación limpia (`research.md`, R9). Pendiente de Edward: `/review-animations` y la comparación con la referencia y el video (T056).
 
 ## 8. Fuera de alcance de esta fase
 

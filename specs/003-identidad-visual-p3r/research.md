@@ -175,3 +175,16 @@ Revisión con la skill `review-animations` (veredicto: **Block**, con correccion
 | Idle en bucle junto al texto de lectura (decisión de Edward) | Movimiento continuo junto a contenido | El idle solo se descarga y se reproduce en el menú; en las pantallas de lectura queda la imagen fija |
 
 Aceptado sin cambios: la transición completa (610–700 ms) supera los 300 ms de una interfaz y se activa con teclado, pero la exige el Principio II, es interrumpible y la visita es de tipo ocasional; el resaltado del menú (lo frecuente con teclado) no se anima. Vigilar en un móvil real (T058): la capa `fixed` del personaje cubre toda la ventana y, con `opacity` < 1 en móvil, es una capa compuesta completa; si hay tirones, limitarla a la caja del personaje.
+
+### R11. Medición en producción tras fusionar (T062)
+
+Fusionada la fase 3 en `main` (pull request #4, 2026-10-23) y desplegada en `https://p3r-portfolio-v2.vercel.app`. La API gratuita de PageSpeed Insights devolvió "cuota diaria agotada" (cuota compartida y sin clave), así que se midió con Lighthouse 12 móvil apuntando directamente a la dirección pública, tres corridas por ruta:
+
+| Ruta | Rendimiento | Accesibilidad | SEO | Prácticas | FCP | LCP | TBT | CLS | KiB | Video / audio |
+|---|---|---|---|---|---|---|---|---|---|---|
+| `/es` | 84, 87 y 87 | 100 | 100 | 96 | 0.9–1.0 s | 2.4–2.5 s | 430–490 ms | 0 | 285.2 | no / no |
+| `/es/stack` | 87, 88 y 85 | 100 | 100 | 96 | 0.9–1.3 s | 2.4–2.6 s | 420–470 ms | 0 | 272.2 | no / no |
+
+- **Carga inicial** de 285 y 272 KiB, dentro del tope de 350 KiB, sin video ni audio (el idle espera a la primera interacción y el audio a activar el sonido).
+- **Rendimiento** de 84 a 88 con Lighthouse en este equipo: el mismo nivel que la fase 2 y que una página "hola mundo" de Next.js medida aquí (86–89), así que el límite es el entorno de ejecución del framework y de esta máquina, no la fase 3. En la fase 1, PageSpeed Insights en la web de Google dio 100 (sus servidores son más rápidos que esta máquina).
+- Pendiente: que Edward ejecute PageSpeed Insights en `pagespeed.web.dev` para `/es` y `/es/stack` y anote el resultado (meta: rendimiento ≥ 90 y accesibilidad 100).

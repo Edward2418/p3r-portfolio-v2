@@ -1,5 +1,6 @@
 import { expect, test } from "@playwright/test";
 import { menu, uiText } from "../../src/content/index.ts";
+import { markSplashSeen } from "./helpers.ts";
 
 type Lang = "es" | "en";
 
@@ -24,6 +25,11 @@ function containsWholeText(haystack: string, text: string): boolean {
 
 test.describe("selector de idioma", () => {
   test.use({ locale: "es-MX" });
+
+  // El splash no es lo que se prueba aquí: se da por visto para que no intercepte los clics.
+  test.beforeEach(async ({ page }) => {
+    await markSplashSeen(page);
+  });
 
   test("cambia de /es a /en desde el menú y actualiza todos los textos", async ({ page }) => {
     await page.goto("/es");

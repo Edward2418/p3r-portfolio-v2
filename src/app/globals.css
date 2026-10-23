@@ -82,6 +82,31 @@ body {
 }
 
 /*
+ * Splash (src/components/Splash.tsx): se cierra solo con una animación de opacidad de
+ * `--duration-splash`, sin necesitar JavaScript. Se oculta de inmediato si ya se vio en la sesión
+ * (`data-splash="seen"`, que fija el script del <head> o el propio splash) y con movimiento reducido.
+ */
+[data-splash-layer] {
+  animation: splash-out var(--duration-splash) var(--ease-out) forwards;
+}
+
+@keyframes splash-out {
+  0%,
+  80% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+
+html[data-splash="seen"] [data-splash-layer],
+html[data-motion="reduced"] [data-splash-layer] {
+  display: none;
+}
+
+/*
  * Movimiento reducido (sistema o sitio): sin capas decorativas ni transiciones. El cambio de pantalla
  * queda en un fundido de opacidad corto que reproduce transition.ts.
  */
@@ -96,7 +121,8 @@ html[data-motion="reduced"] *::after {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  [data-transition-layer] {
+  [data-transition-layer],
+  [data-splash-layer] {
     display: none;
   }
 

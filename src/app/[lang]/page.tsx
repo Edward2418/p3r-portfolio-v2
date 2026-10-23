@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { CharacterSlot } from "../../components/menu/CharacterSlot.tsx";
 import { MainMenu } from "../../components/menu/MainMenu.tsx";
+import { Splash } from "../../components/Splash.tsx";
 import { menu } from "../../content/menu.ts";
 import { isLang } from "../../lib/i18n/config.ts";
 import { localize } from "../../lib/i18n/localize.ts";
@@ -25,6 +26,7 @@ export default async function Page({ params }: PageProps<"/[lang]">) {
       <h1 className="sr-only">{t("siteTitle", lang)}</h1>
       <CharacterSlot lang={lang} />
       <MainMenu lang={lang} label={t("menuLabel", lang)} options={options} />
+      <Splash lang={lang} />
     </main>
   );
 }

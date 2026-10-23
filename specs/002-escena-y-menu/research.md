@@ -239,3 +239,10 @@ Pendiente: la confirmación de Edward en la revisión final con el video (T070).
 - **Variante reducida**: sin barrido, disco ni desplazamientos; la capa decorativa se oculta con `display: none` y el cambio de pantalla es un fundido de opacidad de `--duration-reduced` (120 ms). Sin Web Animations (`Element.prototype.animate` ausente) se usa la misma ruta, y las funciones de animación del controlador no hacen nada (el contenido y la navegación se conservan, FR-025).
 - **Transiciones CSS**: con `data-motion="reduced"` o `prefers-reduced-motion: reduce` se anula la duración de las transiciones (el feedback de pulsación pasa a ser instantáneo).
 - **Cualquier primera carga cuenta como visita para el splash** (decisión A1): el script marca `splash-seen` y `data-splash="seen"` cuando la ruta cargada no es la raíz.
+
+### R8. Splash (T059–T063)
+
+- **Capa en el servidor**: `Splash` pinta la capa sobre el menú ya renderizado (el HTML del menú está en el documento), y la cierra solo una animación CSS de `--duration-splash` (1.5 s) que no necesita JavaScript. Con `data-splash="seen"` o con movimiento reducido la capa se oculta con `display: none`.
+- **Entrada consumida**: `SplashController` consume la primera tecla o el primer clic (con `stopPropagation` en fase de captura) para que no active el menú que hay debajo; solo escucha `click` y no `pointerdown`, porque cerrar en `pointerdown` dejaba que el `click` posterior cayera sobre el enlace que quedó debajo. Cuenta el splash como visto al mostrarse, así que recargar durante el splash no lo repite.
+- **Error corregido con la suite completa**: con movimiento reducido la capa está oculta por CSS pero el controlador igualmente registraba su escucha y se comía el primer clic o tecla del visitante. Ahora no actúa si la capa no se muestra; hay una prueba de regresión.
+- **Pruebas**: las que no son del splash dan la sesión por vista antes de cargar (`markSplashSeen`); las de "omitir" congelan la animación del cierre automático para no depender de la velocidad de la máquina, y miden desde que el evento llega a la página.

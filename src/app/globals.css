@@ -254,6 +254,20 @@ html[data-motion="reduced"] [data-character] {
   }
 }
 
+/*
+ * Pantallas desde 1024 px: el panel de contenido y el aviso del pie se quedan a la izquierda y dejan
+ * libre el lado derecho, donde está Oguri (contracts/scene-layout.md).
+ */
+@media (min-width: 1024px) {
+  [data-view="screen"] [data-scene],
+  [data-view="screen"] [data-footer] {
+    width: min(46rem, calc(100vw - 54vw));
+    max-width: none;
+    margin-left: 14vw;
+    margin-right: auto;
+  }
+}
+
 /* En el menú de escritorio el aviso del pie queda en la columna derecha, sin tapar a Oguri. */
 @media (min-width: 768px) {
   [data-view="menu"] [data-footer] {

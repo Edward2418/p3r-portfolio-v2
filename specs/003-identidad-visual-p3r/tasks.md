@@ -116,14 +116,14 @@ Proyecto único en la raíz del repositorio: `src/`, `tests/`, `public/` (ver pl
 
 ### Pruebas de la historia (escribirlas primero y comprobar que fallan)
 
-- [ ] T030 [P] [US5] Crear `tests/e2e/screen-frame.spec.ts`: en las cinco pantallas hay un `<h1>` con el nombre y un panel de contenido visible; desde 1024 px Oguri queda a la derecha y fuera del panel (cajas delimitadoras sin solaparse); por debajo de 1024 px Oguri queda detrás del panel (`elementFromPoint` en el `<h1>` devuelve el `<h1>`); con L/R el marco se conserva y solo cambia el nombre; con mucho contenido (Proyectos) el personaje no se superpone al texto.
+- [x] T030 [P] [US5] Crear `tests/e2e/screen-frame.spec.ts`: en las cinco pantallas hay un `<h1>` con el nombre y un panel de contenido visible; desde 1024 px Oguri queda a la derecha y fuera del panel (cajas delimitadoras sin solaparse); por debajo de 1024 px Oguri queda detrás del panel (`elementFromPoint` en el `<h1>` devuelve el `<h1>`); con L/R el marco se conserva y solo cambia el nombre; con mucho contenido (Proyectos) el personaje no se superpone al texto.
 
 ### Implementación de la historia
 
-- [ ] T031 [US5] Modificar `src/components/scene/ScreenFrame.tsx`: cabecera con el `<h1>` (foco y anuncio de ruta intactos) y un panel de contenido de azul marino con opacidad alta, manteniendo `data-stagger` en el `<h1>` y en cada bloque.
-- [ ] T032 [US5] Agregar a `src/app/globals.css` las reglas de la vista `screen`: panel en banda estrecha, Oguri a la derecha y grande desde 1024 px, y detrás del panel, recortado y atenuado, por debajo de 1024 px; margen del panel para no solapar al personaje (según `contracts/scene-layout.md`).
-- [ ] T033 [US5] Ajustar `tests/e2e/layout.spec.ts` y las pruebas de foco de `tests/e2e/navigation.spec.ts` si dependen del marco anterior; deben pasar junto con T030.
-- [ ] T034 [US5] Pasar axe-core (reglas WCAG 2.2 AA y buenas prácticas, instalado fuera del repositorio) sobre el marco de las pantallas (una vez en cada idioma, a 390 y 1280 px) para detectar problemas pronto; resolver cualquier violación de contraste, foco o regiones. El barrido completo de 12 casos queda en T054.
+- [x] T031 [US5] Modificar `src/components/scene/ScreenFrame.tsx`: cabecera con el `<h1>` (foco y anuncio de ruta intactos) y un panel de contenido de azul marino con opacidad alta, manteniendo `data-stagger` en el `<h1>` y en cada bloque.
+- [x] T032 [US5] Agregar a `src/app/globals.css` las reglas de la vista `screen`: panel en banda estrecha, Oguri a la derecha y grande desde 1024 px, y detrás del panel, recortado y atenuado, por debajo de 1024 px; margen del panel para no solapar al personaje (según `contracts/scene-layout.md`).
+- [x] T033 [US5] Ajustar `tests/e2e/layout.spec.ts` y las pruebas de foco de `tests/e2e/navigation.spec.ts` si dependen del marco anterior; deben pasar junto con T030.
+- [x] T034 [US5] Pasar axe-core (reglas WCAG 2.2 AA y buenas prácticas, instalado fuera del repositorio) sobre el marco de las pantallas (una vez en cada idioma, a 390 y 1280 px) para detectar problemas pronto; resolver cualquier violación de contraste, foco o regiones. El barrido completo de 12 casos queda en T054.
 
 **Punto de control**: las cinco pantallas tienen marco propio de P3R. Commit: `feat(screens): agregar el marco común de las pantallas`.
 

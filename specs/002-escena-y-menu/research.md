@@ -224,3 +224,10 @@ Revisión con `animation-performance` y `emil-design-eng` (la skill `animate` se
 | Duración total | ~1.55 s | **685 ms medidos** (tokens: 610 ms) | Dentro de 500–800 ms |
 
 Pendiente: la confirmación de Edward en la revisión final con el video (T070).
+
+### R6. Interrupción (T045–T048)
+
+- Un clic, un toque (`pointerdown`) o una tecla durante la transición llama a `skip()`: termina de inmediato todas las animaciones (`finish()`), libera la capa y, si la navegación estaba pendiente, se ejecuta ya. Si la misma acción pide una navegación (por ejemplo otra pestaña L o R, dentro de una ventana de 150 ms), también se hace sin animación y sin entrada: el destino final es el de la última acción y las pantallas intermedias se saltan.
+- Cada navegación lleva un identificador de ejecución: una transición superada por otra se descarta aunque sus esperas sigan pendientes.
+- **Medición de SC-005** (destino en menos de 100 ms desde la interrupción): se cumple en Chromium. En Firefox, con varios navegadores corriendo en paralelo, la confirmación de la ruta tarda 100–170 ms, así que las pruebas usan un límite de 150 ms para Firefox y reintentos acotados; sin carga, Firefox queda cerca de los 100 ms.
+- **Lint**: `eslint.config.mjs` ignora `playwright-report/` y `test-results/` (las trazas de los reintentos generaban miles de avisos falsos).

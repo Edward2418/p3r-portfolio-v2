@@ -145,10 +145,10 @@ Proyecto único en la raíz del repositorio: `src/`, `tests/` (ver plan.md, "Có
 
 ### Pruebas de la historia 5
 
-- [ ] T045 [P] [US5] Escribir `tests/e2e/interruption.spec.ts`: al interrumpir con una tecla, un clic o un toque durante la transición, el destino es visible en menos de 100 ms (marca `scene-transition-skipped`); cinco cambios de pantalla seguidos con L/R terminan siempre en la última pantalla pedida; después, `document.getAnimations().length === 0`, la capa oculta (`data-phase="idle"`) y el foco en el `<h1>` del destino; cambiar de idioma con el selector en mitad de la transición termina en `/en/...` con el contenido legible; recargar en mitad de la transición deja una página utilizable; comprobar que falla
-- [ ] T046 [US5] Añadir `skip()` al controlador de `src/components/scene/transition.ts` (`finish()` sobre todas las animaciones activas, estado final de reposo, ejecución inmediata de la navegación pendiente, marca `scene-transition-skipped`) y escuchar `keydown`, `pointerdown` y clic en fase de captura desde `SceneShell` mientras la fase no sea `idle`; una nueva `navigate()` durante una transición hace `skip()` y luego navega
-- [ ] T047 [US5] Manejar los casos límite en `SceneShell`: teclas repetidas (`event.repeat`) ignoradas, doble toque rápido y mezcla de teclado y toque (la última acción manda), y colocar el foco en el destino también cuando se interrumpe
-- [ ] T048 [US5] Ejecutar `npm run test:e2e` hasta que T045 pase
+- [x] T045 [P] [US5] Escribir `tests/e2e/interruption.spec.ts`: al interrumpir con una tecla, un clic o un toque durante la transición, el destino es visible en menos de 100 ms (marca `scene-transition-skipped`); cinco cambios de pantalla seguidos con L/R terminan siempre en la última pantalla pedida; después, `document.getAnimations().length === 0`, la capa oculta (`data-phase="idle"`) y el foco en el `<h1>` del destino; cambiar de idioma con el selector en mitad de la transición termina en `/en/...` con el contenido legible; recargar en mitad de la transición deja una página utilizable; comprobar que falla
+- [x] T046 [US5] Añadir `skip()` al controlador de `src/components/scene/transition.ts` (`finish()` sobre todas las animaciones activas, estado final de reposo, ejecución inmediata de la navegación pendiente, marca `scene-transition-skipped`) y escuchar `keydown`, `pointerdown` y clic en fase de captura desde `SceneShell` mientras la fase no sea `idle`; una nueva `navigate()` durante una transición hace `skip()` y luego navega
+- [x] T047 [US5] Manejar los casos límite en `SceneShell`: teclas repetidas (`event.repeat`) ignoradas, doble toque rápido y mezcla de teclado y toque (la última acción manda), y colocar el foco en el destino también cuando se interrumpe
+- [x] T048 [US5] Ejecutar `npm run test:e2e` hasta que T045 pase
 
 **Punto de control**: la transición es interrumpible. Hacer commit (`feat(motion): permitir interrumpir la transición`).
 

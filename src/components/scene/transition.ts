@@ -59,8 +59,8 @@ export interface TransitionController {
   enterShort(): Promise<void>;
   /** Variante reducida: fundido de opacidad del contenido. */
   fadeIn(): Promise<void>;
-  /** Termina de inmediato todas las animaciones y deja el destino visible. */
-  skip(): void;
+  /** Termina de inmediato todas las animaciones y deja el destino visible; devuelve si había algo en curso. */
+  skip(): boolean;
   /** Oculta la capa sin animar (por ejemplo, si el destino tarda demasiado). */
   release(): void;
 }
@@ -230,11 +230,12 @@ export function createTransitionController(): TransitionController {
     },
 
     skip() {
-      if (phase === "idle") return;
+      if (phase === "idle") return false;
       skipped = true;
       performance.mark("scene-transition-skipped");
       for (const animation of [...running]) animation.finish();
       releaseLayer();
+      return true;
     },
 
     release() {

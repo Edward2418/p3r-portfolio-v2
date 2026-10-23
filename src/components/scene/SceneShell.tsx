@@ -19,6 +19,9 @@ import {
   supportsWaapi,
 } from "./transition.ts";
 
+/** Ventana en la que una navegación pedida tras interrumpir se considera parte de la interrupción. */
+const INTERRUPT_WINDOW_MS = 150;
+
 export interface SceneInfo {
   id: SceneId;
   name: string;
@@ -120,21 +123,45 @@ export function SceneShell({ lang, scenes, labels, children }: SceneShellProps) 
     });
   }, []);
 
+  // Interrupción: un clic, un toque o una tecla durante la transición la termina de inmediato. Si la
+  // misma acción pide una navegación (por ejemplo otra pestaña L o R), esta se hace también sin
+  // animación: el visitante tiene prisa y el destino final es el de la última acción.
+  const lastInterrupt = useRef(0);
+  const skipEntrance = useRef(false);
+  useEffect(() => {
+    function interrupt() {
+      if (controller.skip()) lastInterrupt.current = performance.now();
+    }
+    document.addEventListener("keydown", interrupt, true);
+    document.addEventListener("pointerdown", interrupt, true);
+    document.addEventListener("click", interrupt, true);
+    return () => {
+      document.removeEventListener("keydown", interrupt, true);
+      document.removeEventListener("pointerdown", interrupt, true);
+      document.removeEventListener("click", interrupt, true);
+    };
+  }, [controller]);
+
   const navigate = useCallback(
     (href: string) => {
       const path = href.split("?")[0];
       if (path === logicalPath.current && !controller.isBusy()) return;
       logicalPath.current = path;
 
-      // Sin movimiento (preferencia reducida o sin Web Animations): cambio directo con fundido corto.
-      if (!supportsWaapi() || prefersReducedMotion()) {
-        controller.skip();
+      const interrupting =
+        controller.skip() || performance.now() - lastInterrupt.current < INTERRUPT_WINDOW_MS;
+
+      // Sin movimiento (preferencia reducida o sin Web Animations) o por una interrupción: cambio directo.
+      if (!supportsWaapi() || prefersReducedMotion() || interrupting) {
+        runId.current += 1; // invalida la transición anterior, si la hubiera
+        arrival.current?.resolve(false);
+        arrival.current = null;
+        skipEntrance.current = interrupting;
         router.push(href);
         return;
       }
 
       const id = ++runId.current;
-      controller.skip(); // una navegación nueva termina de inmediato la que estuviera en curso
       router.prefetch(href);
       void (async () => {
         try {
@@ -277,6 +304,8 @@ export function SceneShell({ lang, scenes, labels, children }: SceneShellProps) 
     if (pending && pending.path === pathname) {
       arrival.current = null;
       pending.resolve(true);
+    } else if (skipEntrance.current) {
+      skipEntrance.current = false; // llegada por una interrupción: sin entrada, el destino ya está visible
     } else if (!supportsWaapi() || prefersReducedMotion()) {
       void controller.fadeIn();
     } else {

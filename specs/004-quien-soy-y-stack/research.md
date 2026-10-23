@@ -133,6 +133,6 @@ Realizada el 2026-10-23 tras `rm -rf node_modules .next` y `npm ci`, por etapas 
 | E2E Chromium 390 px | 244 pasadas y 3 omitidas |
 | E2E Chromium 768 px | 242 pasadas y 5 omitidas |
 | E2E Chromium 1280 px | 245 pasadas y 2 omitidas |
-| E2E Firefox 1280 px | 231 pasadas y 15 omitidas a propósito; 1 fallo intermitente de la prueba de la entrada de Oguri tras omitir el splash (cuenta cuadros de animación y falló con la máquina cargada: 3 de 3 en solitario), que ahora exige 2 cuadros intermedios en lugar de 3 y permite 2 reintentos |
+| E2E Firefox 1280 px | 231 pasadas y 15 omitidas a propósito; 1 fallo intermitente de la prueba de la entrada de Oguri tras omitir el splash (contaba cuadros de animación y falló con la máquina cargada); ahora mide la duración de la animación (≈300 ms entre su inicio y su fin, 0 ms sin la corrección) y permite 2 reintentos |
 
 `tests/e2e/navigation.spec.ts` ("accesos con pocas interacciones", FR-015) sigue pasando.

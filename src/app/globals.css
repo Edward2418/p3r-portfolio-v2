@@ -20,6 +20,26 @@
   /* Panel del barrido de la transición (decorativo, no es texto). */
   --color-wipe: #12255a;
 
+  /* Identidad visual P3R (specs/003-identidad-visual-p3r/research.md, D7 y D8). */
+  /* Degradado del fondo: de cian claro arriba a azul profundo abajo. */
+  --color-sky: #4fe3ff;
+  --color-deep: #0a1a9e;
+  /* Panel blanco inclinado del menú. */
+  --color-panel: #f4f9ff;
+  /* Fichas de las opciones, panel de contenido y controles del encabezado. */
+  --color-navy: #07124a;
+  /* Texto sobre el panel blanco y sobre la opción activa. */
+  --color-on-panel: #07124a;
+  /* Anillo de foco de doble capa: el interior se ve sobre claro, el exterior sobre oscuro. */
+  --color-focus-inner: #07124a;
+  --color-focus-outer: #ffffff;
+
+  /* Composición del personaje y de las superficies inclinadas. */
+  --angle-skew: -10deg;
+  --duration-character-in: 300ms;
+  /* Opacidad del personaje cuando va detrás del contenido (móvil y pantallas estrechas; máximo 0.5). */
+  --opacity-character-dim: 0.45;
+
   /* Movimiento */
   --duration-fast: 150ms;
   --duration-base: 250ms;

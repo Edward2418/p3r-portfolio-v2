@@ -80,6 +80,11 @@ export function createTransitionController(): TransitionController {
     phase = next;
     const element = layer();
     if (element) element.dataset.phase = next;
+    // Señal para el resto de la escena (por ejemplo, el idle del personaje se pausa mientras haya
+    // una transición en curso para no competir por el hilo principal).
+    const root = document.documentElement;
+    if (next === "idle") root.removeAttribute("data-scene-busy");
+    else root.setAttribute("data-scene-busy", "true");
   }
 
   /** Reproduce una animación y la registra para poder terminarla al interrumpir. */

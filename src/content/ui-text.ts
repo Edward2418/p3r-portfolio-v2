@@ -53,6 +53,14 @@ export const uiText = {
     en: "Your system already asks for reduced motion.",
   },
   characterLabel: { es: "Marcador del personaje", en: "Character placeholder" },
+  panelTitle: { es: "PORTFOLIO", en: "PORTFOLIO" },
+  soundToggleLabel: { es: "Sonido", en: "Sound" },
+  soundOn: { es: "Activado", en: "On" },
+  soundOff: { es: "Desactivado", en: "Off" },
+  soundHint: {
+    es: "El audio se descarga solo cuando lo activas.",
+    en: "Audio is downloaded only when you turn it on.",
+  },
   guideMenuHint: {
     es: "Elige una opción y pulsa Confirmar.",
     en: "Choose an option and press Confirm.",

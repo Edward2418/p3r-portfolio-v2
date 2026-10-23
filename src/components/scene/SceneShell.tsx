@@ -6,7 +6,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import type { Lang, SceneId } from "../../content/types.ts";
+import type { Lang, SceneId, ViewKind } from "../../content/types.ts";
 import { neighbors, resolveScreenKey, shouldIgnoreKey } from "../../lib/motion/navigation.ts";
 import type { ScreenAction } from "../../lib/motion/navigation.ts";
 import { detectSwipe } from "../../lib/motion/swipe.ts";
@@ -45,6 +45,8 @@ interface SceneContextValue {
   labels: SceneLabels;
   /** Pantalla actual; `null` en el menú. */
   sceneId: SceneId | null;
+  /** Vista actual: el menú o una pantalla interna (fija la posición del personaje y del panel). */
+  view: ViewKind;
   /** Pantalla de la que se viene (para resaltarla al volver al menú). */
   previousSceneId: SceneId | null;
   activeMenuId: SceneId;
@@ -92,6 +94,7 @@ export function SceneShell({ lang, scenes, labels, children }: SceneShellProps) 
     if (sceneId === null) setActiveMenuId(track.sceneId ?? scenes[0].id);
   }
   const { sceneId, previousSceneId } = track;
+  const view: ViewKind = sceneId === null ? "menu" : "screen";
 
   // Destino lógico: la ruta que se pidió más recientemente. La URL y el estado de React se actualizan
   // un instante después de pedir la navegación; si varias teclas llegan seguidas, cada una debe partir
@@ -325,13 +328,13 @@ export function SceneShell({ lang, scenes, labels, children }: SceneShellProps) 
   }, [pathname]);
 
   const value = useMemo<SceneContextValue>(
-    () => ({ lang, scenes, labels, sceneId, previousSceneId, activeMenuId, setActiveMenuId, navigate, go }),
-    [lang, scenes, labels, sceneId, previousSceneId, activeMenuId, navigate, go],
+    () => ({ lang, scenes, labels, sceneId, view, previousSceneId, activeMenuId, setActiveMenuId, navigate, go }),
+    [lang, scenes, labels, sceneId, view, previousSceneId, activeMenuId, navigate, go],
   );
 
   return (
     <SceneContext.Provider value={value}>
-      <div className="flex min-h-screen touch-pan-y flex-col">
+      <div data-view={view} className="relative flex min-h-screen touch-pan-y flex-col">
         {children}
         <GuideBar />
         <TransitionLayer />

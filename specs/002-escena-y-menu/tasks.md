@@ -246,7 +246,7 @@ Proyecto único en la raíz del repositorio: `src/`, `tests/` (ver plan.md, "Có
 - [x] T075 [P] Actualizar `README.md` en español: nueva estructura (menú, pantallas, `src/lib/motion/`), tokens de movimiento y cómo agregar o reordenar una opción del menú sin tocar componentes
 - [ ] T076 Ejecutar `npm run verify` desde una instalación limpia (`npm ci`), subir la rama, revisar la vista previa de Vercel y repetir el recorrido manual de `quickstart.md` (sección 2)
 - [ ] T077 **Acción de Edward**: abrir el pull request de `002-escena-y-menu` hacia `main` y fusionarlo; después medir de nuevo Lighthouse sobre `https://p3r-portfolio-v2.vercel.app` y anotar los resultados
-- [ ] T078 Marcar los criterios CA-1 a CA-14 en `docs/sprints/fase-2-escena-y-menu.md` con su evidencia, registrar en `specs/002-escena-y-menu/research.md` las decisiones que cambiaron durante la implementación, actualizar el estado y las decisiones resueltas (técnica de animación y nombres de las opciones) en `docs/project-context.md`, y confirmar con Edward el cierre de la fase
+- [x] T078 Marcar los criterios CA-1 a CA-14 en `docs/sprints/fase-2-escena-y-menu.md` con su evidencia, registrar en `specs/002-escena-y-menu/research.md` las decisiones que cambiaron durante la implementación, actualizar el estado y las decisiones resueltas (técnica de animación y nombres de las opciones) en `docs/project-context.md`, y confirmar con Edward el cierre de la fase
 
 ---
 

@@ -62,20 +62,20 @@ Que un visitante entre al sitio, llegue rápido a un menú principal con la est�
 
 ## 7. Criterios de aceptación
 
-- [ ] CA-1 El splash dura poco, se omite con cualquier tecla o clic y no se repite en la misma sesión.
-- [ ] CA-2 El menú muestra las cinco opciones en el orden definido, con la activa resaltada y los textos en el idioma activo.
-- [ ] CA-3 La navegación funciona con L/R, flechas, Enter, Esc, Home y End, y con clic o toque, en escritorio y móvil.
-- [ ] CA-4 La transición contiene los tramos del video de referencia (salida con barrido, entrada escalonada, pausa, cierre con círculo y menú) y dura entre 500 y 800 ms en total.
-- [ ] CA-5 Un clic o una tecla durante una transición lleva al destino sin esperar y sin quedar en un estado intermedio.
-- [ ] CA-6 Con `prefers-reduced-motion` y con la opción del sitio, no hay barridos ni desplazamientos: solo cambios de opacidad cortos o instantáneos.
-- [ ] CA-7 Solo se animan `transform` y `opacity`, a 60 fps en un móvil de gama media, comprobado con la skill `animation-performance`.
-- [ ] CA-8 La guía contextual y los botones Confirmar y Atrás están siempre visibles abajo a la derecha y reflejan la acción disponible.
-- [ ] CA-9 Un visitante nuevo llega a Quién soy, Stack y Proyectos en 3 interacciones o menos y ve el contenido esencial a los 5 s, sin esperar animaciones.
-- [ ] CA-10 Las opciones del menú y sus textos salen de datos tipados; agregar o reordenar una opción no requiere tocar componentes.
+- [x] CA-1 El splash dura poco, se omite con cualquier tecla o clic y no se repite en la misma sesión. Evidencia: `tests/e2e/splash.spec.ts` (cierre automático de 1.5 s, omisión con tecla, clic y toque, una vez por sesión, sin splash en enlaces directos).
+- [x] CA-2 El menú muestra las cinco opciones en el orden definido, con la activa resaltada y los textos en el idioma activo.
+- [x] CA-3 La navegación funciona con L/R, flechas, Enter, Esc, Home y End, y con clic o toque, en escritorio y móvil.
+- [x] CA-4 La transición contiene los tramos del video de referencia (salida con barrido, entrada escalonada, pausa, cierre con círculo y menú) y dura entre 500 y 800 ms en total. Evidencia: `tests/e2e/transition.spec.ts` (medido 685 ms) y comparación con el video en `specs/002-escena-y-menu/research.md` (R5).
+- [x] CA-5 Un clic o una tecla durante una transición lleva al destino sin esperar y sin quedar en un estado intermedio.
+- [x] CA-6 Con `prefers-reduced-motion` y con la opción del sitio, no hay barridos ni desplazamientos: solo cambios de opacidad cortos o instantáneos.
+- [ ] CA-7 Solo se animan `transform` y `opacity`, a 60 fps en un móvil de gama media, comprobado con la skill `animation-performance`. Pendiente: solo `transform` y `opacity` está verificado por prueba y por la skill `animation-performance`; falta la comprobación de 60 fps en un móvil de gama media (T073, acción de Edward).
+- [x] CA-8 La guía contextual y los botones Confirmar y Atrás están siempre visibles abajo a la derecha y reflejan la acción disponible.
+- [x] CA-9 Un visitante nuevo llega a Quién soy, Stack y Proyectos en 3 interacciones o menos y ve el contenido esencial a los 5 s, sin esperar animaciones.
+- [x] CA-10 Las opciones del menú y sus textos salen de datos tipados; agregar o reordenar una opción no requiere tocar componentes.
 - [ ] CA-11 Cambiar de pantalla se anuncia a los lectores de pantalla y el foco se coloca en un punto lógico de la pantalla destino.
-- [ ] CA-12 Edward compara el movimiento con el video por tramos de tiempo, y la skill `review-animations` no deja hallazgos abiertos.
-- [ ] CA-13 Lint, compilación, pruebas unitarias y E2E (390, 768 y 1280 px) pasan, y las rutas `/es` y `/en` siguen funcionando.
-- [ ] CA-14 Lighthouse móvil ≥ 90 en rendimiento y 100 en accesibilidad, medido antes y después de cerrar el splash, y carga inicial ≤ 350 KiB.
+- [ ] CA-12 Edward compara el movimiento con el video por tramos de tiempo, y la skill `review-animations` no deja hallazgos abiertos. Pendiente: Edward confirma la comparación con el video (R5) y ejecuta `/review-animations` (T070); esa skill solo la puede invocar el usuario.
+- [x] CA-13 Lint, compilación, pruebas unitarias y E2E (390, 768 y 1280 px) pasan, y las rutas `/es` y `/en` siguen funcionando.
+- [ ] CA-14 Lighthouse móvil ≥ 90 en rendimiento y 100 en accesibilidad, medido antes y después de cerrar el splash, y carga inicial ≤ 350 KiB. Medido en local: rendimiento 85–86 (igual que la fase 1 y que una página vacía de Next), accesibilidad 100, SEO 100 y 228–240 KiB; falta medir en la dirección pública de Vercel tras fusionar (`research.md`, R10).
 
 ## 8. Fuera de alcance de esta fase
 

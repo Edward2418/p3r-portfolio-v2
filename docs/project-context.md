@@ -3,7 +3,7 @@
 > **Documento de contexto para desarrollo asistido por IA (Claude Code + Spec Kit)**
 >
 > **Nombre del proyecto:** Portafolio personal de Edward Negrete (v2)
-> **Estado:** Fase 1 (Base y datos) completada el 2026-10-22; siguiente: fase 2 (Escena y menú)
+> **Estado:** Fase 1 (Base y datos) completada el 2026-10-22; fase 2 (Escena y menú) implementada y en revisión
 > **Tipo:** Portafolio profesional y proyecto de aprendizaje
 > **Fecha de redacción:** 22/10/2026
 
@@ -219,7 +219,7 @@ Insumo por fase: copiar `docs/sprints/_plantilla.md` a `docs/sprints/fase-N-<nom
 
 - **[Pendiente]** Correo, LinkedIn, otros enlaces de contacto y si se incluye CV descargable (GitHub ya está definido en la sección 9).
 - **[Pendiente]** Texto de presentación y datos de "Quién soy" (los redacta o confirma Edward).
-- **[Pendiente]** Técnica de animación (se decide en el plan de la fase 2).
+- **[Resuelto en la fase 2]** Técnica de animación: Web Animations API y CSS, sin dependencias (`specs/002-escena-y-menu/research.md`, D1).
 - **[Pendiente]** Uso de Higgsfield y presupuesto de créditos para el arte.
-- **[Pendiente]** Nombres definitivos de las opciones del menú en ambos idiomas.
+- **[Resuelto en la fase 2]** Nombres de las opciones: Quién soy / About me, Stack, Proyectos / Projects, Social Link y System.
 - **[Resuelto en la fase 1]** Dirección de Vercel (`p3r-portfolio-v2.vercel.app`); el dominio propio queda para más adelante.

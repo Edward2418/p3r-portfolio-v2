@@ -270,3 +270,40 @@ Lighthouse 12 móvil sobre la compilación de producción local, el 2026-10-22 (
 - **Sin regresión respecto a la fase 1** (85–86 local; 208 KiB). La carga inicial sube unos 20–30 KiB por el JavaScript de la escena (menú, transición, splash, interruptor) y sigue muy por debajo de 350 KiB. El rendimiento local está al nivel de una página "hola mundo" de Next.js en esta máquina (86–89, ver R9 de la fase 1), así que el límite es el entorno de ejecución de React y Next.
 - **Splash**: no empeora el rendimiento medido (el splash es una capa en el HTML del servidor con una animación CSS de opacidad, sin JavaScript para cerrarse).
 - Pendiente: medir en la dirección pública de Vercel tras fusionar (la misma prueba que dio 100 en PageSpeed Insights para la fase 1).
+
+## Cierre de la fase 2 (T078)
+
+**Fecha**: 2026-10-22. Rama `002-escena-y-menu`; aún sin fusionar a `main`.
+
+### Criterios de aceptación
+
+| Criterio | Estado | Evidencia |
+|---|---|---|
+| CA-1 Splash corto, omitible y una vez por sesión | Cumple | `splash.spec.ts` |
+| CA-2 Menú con las cinco opciones en orden y la activa resaltada | Cumple | `menu.spec.ts`, `navigation.spec.ts` |
+| CA-3 Navegación con L/R, flechas, Enter, Esc, Inicio, Fin, clic y toque | Cumple | `navigation.spec.ts`, `navigation.test.ts`, `swipe.test.ts` |
+| CA-4 Transición con los tramos de la referencia en 500–800 ms | Cumple | `transition.spec.ts` (685 ms medidos) y R5 |
+| CA-5 Interrupción inmediata sin estados intermedios | Cumple | `interruption.spec.ts` |
+| CA-6 Movimiento reducido (sistema y sitio) | Cumple | `reduced-motion.spec.ts`, `preference.test.ts`, `init-script.test.ts` |
+| CA-7 Solo `transform` y `opacity` a 60 fps | Parcial | Lo primero, verificado por prueba y por la skill; falta la comprobación de 60 fps en un móvil real (T073, Edward) |
+| CA-8 Guía y botones abajo a la derecha | Cumple | `guide.spec.ts` |
+| CA-9 Tres secciones en 3 interacciones o menos; contenido a los 5 s | Cumple | `navigation.spec.ts`; contenido en el HTML estático (LCP ~2.7 s local) |
+| CA-10 Menú y textos desde datos tipados | Cumple | `menu.test.ts` y verificación manual (T069) |
+| CA-11 Anuncio y foco al cambiar de pantalla | Parcial | Región `aria-live` y foco en el `<h1>` probados; falta la revisión con lector de pantalla (T071, Edward) |
+| CA-12 Comparación con el video y revisión de movimiento | Pendiente | Comparación hecha (R5); falta la confirmación de Edward y `/review-animations` (T070, solo el usuario puede invocarla) |
+| CA-13 Lint, compilación, unitarias y E2E | Cumple | `npm run verify` desde instalación limpia |
+| CA-14 Lighthouse móvil ≥ 90 / accesibilidad 100 / ≤ 350 KiB | Parcial | Local: 85–86, 100 y 228–240 KiB (R10); falta medir en Vercel tras fusionar (T077) |
+
+### Lecciones de la fase
+
+- Los minificadores de CSS reescriben `170ms` como `.17s`: cualquier lector de tokens debe aceptarlo (prueba incluida).
+- La duración medida de una transición incluye la navegación del framework (~110–130 ms); los tokens se calibran contra la medición real, no contra su suma.
+- Las pruebas que miden tiempos con varios navegadores en paralelo dependen de la carga de la máquina: se comprueban propiedades deterministas (duración de la animación) siempre que se puede y se usan reintentos acotados cuando no.
+- Una capa de entrada global (splash) que consume la primera tecla o el primer clic debe comprobar que realmente se muestra; un caso con movimiento reducido la dejaba "comiéndose" la primera acción.
+- En JavaScript, `String.replace` con una cadena que contiene `$` + comilla invertida inserta texto del original: se usa `split/join` o la herramienta de edición.
+
+### Pendiente fuera de la fase
+
+- **Edward**: `/review-animations` y la confirmación de la comparación con el video (T070); revisión con lector de pantalla (T071); fluidez a 60 fps en un móvil de gama media y umbrales de deslizamiento en un dispositivo real (T073); pull request a `main` y medición en Vercel (T077).
+- **Fase 3 y siguientes**: contenido y diseño real de las pantallas, arte del personaje, audio y System completo.
+- **Marcador del personaje** y sus entradas siguen siendo provisionales hasta la fase 3.

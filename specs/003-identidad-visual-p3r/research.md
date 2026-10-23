@@ -120,3 +120,7 @@ Solo `transform` y `opacity`; la entrada inicial es CSS (`character-in`, 300 ms,
 - Se grabó el menú → Stack a 1280×720 (video de Playwright, 25 fps) y se armó una hoja de contactos: se ven en orden el barrido que cubre, el contorno hexagonal que se contrae, la entrada de las fichas junto con Oguri desde la derecha y el anillo de cierre, como en la referencia (R5 de la fase 2).
 - Señal `data-scene-busy` en `<html>` durante la transición: el idle se pausa (comprobado en Chromium) y se reanuda al terminar. Las pruebas de tiempo de la fase 2 (500–800 ms) y de interrupción siguen pasando en Chromium y Firefox.
 - Diferencias aceptadas respecto al video: se mantienen las de R5 (el anillo no recorta las fichas) y, nueva, el cambio de lugar de Oguri entre el menú (izquierda) y las pantallas (derecha) ocurre bajo la cobertura, sin que se vea el desplazamiento.
+
+### R7. Verificación de datos y tokens (US7, T052 y T053)
+
+Se cambiaron a propósito `panelTitle` (`src/content/ui-text.ts`), `--color-sky` y `--duration-character-in` (`src/app/globals.css`): `git status` mostró solo esos dos archivos y la compilación reflejó el título nuevo en el HTML de `/es` y `/en`, y el color y la duración nuevos en el CSS. Se revirtió y el árbol quedó limpio. Los componentes nuevos (`Character`, `SceneBackdrop`, `SoundProvider`, `SoundToggle` y `MainMenu`) no contienen colores ni duraciones en milisegundos; el tope de espera del idle (2000 ms) es una constante del contrato de medios. La prueba de tokens sigue impidiendo colores sueltos fuera de `globals.css`.

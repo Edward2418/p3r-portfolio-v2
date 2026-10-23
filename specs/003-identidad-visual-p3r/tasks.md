@@ -200,8 +200,8 @@ Proyecto único en la raíz del repositorio: `src/`, `tests/`, `public/` (ver pl
 
 **Prueba independiente**: hacer cada cambio, comprobar el resultado y revertirlo.
 
-- [ ] T052 [US7] Verificar que cambiar `panelTitle` en `src/content/ui-text.ts`, la ruta del póster en `src/content/character.ts`, un archivo en `src/content/audio.ts` y un color y una duración en `src/app/globals.css` se refleja sin editar componentes (`git status` muestra solo esos archivos); revertir los cambios y anotar el resultado en `research.md`.
-- [ ] T053 [US7] Verificar que no hay valores de color, ángulo ni duración sueltos en los componentes nuevos (`grep` de `#` y `ms` en `src/components`) y que la prueba de tokens los cubre.
+- [x] T052 [US7] Verificar que cambiar `panelTitle` en `src/content/ui-text.ts`, la ruta del póster en `src/content/character.ts`, un archivo en `src/content/audio.ts` y un color y una duración en `src/app/globals.css` se refleja sin editar componentes (`git status` muestra solo esos archivos); revertir los cambios y anotar el resultado en `research.md`.
+- [x] T053 [US7] Verificar que no hay valores de color, ángulo ni duración sueltos en los componentes nuevos (`grep` de `#` y `ms` en `src/components`) y que la prueba de tokens los cubre.
 
 **Punto de control**: contenido en datos y tokens. Commit: `test(content): comprobar los cambios solo en datos y tokens`.
 
